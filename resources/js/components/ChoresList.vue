@@ -59,14 +59,12 @@ export default {
 
     mounted() {
         let authToken;
-        // let me = this;
-
-        // $(document).ready( function() {
-            authToken = 'Bearer ' + $('#authtoken')[0].dataset.authToken;
-            // me.authtoken = authToken;
-            this.authtoken = authToken;
-
-        // });
+            
+        // authToken = 'Bearer ' + $('#authtoken')[0].dataset.authToken;
+        authToken = 'Bearer ' + localStorage.getItem('authtoken');
+        
+        // me.authtoken = authToken;
+        this.authtoken = authToken;
         
         this.fetchChoresCollection();
     },

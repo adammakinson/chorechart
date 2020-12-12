@@ -25,7 +25,7 @@ export default {
 
     mounted() {
         console.log('mounted!');
-        this.$router.push('login');
+        // this.$router.push('login');
     }
 
 }
