@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+/**
+ * This is the new catch all route that sends everything to the SPA
+ */
+Route::get('/{any}', function() {
+    // $user = auth()->user();
+
+    // $token = $user->createToken('chores-access');
+
+    // return response()->view('choresspa', ['authtoken' => $token->plainTextToken])->header('Authorization', 'Bearer ' . $token->plainTextToken);
+    return response()->view('choresspa');
+})->where('any', '.*');
