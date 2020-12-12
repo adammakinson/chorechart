@@ -26,14 +26,14 @@ class ChoresApiController extends Controller
 
         // dd($user);
         
-        // if (Gate::allows('view-chorechart')) {
+        if (Gate::allows('view-chorechart')) {
 
             $chores = chores::all();
     
             return $chores;
-        // } else {
-        //     return response('Forbidden', 404)->header('Content-Type', 'text/plain');
-        // }
+        } else {
+            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
