@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,13 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        /**
+         * TODO: I need to create roles for the user and fix
+         * this gate to use the role::auth (to be created)
+         */
+        Gate::define('view-chorechart', function(User $user){
+            return $user->id == '1';
+            // return true;
+        });
     }
 }
