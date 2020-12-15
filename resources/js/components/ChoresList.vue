@@ -60,13 +60,17 @@ export default {
     mounted() {
         let authToken;
             
-        // authToken = 'Bearer ' + $('#authtoken')[0].dataset.authToken;
+        // If user is logged in, fetch chores. Otherwise, send to login.
+        if (localStorage.getItem('authtoken')) {
+
         authToken = 'Bearer ' + localStorage.getItem('authtoken');
         
-        // me.authtoken = authToken;
         this.authtoken = authToken;
         
         this.fetchChoresCollection();
+        } else {
+            this.$router.push('login');
+        }
     },
 
     methods: {
@@ -80,9 +84,6 @@ export default {
                 }
             }).then((response) => {
 
-                console.log(response.data);
-
-                // this.chores = choresObj;
                 this.chores = response.data;
 
                 this.columns = [

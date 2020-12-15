@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,10 +24,10 @@ class AuthController extends Controller
             $credentials = request(['username', 'password']);
 
             if (!Auth::attempt($credentials)) {
-                return response()->json([
-                    'status_code' => 500,
-                    'message' => 'Unauthorized'
-                ]);
+                
+                // return response('Invalid credentials', 401);
+
+                return response()->json(['message' => 'Invalid credentials'], 401);
             }
 
             $user = User::where('username', $request->username)->first();

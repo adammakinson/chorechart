@@ -15,6 +15,7 @@
                     <label for="remember_me">Remember me</label>
                 </div>
                 <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
+                <p v-if="error">{{error}}</p>
             </form>
         </div>
     </div>
@@ -25,7 +26,8 @@ export default {
     data() {
         return {
             username: '',
-            password: ''
+            password: '',
+            error: ''
         }
     },
 
@@ -38,9 +40,15 @@ export default {
                 username: this.username,
                 password: this.password
             }).then(function(response) {
+                console.log('entering then!');
                 console.log(response);
                 localStorage.setItem('authtoken', response.data.access_token);
                 me.$router.push('chores-list');
+            }).catch(function(error){
+                if (error.response) {
+                    console.log(error.response);
+                    me.error = error.response.data.message;
+                }
             });
         }
     },
