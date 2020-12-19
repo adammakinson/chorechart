@@ -1,11 +1,5 @@
 <template>
     <main class="container">
-        <h1>app</h1>
-        <!-- <chores-list id="foobar"></chores-list> -->
-        <!-- <modal id="createChoreModal"></modal> -->
-        <p>
-            <router-link :to="{ name: 'chores-list'}">Chores</router-link>
-        </p>
         <router-view></router-view>
     </main>
 </template>
