@@ -22,7 +22,7 @@
         </div> -->
         <div>
             <h1>Chore chart</h1>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal">Add chore</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
             <hr>
             <datatable :columns="columns" :data="rows">
                 <template slot-scope="{row, columns}">
@@ -38,10 +38,13 @@
                     </tr>
                 </template>
             </datatable>
+            <modal id="createChoreModal"></modal>
         </div>
 </template>
 
 <script>
+import Modal from "./Modal";
+
 export default {
     props: ['id'],
 
@@ -57,17 +60,21 @@ export default {
         }
     },
 
+    components: {
+        Modal
+    },
+
     mounted() {
         let authToken;
-            
+
         // If user is logged in, fetch chores. Otherwise, send to login.
         if (localStorage.getItem('authtoken')) {
 
-        authToken = 'Bearer ' + localStorage.getItem('authtoken');
-        
-        this.authtoken = authToken;
-        
-        this.fetchChoresCollection();
+            authToken = 'Bearer ' + localStorage.getItem('authtoken');
+            
+            this.authtoken = authToken;
+            
+            this.fetchChoresCollection();
         } else {
             this.$router.push('login');
         }
@@ -90,14 +97,16 @@ export default {
                     {label: 'id', field: 'id'},
                     {label: 'chore', field: 'chore'},
                     {label: 'pointvalue', field: 'pointvalue'}
-                    // {
-                    //     label: 'actions', 
-                    //     representedAs: row => `<span class="fas fa-check"></span>`
-                    // }
                 ];
 
                 this.rows = response.data;
             });
+        },
+
+        showAddChoreModal() {
+            let modalwindow = document.getElementById("createChoreModal");
+
+            modalwindow.style.display = 'block';
         },
 
         handleCheckClick(el) {

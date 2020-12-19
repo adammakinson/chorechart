@@ -12,7 +12,6 @@
 
 <script>
 import ChoreslistComponent from "./ChoresList";
-import Modal from "./Modal";
 import LoginForm from "./LoginForm";
 
 export default {
