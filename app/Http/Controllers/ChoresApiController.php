@@ -54,7 +54,9 @@ class ChoresApiController extends Controller
     
             $chore->save();
     
-            return response('Chore created', 200)->header('Content-type', 'text/plain');
+            $chores = chores::all();
+    
+            return $chores;
         } else {
 
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
