@@ -10,9 +10,9 @@
                     <td>{{row.chore}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
-                        <span v-on:click="handleCheckClick" class="fas fa-check"></span>
-                        <span v-on:click="handleEditClick" class="fas fa-edit"></span>
-                        <span v-on:click="handleTrashClick" class="fas fa-trash"></span>
+                        <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-id="row.id"></span>
+                        <span v-on:click="handleEditClick" class="fas fa-edit" v-bind:data-id="row.id"></span>
+                        <span v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-id="row.id"></span>
                     </td>
                 </tr>
             </template>
@@ -90,7 +90,19 @@ export default {
         },
 
         handleTrashClick(el) {
-            console.log(el);
+            let itemId = el.target.dataset.id;
+
+            axios.delete('/api/chores/' + itemId, {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                
+                console.log(response);
+
+                this.chores = response.data;
+                this.rows = response.data;
+            });
         }
     }
 };

@@ -107,11 +107,16 @@ class ChoresApiController extends Controller
      * @param  \App\Models\chores  $chores
      * @return \Illuminate\Http\Response
      */
-    public function destroy(chores $chores)
+    public function destroy(chores $chores, $id)
     {
         //
         if (Gate::allows('manage-chorechart')) {
+            $chore = $chores->find($id);
+            $chore->delete();
 
+            $choresList = chores::all();
+    
+            return $choresList;
         } else {
 
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
