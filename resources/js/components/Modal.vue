@@ -48,18 +48,14 @@ export default {
                 url: '/api/chores',
                 data: choreData,
                 headers: {
-                    authorization: 'Bearer ' + localStorage.getItem('authtoken')
+                    authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
                 console.log(response);
                 console.log(this);
 
-                // It's ugly but it works...
-                // Overall, this isn't ideal because we're making
-                // two requests per interaction, a POST and a GET...
-                // If this is intended to be a multi-user (concurrent), this might be what we have to do.
-                // At this point, I'm not going to play with server sent events or web workers.
-                this.$parent.fetchChoresCollection();
+                this.$parent.chores = response.data;
+                this.$parent.rows = response.data;
 
                 // Doesn't work so well...
                 this.$el.style.display = 'none';
