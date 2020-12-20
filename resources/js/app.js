@@ -1,6 +1,8 @@
 require('./bootstrap');
 
 import Vue from "vue";
+import Vuex from 'vuex';
+import 'es6-promise/auto';
 import VueRouter from "vue-router";
 
 import App from "./components/App";
