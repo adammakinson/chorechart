@@ -46,13 +46,19 @@ class ChoresApiController extends Controller
      */
     public function store(Request $request)
     {
-        $chore = new Chores;
-        $chore->chore = $request->chore;
-        $chore->pointvalue = $request->pointvalue;
+        if (Gate::allows('manage-chorechart')) {
 
-        $chore->save();
+            $chore = new Chores;
+            $chore->chore = $request->chore;
+            $chore->pointvalue = $request->pointvalue;
+    
+            $chore->save();
+    
+            return response('Chore created', 200)->header('Content-type', 'text/plain');
+        } else {
 
-        return response('Chore created', 200)->header('Content-type', 'text/plain');
+            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
@@ -85,6 +91,12 @@ class ChoresApiController extends Controller
     public function update(Request $request, chores $chores)
     {
         //
+        if (Gate::allows('manage-chorechart')) {
+
+        } else {
+
+            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+        }
     }
 
     /**
@@ -98,5 +110,11 @@ class ChoresApiController extends Controller
     public function destroy(chores $chores)
     {
         //
+        if (Gate::allows('manage-chorechart')) {
+
+        } else {
+
+            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+        }
     }
 }

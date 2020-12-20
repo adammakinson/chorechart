@@ -29,10 +29,35 @@ class AuthServiceProvider extends ServiceProvider
         /**
          * TODO: I need to create roles for the user and fix
          * this gate to use the role::auth (to be created)
+         * 
+         * really should be manage-chorechart instead of view-chorechart...
          */
         Gate::define('view-chorechart', function(User $user){
-            return $user->id == '1';
-            // return true;
+            $authorized = false;
+            $validRoles = [
+                'admin',
+                'user'
+            ];
+
+            foreach($user->roles as $role) {
+                if(in_array($role->role, $validRoles)) {
+                    $authorized = true;
+                }
+            }
+
+            return $authorized;
+        });
+        
+        Gate::define('manage-chorechart', function(User $user){
+            $authorized = false;
+
+            foreach($user->roles as $role) {
+                if($role->role == 'admin') {
+                    $authorized = true;
+                }
+            }
+
+            return $authorized;
         });
     }
 }
