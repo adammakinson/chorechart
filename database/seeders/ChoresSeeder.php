@@ -17,11 +17,11 @@ class ChoresSeeder extends Seeder
     {
         //
         DB::table('chores')->insert([
-            ['chore' => 'Dishes', 'pointvalue' => '10'],
-            ['chore' => 'Sweep the floor', 'pointvalue' => '10'],
-            ['chore' => 'Feed the dog', 'pointvalue' => '10'],
-            ['chore' => 'Wipe the counters', 'pointvalue' => '10'],
-            ['chore' => 'Mow the lawn', 'pointvalue' => '10'],
+            ['chore' => 'Dishes', 'pointvalue' => '10', 'created_at' => now(), 'updated_at' => now()],
+            ['chore' => 'Sweep the floor', 'pointvalue' => '10', 'created_at' => now(), 'updated_at' => now()],
+            ['chore' => 'Feed the dog', 'pointvalue' => '10', 'created_at' => now(), 'updated_at' => now()],
+            ['chore' => 'Wipe the counters', 'pointvalue' => '10', 'created_at' => now(), 'updated_at' => now()],
+            ['chore' => 'Mow the lawn', 'pointvalue' => '10', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }
