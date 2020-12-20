@@ -17,10 +17,22 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
+            [
             'name' => 'Adam Makinson',
             'username' => 'amakinson',
             'email' => 'adam.levi.makinson@gmail.com',
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now()
+            ],
+            [
+            'name' => 'Adam Makinson',
+            'username' => 'cmakinson',
+            'email' => 'cmakinson@yopmail.com',
+            'password' => Hash::make('password'),
+            'created_at' => now(),
+            'updated_at' => now()
+            ]
         ]);
     }
 }
