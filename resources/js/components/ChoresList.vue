@@ -1,45 +1,24 @@
 <template>
-        <!-- <div>
-        <table id="choresTable">
-            <thead>
-                <th>Points</th>
-                <th>Chore</th>
-                <th>Actions</th>
-            </thead>
-            <tbody>
-                <tr v-for="chore in chores" v-bind:key="chore.id">
-                    <td>{{chore.pointvalue}}</td>
-                    <td>{{chore.chore}}</td>
-                        <a href="#"><span class="fas fa-check"></span></a>
-                        <a href="#"><span class="fas fa-edit"></span></a>
-                        <a href="#"><span class="fas fa-trash"></span></a>
+    <div>
+        <h1>Chore chart</h1>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
+        <hr>
+        <datatable :columns="columns" :data="rows">
+            <template slot-scope="{row, columns}">
+                <tr>
+                    <td>{{row.id}}</td>
+                    <td>{{row.chore}}</td>
+                    <td>{{row.pointvalue}}</td>
+                    <td>
+                        <span v-on:click="handleCheckClick" class="fas fa-check"></span>
+                        <span v-on:click="handleEditClick" class="fas fa-edit"></span>
+                        <span v-on:click="handleTrashClick" class="fas fa-trash"></span>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-        <hr>
-        <datatable :columns="columns" :data="rows"></datatable>
-        </div> -->
-        <div>
-            <h1>Chore chart</h1>
-            <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
-            <hr>
-            <datatable :columns="columns" :data="rows">
-                <template slot-scope="{row, columns}">
-                    <tr>
-                        <td>{{row.id}}</td>
-                        <td>{{row.chore}}</td>
-                        <td>{{row.pointvalue}}</td>
-                        <td>
-                            <span v-on:click="handleCheckClick" class="fas fa-check"></span>
-                            <span v-on:click="handleEditClick" class="fas fa-edit"></span>
-                            <span v-on:click="handleTrashClick" class="fas fa-trash"></span>
-                        </td>
-                    </tr>
-                </template>
-            </datatable>
-            <modal id="createChoreModal"></modal>
-        </div>
+            </template>
+        </datatable>
+        <modal id="createChoreModal"></modal>
+    </div>
 </template>
 
 <script>
@@ -54,9 +33,7 @@ export default {
 
             columns: [],
 
-            rows: [],
-
-            authtoken: ''
+            rows: []
         }
     },
 
@@ -65,17 +42,12 @@ export default {
     },
 
     mounted() {
-        let authToken;
 
-        // If user is logged in, fetch chores. Otherwise, send to login.
-        if (localStorage.getItem('authtoken')) {
-
-            authToken = 'Bearer ' + localStorage.getItem('authtoken');
-            
-            this.authtoken = authToken;
+        if (this.$store.getters.getUserAuthToken) {
             
             this.fetchChoresCollection();
         } else {
+
             this.$router.push('login');
         }
     },
@@ -83,11 +55,9 @@ export default {
     methods: {
         fetchChoresCollection() {
 
-            console.log(this.authtoken);
-
             axios.get('/api/chores', {
                 headers: {
-                    authorization: this.authtoken
+                    authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
 
