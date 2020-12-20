@@ -11,6 +11,11 @@ class chores extends Model
     use HasFactory;
     use HasApiTokens;
 
+    /**
+     * Populate timestamps
+     */
+    public $timestamps = true;
+
     protected $fillable = [
         'chore',
         'pointvalue'
