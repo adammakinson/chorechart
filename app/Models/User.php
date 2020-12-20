@@ -47,4 +47,9 @@ class User extends Authenticatable
      * Populate timestamps
      */
     public $timestamps = true;
+
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'role_user', 'role_id', 'user_id');
+    }
 }
