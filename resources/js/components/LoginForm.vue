@@ -39,15 +39,15 @@ export default {
             axios.post('/api/login', {
                 username: this.username,
                 password: this.password
-            }).then(function(response) {
-                console.log('entering then!');
-                console.log(response);
-                localStorage.setItem('authtoken', response.data.access_token);
-                me.$router.push('chores-list');
-            }).catch(function(error){
+            }).then((response) => {
+
+                this.$store.commit('setCurrentUser', response.data.user);
+
+                this.$router.push('chores-list');
+            }).catch((error) => {
                 if (error.response) {
                     console.log(error.response);
-                    me.error = error.response.data.message;
+                    this.error = error.response.data.message;
                 }
             });
         }
@@ -55,12 +55,15 @@ export default {
 
     mounted() {
         // if (!this.cookie.get('XSRF-TOKEN')) {
-
             axios.get('/sanctum/csrf-cookie').then(response => {
             //    this.csrfToken = this.cookie.get('XSRF-TOKEN');  
                 console.log('cookie should be there');   
             });
         // }
+
+        if(this.$store.getters.getUserAuthToken) {
+            this.$router.push('chores-list'); // This may change to a different view...
+        }
     }
 }
 </script>
