@@ -58,9 +58,17 @@ const store = new Vuex.Store({
                 let userData = JSON.parse(localStorage.getItem('user'));
 
                 authToken = `${userData.token_type} ${userData.access_token}`;
+
+                // If we get it from localStorage, we need to ensure it's in vuex
+                // this.$store.commit('setCurrentUser', localStorage.getItem('user'));
+                state.user = userData;
             }
 
             return authToken;
+        },
+
+        getUsersName: state => {
+            return state.user.name;
         }
     }
 });

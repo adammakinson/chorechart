@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Chore chart</h1>
+        <user-status-bar></user-status-bar>
         <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
         <hr>
         <datatable :columns="columns" :data="rows">
@@ -23,6 +23,7 @@
 
 <script>
 import Modal from "./Modal";
+import UserStatusBar from './UserStatusBar.vue';
 
 export default {
     props: ['id'],
@@ -38,7 +39,8 @@ export default {
     },
 
     components: {
-        Modal
+        Modal,
+        UserStatusBar
     },
 
     mounted() {

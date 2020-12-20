@@ -5,20 +5,16 @@
 </template>
 
 <script>
-import ChoreslistComponent from "./ChoresList";
-import LoginForm from "./LoginForm";
 
 export default {
-
     components: {
-        // 'chores-list': ChoreslistComponent,
-        // 'modal': Modal,
-        // 'loginform': LoginForm
+    
     },
 
     mounted() {
-        console.log('mounted!');
-        // this.$router.push('login');
+        if (!this.$store.getters.getUserAuthToken) {
+            this.$router.push('login');
+        }
     }
 
 }
