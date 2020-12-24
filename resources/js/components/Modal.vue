@@ -1,70 +1,44 @@
 <template>
-    <div v-bind:id="id" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div v-bind:id="id" @close-modal="closeModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-diaolog-centered" role="document">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Create a chore</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeWithoutSaving">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="createChoreForm">
-                    <div class="form-group">
-                        <label for="chore">Chore:</label>
-                        <input id="chore" class="form-control" type="text">
-                    </div>
-                    <div class="form-group">
-                        <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" class="form-control" type="number">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" v-on:click.prevent="saveChanges">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeWithoutSaving">Close</button>
-            </div>
+                <header class="modal-header">
+                    <h5 class="modal-title">
+                        <slot name="header"></slot>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeModal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </header>
+                <slot></slot>
+                <slot name="footer"></slot>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import eventBus from '../eventBus';
 export default {
-    props: ['id'],
-    methods: {
-        'saveChanges': function(){
-            let formEls = document.querySelectorAll('.form-control');
-            let choreData = {};
 
-            console.log("calling saveChanges!");
+    props: ['id'],
+
+    methods: {
+        'closeModal': function() {
+            let formEls = document.querySelectorAll('.form-control');
 
             formEls.forEach((el) => {
-                choreData[el.id] = el.value;
+                el.value = '';
             });
 
-            axios({
-                method: 'post',
-                url: '/api/chores',
-                data: choreData,
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
-                }
-            }).then((response) => {
-                console.log(response);
-                console.log(this);
-
-                this.$parent.chores = response.data;
-                this.$parent.rows = response.data;
-
-                // Doesn't work so well...
-                this.$el.style.display = 'none';
-            });
-        },
-
-        'closeWithoutSaving': function() {
             this.$el.style.display = 'none';
         }
+    },
+
+    created() {
+        eventBus.$on("close-modal", () => {
+            this.closeModal();
+        });
     }
 }
 </script>

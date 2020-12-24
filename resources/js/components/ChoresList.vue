@@ -17,13 +17,36 @@
                 </tr>
             </template>
         </datatable>
-        <modal id="createChoreModal"></modal>
+        <modal id="createChoreModal">
+            <template v-slot:header>
+                Create a chore
+            </template>
+            <div class="modal-body">
+                <form id="createChoreForm">
+                    <div class="form-group">
+                        <label for="chore">Chore:</label>
+                        <input id="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
+                    </div>
+                    <div class="form-group">
+                        <label for="pointvalue">Point value:</label>
+                        <input id="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
+                    </div>
+                </form>
+            </div>
+            <template v-slot:footer>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="createChore">Create chore</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                </footer>
+            </template>
+        </modal>
     </div>
 </template>
 
 <script>
 import Modal from "./Modal";
 import UserStatusBar from './UserStatusBar.vue';
+import eventBus from '../eventBus';
 
 export default {
     props: ['id'],
@@ -34,7 +57,11 @@ export default {
 
             columns: [],
 
-            rows: []
+            rows: [],
+
+            choreFieldValue: '',
+
+            pointFieldValue: ''
         }
     },
 
@@ -103,6 +130,34 @@ export default {
                 this.chores = response.data;
                 this.rows = response.data;
             });
+        },
+
+        'createChore': function(){
+            let formEls = document.querySelectorAll('.form-control');
+            let choreData = {};
+
+            formEls.forEach((el) => {
+                choreData[el.id] = el.value;
+            });
+
+            axios({
+                method: 'post',
+                url: '/api/chores',
+                data: choreData,
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.chores = response.data;
+                this.rows = response.data;
+                
+                // Close the modal
+                eventBus.$emit('close-modal');
+            });
+        },
+
+        sendEventBusMessage() {
+            eventBus.$emit('close-modal');
         }
     }
 };
