@@ -22,11 +22,13 @@ class ChoresApiController extends Controller
      */
     public function index(User $user)
     {
-        // $user = auth('api')->user();
+        if (Gate::allows('manage-chorechart')) {
 
-        // dd($user);
-        
-        if (Gate::allows('view-chorechart')) {
+            $chores = chores::all();
+    
+            return $chores;
+
+        } else if (Gate::allows('view-chorechart')) {
 
             $chores = chores::all();
     
