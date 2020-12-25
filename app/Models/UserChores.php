@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class UserChores extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'chore_id',
+        'user_id',
+        'inspection_ready',
+        'inspected_on',
+        'inspection_passed'
+    ];
+}
