@@ -11,7 +11,7 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-id="row.id"></span>
-                        <span v-on:click="handleEditClick" class="fas fa-edit" v-bind:data-id="row.id"></span>
+                        <span v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-id="row.id"></span>
                         <span v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-id="row.id"></span>
                     </td>
                 </tr>
@@ -25,17 +25,40 @@
                 <form id="createChoreForm">
                     <div class="form-group">
                         <label for="chore">Chore:</label>
-                        <input id="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
+                        <input id="chore" name="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
                     </div>
                     <div class="form-group">
                         <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
+                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
                     </div>
                 </form>
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
                     <button type="button" class="btn btn-primary" v-on:click.prevent="createChore">Create chore</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                </footer>
+            </template>
+        </modal>
+        <modal id="editChoreModal">
+            <template v-slot:header>
+                Create a chore
+            </template>
+            <div class="modal-body">
+                <form id="createChoreForm">
+                    <div class="form-group">
+                        <label for="editchore">Chore:</label>
+                        <input id="editchore" class="form-control" type="text" name="chore" v-bind:value="choreFieldValue">
+                    </div>
+                    <div class="form-group">
+                        <label for="editpointvalue">Point value:</label>
+                        <input id="editpointvalue" class="form-control" type="number" name="pointvalue" v-bind:value="pointFieldValue">
+                    </div>
+                </form>
+            </div>
+            <template v-slot:footer>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateChore">Update chore</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
                 </footer>
             </template>
@@ -61,7 +84,9 @@ export default {
 
             choreFieldValue: '',
 
-            pointFieldValue: ''
+            pointFieldValue: '',
+
+            activeElementId: ''
         }
     },
 
@@ -108,11 +133,21 @@ export default {
             modalwindow.style.display = 'block';
         },
 
-        handleCheckClick(el) {
-            console.log(el);
+        showEditChoreModal(el) {
+            let modalwindow = document.getElementById("editChoreModal");
+
+            let currentElementName = el.target.parentNode.parentNode.children[1].innerText;
+            let currentElementPoints = el.target.parentNode.parentNode.children[2].innerText;
+
+            this.choreFieldValue = currentElementName;
+            this.pointFieldValue = currentElementPoints;
+
+            this.activeElementId = el.target.dataset.id;
+
+            modalwindow.style.display = 'block';
         },
-        
-        handleEditClick(el) {
+
+        handleCheckClick(el) {
             console.log(el);
         },
 
@@ -133,11 +168,11 @@ export default {
         },
 
         'createChore': function(){
-            let formEls = document.querySelectorAll('.form-control');
+            let formEls = document.querySelectorAll('#createChoreModal .form-control');
             let choreData = {};
 
             formEls.forEach((el) => {
-                choreData[el.id] = el.value;
+                choreData[el.name] = el.value;
             });
 
             axios({
@@ -151,6 +186,32 @@ export default {
                 this.chores = response.data;
                 this.rows = response.data;
                 
+                // Close the modal
+                eventBus.$emit('close-modal');
+            });
+        },
+        
+        'updateChore': function(){
+            let formEls = document.querySelectorAll('#editChoreModal .form-control');
+            let choreData = {};
+
+            formEls.forEach((formInput) => {
+                choreData[formInput.name] = formInput.value;
+            });
+
+            axios({
+                method: 'put',
+                url: '/api/chores/' + this.activeElementId,
+                data: choreData,
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.chores = response.data;
+                this.rows = response.data;
+                
+                this.activeElementId = '';
+
                 // Close the modal
                 eventBus.$emit('close-modal');
             });

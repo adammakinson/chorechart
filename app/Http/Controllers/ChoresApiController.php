@@ -90,11 +90,20 @@ class ChoresApiController extends Controller
      * @param  \App\Models\chores  $chores
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, chores $chores)
+    public function update(Request $request, $choreId)
     {
-        //
+
         if (Gate::allows('manage-chorechart')) {
 
+            $chore = chores::find($choreId);
+
+            $chore->chore = $request->chore;
+            $chore->pointvalue = $request->pointvalue;
+            $chore->save();
+
+            $choresList = chores::all();
+    
+            return $choresList;
         } else {
 
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
