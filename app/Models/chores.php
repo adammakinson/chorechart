@@ -20,4 +20,8 @@ class chores extends Model
         'chore',
         'pointvalue'
     ];
+
+    public function user() {
+        return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id');
+    }
 }

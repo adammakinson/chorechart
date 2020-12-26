@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Roles::class, 'role_user', 'role_id', 'user_id');
     }
+
+    public function chores()
+    {
+        return $this->belongsToMany(chores::class, 'user_chores', 'user_id', 'chore_id');
+    }
 }

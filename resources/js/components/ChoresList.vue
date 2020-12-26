@@ -6,13 +6,13 @@
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
                 <tr>
-                    <!-- <td>{{row.id}}</td> -->
                     <td>{{row.chore}}</td>
+                    <td v-if="userIsAdmin">{{row.assignedUsers}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-id="row.id"></span>
-                        <span v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-id="row.id"></span>
-                        <span v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-id="row.id"></span>
+                        <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-id="row.id"></span>
+                        <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-id="row.id"></span>
                     </td>
                 </tr>
             </template>
@@ -86,7 +86,9 @@ export default {
 
             pointFieldValue: '',
 
-            activeElementId: ''
+            activeElementId: '',
+
+            userIsAdmin: false
         }
     },
 
@@ -98,6 +100,8 @@ export default {
     mounted() {
 
         if (this.$store.getters.getUserAuthToken) {
+
+            this.userHasAdminPrivelege();
             
             this.fetchChoresCollection();
         } else {
@@ -114,17 +118,46 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+                
+                response.data.forEach((row) => {
 
+                    // Aggregates user names into a string... perhaps not ideal?
+                    if(row.user){
+
+                        row.assignedUsers = row.user.reduce((total, user) => {
+                            return user.name + ', ';
+                        }, '');
+                    }
+                });
+                
                 this.chores = response.data;
 
                 this.columns = [
-                    // {label: 'id', field: 'id'},
-                    {label: 'chore', field: 'chore'},
-                    {label: 'pointvalue', field: 'pointvalue'}
+                    {label: 'chore', field: 'chore'}
                 ];
+
+                if(this.userIsAdmin) {
+                    this.columns.push({label: 'assigned', field: 'assignedUsers'});
+                }
+                
+                this.columns.push({label: 'points', field: 'pointvalue'});
 
                 this.rows = response.data;
             });
+        },
+
+        userHasAdminPrivelege() {
+            let userRoles = this.$store.getters.getUsersRoles;
+
+            console.log(userRoles);
+
+            if(userRoles.some((role) => { 
+                return role.role == 'admin';
+                })) {
+                this.userIsAdmin = true;
+            } else {
+                this.userIsAdmin = false;
+            }
         },
 
         showAddChoreModal() {
@@ -159,8 +192,6 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                
-                console.log(response);
 
                 this.chores = response.data;
                 this.rows = response.data;

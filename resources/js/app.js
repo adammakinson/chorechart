@@ -69,6 +69,10 @@ const store = new Vuex.Store({
 
         getUsersName: state => {
             return state.user.name;
+        },
+
+        getUsersRoles: state => {
+            return state.user.roles;
         }
     }
 });

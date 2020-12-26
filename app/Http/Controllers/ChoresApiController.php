@@ -24,13 +24,14 @@ class ChoresApiController extends Controller
     {
         if (Gate::allows('manage-chorechart')) {
 
-            $chores = chores::all();
+            $chores = chores::all()->load('user');
     
             return $chores;
 
         } else if (Gate::allows('view-chorechart')) {
 
-            $chores = chores::all();
+            $user = auth()->user();
+            $chores = $user->chores()->get();
     
             return $chores;
         } else {
