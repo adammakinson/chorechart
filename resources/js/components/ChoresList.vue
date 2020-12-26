@@ -6,7 +6,7 @@
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
                 <tr>
-                    <td>{{row.id}}</td>
+                    <!-- <td>{{row.id}}</td> -->
                     <td>{{row.chore}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
@@ -118,7 +118,7 @@ export default {
                 this.chores = response.data;
 
                 this.columns = [
-                    {label: 'id', field: 'id'},
+                    // {label: 'id', field: 'id'},
                     {label: 'chore', field: 'chore'},
                     {label: 'pointvalue', field: 'pointvalue'}
                 ];
