@@ -5,14 +5,14 @@
         <hr>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
-                <tr>
+                <tr v-bind:id="row.id">
                     <td>{{row.chore}}</td>
                     <td v-if="userIsAdmin">{{row.assignedUsers}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
-                        <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-id="row.id"></span>
-                        <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-id="row.id"></span>
-                        <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-id="row.id"></span>
+                        <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-choreid="row.id"></span>
+                        <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-choreid="row.id"></span>
+                        <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-choreid="row.id"></span>
                     </td>
                 </tr>
             </template>
@@ -25,17 +25,17 @@
                 <form id="createChoreForm">
                     <div class="form-group">
                         <label for="chore">Chore:</label>
-                        <input id="chore" name="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
+                        <input id="chore" name="chore" class="form-control" type="text" value="">
                     </div>
                     <div class="form-group">
                         <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
+                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" value="">
                     </div>
                     <div class="form-group">
                         <label for="assignedto">Assigned to:</label>
                         <!-- <input id="assignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
                         <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
-                            <option value="">Unassigned</option>
+                            <option value="" selected>Unassigned</option>
                             <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id">{{user.name}}</option>
                         </select>
                     </div>
@@ -50,7 +50,7 @@
         </modal>
         <modal id="editChoreModal" v-if="userIsAdmin">
             <template v-slot:header>
-                Create a chore
+                Edit chore
             </template>
             <div class="modal-body">
                 <form id="createChoreForm">
@@ -66,8 +66,8 @@
                         <label for="editassignedto">Assigned to:</label>
                         <!-- <input id="editassignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
                         <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
-                            <option value="">Unassigned</option>
-                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id">{{user.name}}</option>
+                            <option value="" :selected="assignee == ''">Unassigned</option>
+                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id" :selected="assignee == user.id">{{user.name}}</option>
                         </select>
                     </div>
                 </form>
@@ -103,6 +103,8 @@ export default {
             pointFieldValue: '',
 
             activeElementId: '',
+
+            assignee: '',
 
             userIsAdmin: false,
 
@@ -202,14 +204,27 @@ export default {
 
         showEditChoreModal(el) {
             let modalwindow = document.getElementById("editChoreModal");
+            let choreId = el.target.dataset.choreid;
+            let allChores = this.chores;
+            let choreBeingEdited;
 
-            let currentElementName = el.target.parentNode.parentNode.children[1].innerText;
-            let currentElementPoints = el.target.parentNode.parentNode.children[2].innerText;
+            allChores.forEach(chore => {
+                console.log(chore);
+                if (chore.id == choreId) {
+                    choreBeingEdited = chore;
+                }
+            });
 
-            this.choreFieldValue = currentElementName;
-            this.pointFieldValue = currentElementPoints;
+            this.choreFieldValue = choreBeingEdited.chore;
+            this.pointFieldValue = choreBeingEdited.pointvalue;
 
-            this.activeElementId = el.target.dataset.id;
+            if(choreBeingEdited.user && choreBeingEdited.user.length > 0) {
+                this.assignee = choreBeingEdited.user[0].id;
+            } else {
+                this.assignee = '';
+            }
+
+            this.activeElementId = choreId;
 
             modalwindow.style.display = 'block';
         },
@@ -219,7 +234,7 @@ export default {
         },
 
         handleTrashClick(el) {
-            let itemId = el.target.dataset.id;
+            let itemId = el.target.dataset.choreid;
 
             axios.delete('/api/chores/' + itemId, {
                 headers: {

@@ -27,10 +27,6 @@ export default {
         'closeModal': function() {
             let formEls = document.querySelectorAll('.form-control');
 
-            formEls.forEach((el) => {
-                el.value = '';
-            });
-
             this.$el.style.display = 'none';
         }
     },
