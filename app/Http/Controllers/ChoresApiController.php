@@ -110,15 +110,23 @@ class ChoresApiController extends Controller
             $chore = chores::find($choreId)->load('user');
 
 
-
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
-            $userChore = UserChores::where([['chore_id', $chore->id], ['user_id', $chore->user[0]->id]])->first();
+            // we have a user assigned to the chore
+            if (isset($chore->user) && count($chore->user) > 0) {
 
-            $userChore->user_id = $request->assignedto;
-            $userChore->save();
+                $userChore = UserChores::where([['chore_id', $chore->id], ['user_id', $chore->user[0]->id]])->first();
+    
+                $userChore->user_id = $request->assignedto;
+                $userChore->save();
+            } else {
+                $userChore = new UserChores;
+                $userChore->chore_id = $chore->id;
+                $userChore->user_id = $request->assignedto;
+                $userChore->save();
+            }
 
             $choresList = chores::all()->load('user');
     
