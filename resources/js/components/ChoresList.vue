@@ -17,7 +17,7 @@
                 </tr>
             </template>
         </datatable>
-        <modal id="createChoreModal">
+        <modal id="createChoreModal" v-if="userIsAdmin">
             <template v-slot:header>
                 Create a chore
             </template>
@@ -31,6 +31,14 @@
                         <label for="pointvalue">Point value:</label>
                         <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
                     </div>
+                    <div class="form-group">
+                        <label for="assignedto">Assigned to:</label>
+                        <!-- <input id="assignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
+                        <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
+                            <option value="">Unassigned</option>
+                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id">{{user.name}}</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <template v-slot:footer>
@@ -40,7 +48,7 @@
                 </footer>
             </template>
         </modal>
-        <modal id="editChoreModal">
+        <modal id="editChoreModal" v-if="userIsAdmin">
             <template v-slot:header>
                 Create a chore
             </template>
@@ -53,6 +61,14 @@
                     <div class="form-group">
                         <label for="editpointvalue">Point value:</label>
                         <input id="editpointvalue" class="form-control" type="number" name="pointvalue" v-bind:value="pointFieldValue">
+                    </div>
+                    <div class="form-group">
+                        <label for="editassignedto">Assigned to:</label>
+                        <!-- <input id="editassignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
+                        <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
+                            <option value="">Unassigned</option>
+                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id">{{user.name}}</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -88,7 +104,9 @@ export default {
 
             activeElementId: '',
 
-            userIsAdmin: false
+            userIsAdmin: false,
+
+            allUsers: []
         }
     },
 
@@ -104,6 +122,10 @@ export default {
             this.userHasAdminPrivelege();
             
             this.fetchChoresCollection();
+
+            if(this.userIsAdmin) {
+                this.getAllUsers();
+            }
         } else {
 
             this.$router.push('login');
@@ -160,6 +182,18 @@ export default {
             }
         },
 
+        getAllUsers() {
+            axios.get('/api/users', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then(
+                (response) => {
+                    this.allUsers = response.data;
+                }
+            );
+        },
+
         showAddChoreModal() {
             let modalwindow = document.getElementById("createChoreModal");
 
@@ -214,6 +248,18 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+
+                response.data.forEach((row) => {
+
+                    // Aggregates user names into a string... perhaps not ideal?
+                    if(row.user){
+
+                        row.assignedUsers = row.user.reduce((total, user) => {
+                            return user.name + ', ';
+                        }, '');
+                    }
+                });
+
                 this.chores = response.data;
                 this.rows = response.data;
                 
@@ -238,6 +284,18 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+
+                response.data.forEach((row) => {
+
+                    // Aggregates user names into a string... perhaps not ideal?
+                    if(row.user){
+
+                        row.assignedUsers = row.user.reduce((total, user) => {
+                            return user.name + ', ';
+                        }, '');
+                    }
+                });
+
                 this.chores = response.data;
                 this.rows = response.data;
                 

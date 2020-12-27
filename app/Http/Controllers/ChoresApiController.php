@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 
 use App\Models\chores;
 use App\Models\User;
+use App\Models\UserChores;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -54,10 +55,18 @@ class ChoresApiController extends Controller
             $chore = new Chores;
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
-    
             $chore->save();
+
+            $assignedTo = $request->assignedto;
+
+            if (!empty($assignedTo)) {
+                $userChore = new UserChores;
+                $userChore->chore_id = $chore->id;
+                $userChore->user_id = $assignedTo;
+                $userChore->save();
+            }
     
-            $chores = chores::all();
+            $chores = chores::all()->load('user');
     
             return $chores;
         } else {
@@ -98,13 +107,20 @@ class ChoresApiController extends Controller
 
         if (Gate::allows('manage-chorechart')) {
 
-            $chore = chores::find($choreId);
+            $chore = chores::find($choreId)->load('user');
+
+
 
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
-            $choresList = chores::all();
+            $userChore = UserChores::where([['chore_id', $chore->id], ['user_id', $chore->user[0]->id]])->first();
+
+            $userChore->user_id = $request->assignedto;
+            $userChore->save();
+
+            $choresList = chores::all()->load('user');
     
             return $choresList;
         } else {
