@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
             'updated_at' => now()
             ],
             [
-            'name' => 'Adam Makinson',
+            'name' => 'Catie Makinson',
             'username' => 'cmakinson',
             'email' => 'cmakinson@yopmail.com',
             'password' => Hash::make('password'),
