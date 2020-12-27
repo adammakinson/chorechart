@@ -64,3 +64,8 @@ Thoughts/questions:
     be assigned to one user, we should be able to get the core by id loading users
     to get the current user id and use chore_id and user_id to get that specific
     instance. We could then update the user_id for that user_chore instance.
+4.  One thought is to use user_chores as a historical record type of table which
+    wouldn't be hard to do. I could add a details column and put a JSON string
+    in there indicating the chore and points awarded. Then, I think the onDelete cascade
+    stuff may not be wanted anyway since we would want to retain everything in
+    the user_chores table...
