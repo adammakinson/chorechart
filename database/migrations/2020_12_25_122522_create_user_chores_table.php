@@ -17,7 +17,7 @@ class CreateUserChoresTable extends Migration
             $table->id();
             $table->unsignedBigInteger('chore_id')
                 ->references('id')->on('chores')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id')
+            $table->unsignedBigInteger('user_id')->nullable()
                 ->referneces('id')->on('users')->onDelete('cascade');
             $table->timestamp('inspection_ready')->nullable();
             $table->timestamp('inspected_on')->nullable();
