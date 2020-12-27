@@ -59,11 +59,8 @@ Thoughts/questions:
     i.e. no multi-assignment, so updating a chore would effectively transfer
     the chore assignment to another user. In the future, it may be pretty easy
     to have multi-assignments, but would be slightly more complex.
-3.  For updating a chore to a new user, how do we find the specificchore-instance?
+3.  For updating a chore to a new user, how do we find the specific chore-instance?
     We should have the chore id and the new user id. if (for now) a chore can only
     be assigned to one user, we should be able to get the core by id loading users
     to get the current user id and use chore_id and user_id to get that specific
     instance. We could then update the user_id for that user_chore instance.
-4.  As it is currently, if the admin user specifies an assignee during chore creation,
-    that's when we create the user_chore record in the database. From there on,
-    that record can't be unassigned unless we make the user_id field nullable.
