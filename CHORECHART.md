@@ -50,6 +50,7 @@ Notes:
     a.  I don't think I got the foreign keys right. I don't see them in
         workbench and when I deleted a chore that was assigned to a user,
         the join-table entry did not get removed as expected.
+    b.  general user is still able to see the add chore button in their chores list view
 
 
 Thoughts/questions:
@@ -69,3 +70,14 @@ Thoughts/questions:
     in there indicating the chore and points awarded. Then, I think the onDelete cascade
     stuff may not be wanted anyway since we would want to retain everything in
     the user_chores table...
+5.  The user management screen needs to give the admin the ability to 
+        "remove" a user
+        grant user roles
+        generate a new password on behalf of a user
+        edit the user's information
+
+        Hrm... maybe a better way to go about it would be to generate a one-time access token?
+        I think we can just have edit and delete buttons in the main view. The admin
+        would open the edit modal to change anything on the user. It would just have
+        sections with different buttons to do various things. The modal would just have the
+        one close button in the upper right hand corner.
