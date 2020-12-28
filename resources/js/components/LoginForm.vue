@@ -1,22 +1,27 @@
 <template>
-    <div class="card">
-        <div class="card-body">
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" v-model="username" id="username">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" v-model="password" id="password">
-                </div>
-                <div class="form-group">
-                    <input type="checkbox" id="remember_me" name="remember">
-                    <label for="remember_me">Remember me</label>
-                </div>
-                <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
-                <p v-if="error">{{error}}</p>
-            </form>
+    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh">
+        <div class="card" style="width: 40em;">
+            <div class="card-header">
+                <h1>Chorechart Login</h1>
+            </div>
+            <div class="card-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" v-model="username" id="username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" v-model="password" id="password" class="form-control">
+                    </div>
+                    <!-- <div class="form-group">
+                        <input type="checkbox" id="remember_me" name="remember">
+                        <label for="remember_me">Remember me</label>
+                    </div> -->
+                    <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
+                    <p v-if="error">{{error}}</p>
+                </form>
+            </div>
         </div>
     </div>
 </template>
