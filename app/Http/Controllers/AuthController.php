@@ -66,10 +66,13 @@ class AuthController extends Controller
             $request->validate([
                 'name' => 'string',
                 'username' => 'required',
-                'email' => 'email',
                 'password' => 'required',
                 'confirm_password' => 'required'
             ]);
+
+            if (isset($request->email) && $request->email != "") {
+                $request->validate(['email' => 'email']);
+            }
 
             $password = $request->password;
             $passwordConfirmation = $request->confirm_password;            
@@ -87,6 +90,11 @@ class AuthController extends Controller
 
             // Persist the user model to the database
             $user->save();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Registration successful'
+            ]);
 
         } catch(Exception $error) {
             return response()->json([
