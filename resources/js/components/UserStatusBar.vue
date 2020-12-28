@@ -8,6 +8,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="container-fluid d-flex justify-content-end px-0">
+                        <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
                         <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
                     </div>
                 </div>
@@ -21,7 +22,8 @@ export default {
     data() {
         return {
             authenticatedUser: false,
-            usersName: ''
+            usersName: '',
+            userIsAdmin: false,
         };
     },
 
@@ -38,6 +40,8 @@ export default {
         
         if(this.authenticatedUser) {
             this.usersName = this.$store.getters.getUsersName;
+
+            this.userIsAdmin = this.$store.getters.userIsAdmin;
         }
     }
 }
