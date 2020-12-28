@@ -8,15 +8,15 @@
                     <td>{{row.username}}</td>
                     <td>{{row.email}}</td>
                     <td>
-                        <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-choreid="row.id"></span>
-                        <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-choreid="row.id"></span>
+                        <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-userid="row.id"></span>
+                        <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-userid="row.id"></span>
                     </td>
                 </tr>
             </template>
         </datatable>
         <modal id="editUserModal">
             <template v-slot:header>
-                Create a chore
+                Edit User
             </template>
             <div class="modal-body">
                 <form id="createChoreForm">
@@ -57,6 +57,7 @@
         data() {
             return {
                 users: null,
+                currentUser: null,
                 columns: [],
                 rows: [],
                 userIsAdmin: false
