@@ -12,6 +12,7 @@ import LoginForm from "./components/LoginForm";
 import ChoresListComponent from "./components/ChoresList";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
+import ManageUsers from "./components/ManageUsers";
 
 VuejsDatatableFactory.useDefaultType( false )
     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
@@ -28,7 +29,8 @@ const routes = [
     {path: '/', name: 'welcome-screen', component: WelcomeScreen},
     {path: '/chores-list', name: 'chores-list', component: ChoresListComponent},
     {path: '/login', name: 'login', component: LoginForm},
-    {path: '/register', name: 'register', component: RegistrationForm}
+    {path: '/register', name: 'register', component: RegistrationForm},
+    {path: '/manage-users', name: 'manage-users', component: ManageUsers}
 ];
 
 const router = new VueRouter({
@@ -77,6 +79,14 @@ const store = new Vuex.Store({
 
         getUsersRoles: state => {
             return state.user.roles;
+        },
+
+        userIsAdmin: state => {
+            let userRoles = state.user.roles;
+
+            return userRoles.find(role => {
+                return role.role == 'admin';
+            });
         }
     }
 });
