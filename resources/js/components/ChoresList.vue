@@ -25,11 +25,11 @@
                 <form id="createChoreForm">
                     <div class="form-group">
                         <label for="chore">Chore:</label>
-                        <input id="chore" name="chore" class="form-control" type="text" value="">
+                        <input id="chore" name="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
                     </div>
                     <div class="form-group">
                         <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" value="">
+                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
                     </div>
                     <div class="form-group">
                         <label for="assignedto">Assigned to:</label>
@@ -121,7 +121,7 @@ export default {
 
         if (this.$store.getters.getUserAuthToken) {
 
-            this.userHasAdminPrivelege();
+            this.userIsAdmin = this.$store.getters.userIsAdmin;
             
             this.fetchChoresCollection();
 
@@ -170,20 +170,6 @@ export default {
             });
         },
 
-        userHasAdminPrivelege() {
-            let userRoles = this.$store.getters.getUsersRoles;
-
-            console.log(userRoles);
-
-            if(userRoles.some((role) => { 
-                return role.role == 'admin';
-                })) {
-                this.userIsAdmin = true;
-            } else {
-                this.userIsAdmin = false;
-            }
-        },
-
         getAllUsers() {
             axios.get('/api/users', {
                 headers: {
@@ -198,6 +184,11 @@ export default {
 
         showAddChoreModal() {
             let modalwindow = document.getElementById("createChoreModal");
+
+            this.choreFieldValue = '';
+            this.pointFieldValue = '';
+            this.assignee = '';
+            this.activeElementId = '';
 
             modalwindow.style.display = 'block';
         },
@@ -241,6 +232,18 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+
+                // TODO refactor this out because it's duplicated everywhere
+                response.data.forEach((row) => {
+
+                    // Aggregates user names into a string... perhaps not ideal?
+                    if(row.user){
+
+                        row.assignedUsers = row.user.reduce((total, user) => {
+                            return user.name + ', ';
+                        }, '');
+                    }
+                });
 
                 this.chores = response.data;
                 this.rows = response.data;
