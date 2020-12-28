@@ -12,9 +12,7 @@ export default {
     },
 
     mounted() {
-        if (!this.$store.getters.getUserAuthToken) {
-            this.$router.push('login');
-        }
+
     }
 
 }

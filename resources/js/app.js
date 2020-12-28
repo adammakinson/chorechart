@@ -10,6 +10,7 @@ import { VuejsDatatableFactory } from 'vuejs-datatable';
 
 import LoginForm from "./components/LoginForm";
 import ChoresListComponent from "./components/ChoresList";
+import WelcomeScreen from "./components/WelcomeScreen";
 
 VuejsDatatableFactory.useDefaultType( false )
     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
@@ -23,6 +24,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 
 const routes = [
+    {path: '/', name: 'welcome-screen', component: WelcomeScreen},
     {path: '/chores-list', name: 'chores-list', component: ChoresListComponent},
     {path: '/login', name: 'login', component: LoginForm}
 ];
