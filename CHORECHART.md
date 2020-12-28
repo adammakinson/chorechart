@@ -24,13 +24,16 @@ Notes:
     f. Users accumiulate points and are able to spend them on prizes
 
 3.  TODOS
-    a.  Chore creation and management (90%)
-    b.  Assigning chores to users.
-    b.  Admin user management dashboard (TODO)
-    c.  User profile dashboard (TODO)
-    d.  User point and prize system (TODO)
-    e.  App onboarding
-    f.  Maybe I really should look into soft deletes...
+    a.  Chore creation and management (DONE)
+    b.  Assigning chores to a user (DONE)
+    c.  User registration process (DONE)
+    d.  Admin user management dashboard (TODO)
+    e.  User profile dashboard (TODO)
+    f.  User point and prize system (TODO)
+    g.  App onboarding
+    h.  Maybe I really should look into soft deletes...
+    i.  Creation of a home screen
+    j.  User notification system
 
 4.  I fiddled around with the app onboarding concept a bit earlier.
     The basic gist is we check for a .env file with credentials and
@@ -47,9 +50,6 @@ Notes:
     a.  I don't think I got the foreign keys right. I don't see them in
         workbench and when I deleted a chore that was assigned to a user,
         the join-table entry did not get removed as expected.
-    b.  The state on the edit chore modal isn't working correctly. sometimes
-        the fields are populated correctly, but other times they're not.
-        I'm not sure why.
 
 
 Thoughts/questions:
