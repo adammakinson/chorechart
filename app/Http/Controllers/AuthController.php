@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -90,6 +91,11 @@ class AuthController extends Controller
 
             // Persist the user model to the database
             $user->save();
+
+            // Give the user the default role
+            DB::table('role_user')->insert([
+                'role_id' => '2', 'user_id' => $user->id, 'created_at' => now(), 'updated_at' => now()
+            ]);
 
             return response()->json([
                 'status_code' => 200,
