@@ -152,7 +152,7 @@ class ChoresApiController extends Controller
             $chore = $chores->find($id);
             $chore->delete();
 
-            $choresList = chores::all();
+            $choresList = chores::all()->load('user');
     
             return $choresList;
         } else {
