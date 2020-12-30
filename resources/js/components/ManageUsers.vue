@@ -8,6 +8,7 @@
                     <td>{{row.username}}</td>
                     <td>{{row.email}}</td>
                     <td>
+                        <span v-on:click="showChangeCredentialsModal" class="fas fa-key" v-bind:data-userid="row.id"></span>
                         <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-userid="row.id"></span>
                         <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-userid="row.id"></span>
                     </td>
@@ -19,28 +20,51 @@
                 Edit User
             </template>
             <div class="modal-body">
-                <form id="createChoreForm">
+                <form id="editUserForm">
                     <div class="form-group">
-                        <label for="chore">Chore:</label>
-                        <input id="chore" name="chore" class="form-control" type="text" value="">
+                        <label for="name">Name:</label>
+                        <input id="name" name="name" class="form-control" type="text" value="">
                     </div>
                     <div class="form-group">
-                        <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" value="">
+                        <label for="username">Username:</label>
+                        <input id="username" name="username" class="form-control" type="text" value="">
                     </div>
                     <div class="form-group">
-                        <label for="assignedto">Assigned to:</label>
-                        <!-- <input id="assignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
-                        <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
-                            <option value="" selected>Unassigned</option>
-                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id">{{user.name}}</option>
-                        </select>
+                        <label for="email">Email:</label>
+                        <input id="email" name="email" class="form-control" type="text" value="">
                     </div>
                 </form>
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="createChore">Create chore</button>
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUser">Update user</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                </footer>
+            </template>
+        </modal>
+        <modal id="updateUserCredentialsModal">
+            <template v-slot:header>
+                Change user credentials
+            </template>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input id="username" name="username" class="form-control" type="text" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input id="password" name="password" class="form-control" type="text" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm password:</label>
+                        <input id="confirm_password" name="confirm_password" class="form-control" type="text" value="">
+                    </div>
+                </form>
+            </div>
+            <template v-slot:footer>
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUser">Update user</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
                 </footer>
             </template>
@@ -81,10 +105,6 @@
         },
 
         methods: {
-            showEditUserModal() {
-                console.log("Showing the user edit modal!");
-            },
-
             getAllUsers() {
                 axios.get('/api/users', {
                     headers: {
@@ -105,23 +125,38 @@
                 );
             },
 
-            removeUser() {
-                console.log("removing the user!");
+            showEditUserModal() {
+                let editUserModal = document.getElementById('editUserModal');
+
+                editUserModal.style.display = 'block';
             },
 
-            // TODO recreate this as a vuex getter
-            userHasAdminPrivelege() {
-                let userRoles = this.$store.getters.getUsersRoles;
+            showChangeCredentialsModal() {
+                let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
 
-                console.log(userRoles);
+                changeCredentialsModal.style.display = 'block';
+            },
 
-                if(userRoles.some((role) => { 
-                    return role.role == 'admin';
-                    })) {
-                    this.userIsAdmin = true;
-                } else {
-                    this.userIsAdmin = false;
-                }
+            changeUserCredentials() {
+                console.log('Changing the user credentials!');
+            },
+
+            updateUser() {
+                console.log('Updating the user!');
+
+                // Close the modal
+                eventBus.$emit('close-modal');
+            },
+
+            removeUser() {
+                console.log("removing the user!");
+
+                // Close the modal
+                eventBus.$emit('close-modal');
+            },
+            
+            sendEventBusMessage() {
+                eventBus.$emit('close-modal');
             }
         }
     }
