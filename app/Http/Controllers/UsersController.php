@@ -55,6 +55,28 @@ class UsersController extends Controller
     public function update(Request $request, $userId)
     {
         if (Gate::allows('manage-chorechart')) {
+            $validatedRequest = $request->validate([
+                'name' => 'required',
+                'username' => 'required',
+                'email' => 'nullable'
+            ]);
+            
+            $user = User::find($userId);
+
+            $user->name = $validatedRequest['name'];
+            $user->username = $validatedRequest['username'];
+            
+            if(!empty($validatedRequest['email'])) {
+                $user->email = $validatedRequest['email'];
+            } else {
+                $user->email = null;
+            }
+
+            $user->save();
+
+            $allUsers = User::all();
+
+            return $allUsers;
 
         } else {
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');

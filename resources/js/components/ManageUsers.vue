@@ -23,15 +23,15 @@
                 <form id="editUserForm">
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input id="name" name="name" class="form-control" type="text" value="">
+                        <input id="name" name="name" class="form-control" type="text" v-bind:value="editingUsersNameValue">
                     </div>
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input id="username" name="username" class="form-control" type="text" value="">
+                        <input id="username" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input id="email" name="email" class="form-control" type="text" value="">
+                        <input id="email" name="email" class="form-control" type="text" v-bind:value="editingUserEmailValue">
                     </div>
                 </form>
             </div>
@@ -47,10 +47,10 @@
                 Change user credentials
             </template>
             <div class="modal-body">
-                <form id="editUserForm">
+                <form id="changeUserCredentialsForm">
                     <div class="form-group">
                         <label for="username">Username:</label>
-                        <input id="username" name="username" class="form-control" type="text" value="">
+                        <input id="username" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
                     </div>
                     <div class="form-group">
                         <label for="password">Password:</label>
@@ -84,7 +84,11 @@
                 currentUser: null,
                 columns: [],
                 rows: [],
-                userIsAdmin: false
+                userIsAdmin: false,
+                editingUsersId: '',
+                editingUsersNameValue: '',
+                editingUsernameValue: '',
+                editingUserEmailValue: ''
             }
         },
 
@@ -125,14 +129,29 @@
                 );
             },
 
-            showEditUserModal() {
+            showEditUserModal(el) {
                 let editUserModal = document.getElementById('editUserModal');
+                let userId = el.target.dataset.userid;
+                let userBeingEdited;
+
+                this.users.forEach(user => {
+                    if (user.id == userId) {
+                        userBeingEdited = user;
+                    }
+                });
+
+                this.editingUsersId = userId;
+                this.editingUsersNameValue = userBeingEdited.name;
+                this.editingUsernameValue = userBeingEdited.username;
+                this.editingUserEmailValue = userBeingEdited.email;
 
                 editUserModal.style.display = 'block';
             },
 
             showChangeCredentialsModal() {
                 let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
+                let userId = el.target.dataset.userid;
+                let userBeingEdited;
 
                 changeCredentialsModal.style.display = 'block';
             },
@@ -142,7 +161,26 @@
             },
 
             updateUser() {
-                console.log('Updating the user!');
+                let formEls = document.querySelectorAll('#editUserForm .form-control');
+                let userData = {};
+
+                formEls.forEach((el) => {
+                    userData[el.name] = el.value;
+                });
+
+                axios({
+                    method: 'put',
+                    url: '/api/users/' + this.editingUsersId,
+                    data: userData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    this.users = response.data;
+                    this.rows = response.data;
+                }).catch((error) => {
+                    console.log(error);
+                });
 
                 // Close the modal
                 eventBus.$emit('close-modal');
