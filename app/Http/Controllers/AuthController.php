@@ -110,4 +110,32 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function updateUserCredentials(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required|min:8',
+            'confirm_password' => 'required|min:8|same:password'
+        ]);
+
+        $user = User::where('username', $request->username)->first();
+        
+        try {
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'Successfully updated credentials'
+            ]);
+        } catch(Exception $error) {
+            return response()->json([
+                'status_code' => 500,
+                'message' => 'Error updating credentials',
+                'error' => $error
+            ]);
+        }
+    }
 }

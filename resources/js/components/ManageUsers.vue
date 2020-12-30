@@ -54,17 +54,20 @@
                     </div>
                     <div class="form-group">
                         <label for="password">Password:</label>
-                        <input id="password" name="password" class="form-control" type="text" value="">
+                        <input id="password" name="password" class="form-control" type="password" value="">
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Confirm password:</label>
-                        <input id="confirm_password" name="confirm_password" class="form-control" type="text" value="">
+                        <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
                     </div>
                 </form>
+                <div id="errorMessage">
+                    <p v-for="errorMessage in errorMessages" :key="errorMessage.message">{{errorMessage.message}}</p>
+                </div>
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUser">Update user</button>
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="changeUserCredentials">Update credentials</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
                 </footer>
             </template>
@@ -88,7 +91,8 @@
                 editingUsersId: '',
                 editingUsersNameValue: '',
                 editingUsernameValue: '',
-                editingUserEmailValue: ''
+                editingUserEmailValue: '',
+                errorMessages: []
             }
         },
 
@@ -148,16 +152,71 @@
                 editUserModal.style.display = 'block';
             },
 
-            showChangeCredentialsModal() {
+            showChangeCredentialsModal(el) {
                 let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
+
+                this.users.forEach(user => {
+                    if (user.id == userId) {
+                        userBeingEdited = user;
+                    }
+                });
+
+                this.editingUsersId = userId;
+                this.editingUsernameValue = userBeingEdited.username;
 
                 changeCredentialsModal.style.display = 'block';
             },
 
             changeUserCredentials() {
-                console.log('Changing the user credentials!');
+                let formEls = document.querySelectorAll('#updateUserCredentialsModal .form-control');
+                let userData = {};
+                let validPasswords = false;
+
+                // reset errorMessages to an empty array
+                this.errorMessages = [];
+
+                formEls.forEach((el) => {
+                    userData[el.name] = el.value;
+                });
+
+                console.log(userData);
+
+                // TODO validate passwords on the fly with an onchange event.
+                if (userData['password'].length < 8) {
+                    this.errorMessages.push({ message: 'Your password needs to be at least eight characters'});
+                }
+                
+                if (userData['confirm_password'].length < 8) {
+                    this.errorMessages.push({ message: 'Your password confirmation needs to be at least eight characters'});
+                }
+                
+                if (userData['password'] != userData['confirm_password']) {
+                    this.errorMessages.push({ message: 'Your passwords do not match'});
+                }
+
+                if(this.errorMessages.length == 0) {
+                    validPasswords = true;
+                }
+
+                if(validPasswords) {
+
+                    axios({
+                        method: 'put',
+                        url: '/api/update-credentials/' + this.editingUsersId, // TODO rework this. its not restful
+                        data: userData,
+                        headers: {
+                            authorization: this.$store.getters.getUserAuthToken
+                        }
+                    }).then((response) => {
+                        // Close the modal
+                        eventBus.$emit('close-modal');
+                    }).catch((error) => {
+                        // TODO - log a nice message to the user
+                        console.log(error);
+                    });
+                }
             },
 
             updateUser() {
