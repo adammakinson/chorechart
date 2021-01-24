@@ -49,8 +49,8 @@
             <div class="modal-body">
                 <form id="changeUserCredentialsForm">
                     <div class="form-group">
-                        <label for="username">Username:</label>
-                        <input id="username" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
+                        <label for="uname">Username:</label>
+                        <input id="uname" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
                     </div>
                     <div class="form-group">
                         <label for="password">Password:</label>
@@ -245,8 +245,21 @@
                 eventBus.$emit('close-modal');
             },
 
-            removeUser() {
-                console.log("removing the user!");
+            removeUser(el) {
+                let userId = el.target.dataset.userid;
+
+                axios({
+                    method: 'delete',
+                    url: '/api/users/' + userId,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    this.users = response.data;
+                    this.rows = response.data;
+                }).catch((error) => {
+                    console.log(error);
+                })
 
                 // Close the modal
                 eventBus.$emit('close-modal');

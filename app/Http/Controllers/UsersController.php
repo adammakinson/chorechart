@@ -91,10 +91,15 @@ class UsersController extends Controller
      * @param  \App\Models\chores  $chores
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user, $id)
+    public function destroy($userId)
     {
         if (Gate::allows('manage-chorechart')) {
+            $user = User::find($userId);
+            $user->delete();
 
+            $allUsers = User::all();
+
+            return $allUsers;
         } else {
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
         }
