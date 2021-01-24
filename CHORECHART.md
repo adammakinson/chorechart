@@ -27,14 +27,15 @@ Notes:
     a.  Chore creation and management (DONE)
     b.  Assigning chores to a user (DONE)
     c.  User registration process (DONE)
-    d.  Admin user management dashboard (TODO)
+    d.  Admin user management dashboard (DONE)
     e.  User profile dashboard (TODO)
     f.  User point and prize system (TODO)
     g.  App onboarding
-    h.  Maybe I really should look into soft deletes...
+    h.  Maybe I really should look into soft deletes... (Added soft deletes for users)
     i.  Creation of a home screen
     j.  User notification system
-    k.  add a 404 forbidden error screen for routes the user shouldnt be able to access instead of just booting them from the app.
+    k.  add a 404 forbidden error screen for routes the user shouldnt be able to 
+        access instead of just booting them from the app.
 
 4.  I fiddled around with the app onboarding concept a bit earlier.
     The basic gist is we check for a .env file with credentials and
