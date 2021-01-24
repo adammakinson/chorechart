@@ -61,26 +61,47 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        try {
+        
+        // Validate the request
+        $request->validate([
+            'name' => 'string',
+            'username' => 'required',
+            'password' => 'required',
+            'confirm_password' => 'required'
+        ]);
             
-            // Validate the request
-            $request->validate([
-                'name' => 'string',
-                'username' => 'required',
-                'password' => 'required',
-                'confirm_password' => 'required'
-            ]);
+        if (isset($request->email) && $request->email != "") {
+            $request->validate(['email' => 'email']);
+        }
+        
+        $password = $request->password;
+        $passwordConfirmation = $request->confirm_password;            
+        if ($password !== $passwordConfirmation) {
+            throw new \Exception('Your password and password confirmation need to match!');
+        }
+        
+        $userExistsWithUsername = User::withTrashed()->where('username', $request->username)->first();
+        $userExistsWithEmail = User::withTrashed()->where('email', $request->email)->first();
 
-            if (isset($request->email) && $request->email != "") {
-                $request->validate(['email' => 'email']);
-            }
+        if($userExistsWithUsername != null && $userExistsWithUsername->trashed()) {
 
-            $password = $request->password;
-            $passwordConfirmation = $request->confirm_password;            
-            if ($password !== $passwordConfirmation) {
-                throw new \Exception('Your password and password confirmation need to match!');
-            }
+            throw new \Exception("The user associated with $request->username was removed. Please contact an admin about restoring it.");
+        }
+        
+        if($userExistsWithEmail != null && $userExistsWithEmail->trashed()) {
 
+            throw new \Exception("The user associated with $request->email was removed. Please contact an admin about restoring it.");
+        }
+
+        if ($userExistsWithUsername) {
+            throw new \Exception("$request->username already exists. Choose another user name.");
+        }
+        
+        if ($userExistsWithEmail) {
+            throw new \Exception("$request->email already exists. Have you registered here before?");
+        }
+        
+        try {
             // Create a new instance of the User model passing in the values
             $user = new User();
 
