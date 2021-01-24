@@ -22,6 +22,9 @@
                     <p v-if="error">{{error}}</p>
                 </form>
             </div>
+            <div class="card-footer">
+                <p>Dont have an account? <a href="/register">Sign up for one now.</a></p>
+            </div>
         </div>
     </div>
 </template>
