@@ -26,12 +26,14 @@ class UserChoreSeeder extends Seeder
             [
             'chore_id' => '1',
             'user_id' => '1',
+            'assigner_id' => '1',
             'created_at' => now(),
             'updated_at' => now()
             ],
             [
             'chore_id' => '2',
             'user_id' => '2',
+            'assigner_id' => '1',
             'created_at' => now(),
             'updated_at' => now()
             ]
