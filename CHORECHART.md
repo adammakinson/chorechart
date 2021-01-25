@@ -36,6 +36,21 @@ Notes:
     j.  User notification system
     k.  add a 404 forbidden error screen for routes the user shouldnt be able to 
         access instead of just booting them from the app.
+    l.  Checkbox functionality
+        1.  An admin assigns a chore to another user (could be another admin)
+            I think we need an assignee, which would also be the reviewer.
+        2.  The person to whom the chore is assigned gets the chore in their
+            list and the checkmark icon. The checkmark icon here submits a
+            state change indicating the chore is "ready for review" 
+        3.  The admin (person who assigned the task) would then have the checkmark
+            show up in their interface for the task. Checking this instance of
+            the checkbox would be done after the assigner of the chore had
+            manually verified that the task was completed to satisfaction.
+        4.  I think all I need to do is add an assigner_id to the user_chores
+            table because it makes sense that a chore can only be assined by
+            one person. I think with that, everything is there for the remaining
+            functionality.
+
 
 4.  I fiddled around with the app onboarding concept a bit earlier.
     The basic gist is we check for a .env file with credentials and
