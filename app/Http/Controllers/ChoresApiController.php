@@ -57,12 +57,14 @@ class ChoresApiController extends Controller
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
+            $assigner = auth()->user();
             $assignedTo = $request->assignedto;
 
             if (!empty($assignedTo)) {
                 $userChore = new UserChores;
                 $userChore->chore_id = $chore->id;
                 $userChore->user_id = $assignedTo;
+                $userChore->assigner_id = $assigner->id;
                 $userChore->save();
             }
     
@@ -151,6 +153,9 @@ class ChoresApiController extends Controller
         if (Gate::allows('manage-chorechart')) {
             $chore = $chores->find($id);
             $chore->delete();
+
+            // Hrm... I'm really not sure the on-delete cascade is working here
+            // It might be something I need to get working.
 
             $choresList = chores::all()->load('user');
     
