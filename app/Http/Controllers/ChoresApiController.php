@@ -156,6 +156,7 @@ class ChoresApiController extends Controller
 
             // Hrm... I'm really not sure the on-delete cascade is working here
             // It might be something I need to get working.
+            UserChores::where('chore_id', $id)->delete();
 
             $choresList = chores::all()->load('user');
     
