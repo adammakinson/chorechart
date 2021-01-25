@@ -12,6 +12,7 @@ class UserChores extends Model
     protected $fillable = [
         'chore_id',
         'user_id',
+        'assigner_id',
         'inspection_ready',
         'inspected_on',
         'inspection_passed'
