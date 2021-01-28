@@ -10,9 +10,11 @@
                     <td v-if="userIsAdmin">{{row.assignedUsers}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
-                        <span v-on:click="handleCheckClick" class="fas fa-check" v-bind:data-choreid="row.id"></span>
-                        <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit" v-bind:data-choreid="row.id"></span>
-                        <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash" v-bind:data-choreid="row.id"></span>
+                        <div class="actionsContainer">
+                            <span v-if="row.submittable" v-on:click="handleCheckClick" class="fas fa-check text-secondary" v-bind:data-choreid="row.id"></span>
+                            <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
+                            <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
+                        </div>
                     </td>
                 </tr>
             </template>
