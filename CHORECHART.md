@@ -98,3 +98,29 @@ Thoughts/questions:
         would open the edit modal to change anything on the user. It would just have
         sections with different buttons to do various things. The modal would just have the
         one close button in the upper right hand corner.
+
+
+relationships
+1.  A user can have many chores
+2.  A chore could conceivably be assigned to many users
+    In addition a chore could be assigned to different users at different times
+
+
+checkmark states
+    IF the user is an admin (i.e. they are viewing all chores)
+        IF the chore was assinged to them by them (they are assinger and owner):
+        then checking the checkbox should set inspection_ready=now(), inspected_on=now(), inspection_passed=true
+        These params passed to the DB successfully (OK 200) should cause the checkbox to be green
+
+        IF the chore is assinged to another individual by them, the checkbox should
+        not be visible nor clickable while inspection_ready=null. Once inspection_ready
+        is set, the checkbox should appear for the admin user and clicking on it
+        should set inspected_on=now() and inspection_passed=true in the database and
+        cause the checkbox to become green.
+
+    IF the user is NOT an admin, they only need to see inspection_ready.
+        IF inspection_ready=null, checkbox is gray. Clicking checkbox will send
+        an inspection_ready=now() message to the server which will get updated on
+        the Model and persisted to the DB. An OK 200 response will cause the checkbox
+        to get a class coloring green.
+
