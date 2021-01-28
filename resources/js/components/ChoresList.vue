@@ -147,12 +147,30 @@ export default {
                 
                 response.data.forEach((row) => {
 
-                    // Aggregates user names into a string... perhaps not ideal?
-                    if(row.user){
+                    row.submittable = false;
+                    
+                    if (this.userIsAdmin) {
+                        
+                        if(row.assigner && row.assigner.length) {
+                            row.assigner = row.assigner[0];
+                        }
 
-                        row.assignedUsers = row.user.reduce((total, user) => {
-                            return user.name + ', ';
-                        }, '');
+                        if(row.user && row.user.length){
+                            row.user = row.user[0];
+    
+                            // Hrm, I think the thought here was if a chore was assigned to multiple users.
+                            // I'm not sure I want to go that route, but rather perhaps have chore instances?
+                            // would need to stay an array for reduce to work
+                            // row.assignedUsers = row.user.reduce((total, user) => {
+                            //     return user.name + ', ';
+                            // }, '');
+    
+                            if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
+                                row.submittable = true;
+                            }
+                        }
+                    } else {
+                        row.submittable = true;
                     }
                 });
                 
@@ -170,6 +188,14 @@ export default {
 
                 this.rows = response.data;
             });
+        },
+
+        choreIsSelfAssigned(row) {
+            return row.assigner && row.user && row.assigner.id == row.user.id;
+        },
+
+        choreIsReadyForInspection(row) {
+            return row.user && row.user.pivot.inspection_ready;
         },
 
         getAllUsers() {
@@ -202,7 +228,6 @@ export default {
             let choreBeingEdited;
 
             allChores.forEach(chore => {
-                console.log(chore);
                 if (chore.id == choreId) {
                     choreBeingEdited = chore;
                 }
@@ -223,7 +248,14 @@ export default {
         },
 
         handleCheckClick(el) {
-            console.log(el);
+            let itemId = el.target.dataset.choreid;
+            
+            if(this.userIsAdmin) {
+                console.log("user is admin");
+            
+            } else {
+                console.log("User is not an admin");
+            }
         },
 
         handleTrashClick(el) {
