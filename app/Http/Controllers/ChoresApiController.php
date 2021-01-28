@@ -18,6 +18,9 @@ class ChoresApiController extends Controller
      * Display a listing of the resource.
      *
      * All users should be able to view basic chores
+     * NOTE: we are using the relationship here to eager-load chores per user
+     * Take a look at the user Model at the relationship to see the extra Pivot
+     * table fields we are including from the UserChores Model
      * 
      * @return \Illuminate\Http\Response
      */
@@ -25,7 +28,7 @@ class ChoresApiController extends Controller
     {
         if (Gate::allows('manage-chorechart')) {
 
-            $chores = chores::all()->load('user');
+            $chores = chores::all()->load('user', 'assigner');
     
             return $chores;
 
