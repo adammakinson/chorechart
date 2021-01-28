@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ChoresApiController;
+use App\Http\Controllers\UserChoresController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,8 +24,18 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+Route::middleware('auth:sanctum')->put('/users/{id}/chores/{id}', [UserChoresController::class, 'update']);
 
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);
 
 Route::middleware('auth:sanctum')->apiResource('/chores', ChoresApiController::class);
 // Route::apiResource('/chores', ChoresApiController::class);
+
+// How does a user submit their chore for "inspection"?
+// route: POST /chores/{id}?
+// since creating a new chore is a POST to /chores to add to the collection,
+
+ // What would a UserChoresController look like?
+    // PUT /users/{id}/chores/{id}
+        // This would get the UserChores model associated with user_id and chore_id
+        // and update EITHER "inspection_ready" OR "inspected_on" + "inspection_passed"
