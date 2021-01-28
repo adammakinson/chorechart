@@ -84,7 +84,7 @@ const store = new Vuex.Store({
         userIsAdmin: state => {
             let userRoles = state.user.roles;
 
-            return userRoles.find(role => {
+            return userRoles.some(role => {
                 return role.role == 'admin';
             });
         }
