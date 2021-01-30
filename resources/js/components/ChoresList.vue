@@ -1,7 +1,7 @@
 <template>
     <div>
         <user-status-bar></user-status-bar>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
+        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
         <hr>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
