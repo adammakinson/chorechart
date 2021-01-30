@@ -29,8 +29,8 @@ export default {
 
     methods: {
         logout() {
-            this.$store.commit('setCurrentUser', {});
-            localStorage.removeItem('user');
+            this.$store.commit('removeCurrentUser');
+            // localStorage.removeItem('user');
             this.$router.push('login');
         }
     },
@@ -42,6 +42,8 @@ export default {
             this.usersName = this.$store.getters.getUsersName;
 
             this.userIsAdmin = this.$store.getters.userIsAdmin;
+        } else {
+            this.logout();
         }
     }
 }

@@ -64,8 +64,8 @@ export default {
     mounted() {
         // if (!this.cookie.get('XSRF-TOKEN')) {
             axios.get('/sanctum/csrf-cookie').then(response => {
-            //    this.csrfToken = this.cookie.get('XSRF-TOKEN');  
-                console.log('cookie should be there');   
+                // this.csrfToken = this.cookie.get('XSRF-TOKEN');  
+                // The csrfToken cooke should be set in the browser.
             });
         // }
 

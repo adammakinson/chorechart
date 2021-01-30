@@ -46,6 +46,11 @@ const store = new Vuex.Store({
         setCurrentUser (state, data) {
             state.user = data;
             localStorage.setItem('user', JSON.stringify(data));
+        },
+        
+        removeCurrentUser (state) {
+            state.user = {};
+            localStorage.removeItem('user');
         }
     },
     getters: {
@@ -84,9 +89,13 @@ const store = new Vuex.Store({
         userIsAdmin: state => {
             let userRoles = state.user.roles;
 
-            return userRoles.some(role => {
-                return role.role == 'admin';
-            });
+            if (userRoles) {
+                return userRoles.some(role => {
+                    return role.role == 'admin';
+                });
+            } else {
+                return false;
+            }
         }
     }
 });
