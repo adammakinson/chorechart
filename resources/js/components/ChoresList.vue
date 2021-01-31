@@ -11,7 +11,7 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
-                            <span v-if="row.submittable" v-on:click="handleCheckClick" class="fas fa-check text-secondary" v-bind:data-choreid="row.id"></span>
+                            <span v-if="row.submittable && row.user.id" v-on:click="handleCheckClick" v-bind:class="[{ 'text-warning': row.pivot && row.pivot.pending, 'text-success': row.pivot && row.pivot.inspection_passed, 'text-secondary': ((row.pivot && !row.pivot.inspection_passed) && (row.pivot && !row.pivot.pending)) }, 'fas fa-check']" v-bind:data-choreid="row.id"></span>
                             <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
                             <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
                         </div>
@@ -145,49 +145,46 @@ export default {
                 }
             }).then((response) => {
                 
-                response.data.forEach((row) => {
-
-                    row.submittable = false;
-                    
-                    if (this.userIsAdmin) {
-                        
-                        if(row.assigner && row.assigner.length) {
-                            row.assigner = row.assigner[0];
-                        }
-
-                        if(row.user && row.user.length){
-                            row.user = row.user[0];
-    
-                            // Hrm, I think the thought here was if a chore was assigned to multiple users.
-                            // I'm not sure I want to go that route, but rather perhaps have chore instances?
-                            // would need to stay an array for reduce to work
-                            // row.assignedUsers = row.user.reduce((total, user) => {
-                            //     return user.name + ', ';
-                            // }, '');
-    
-                            if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
-                                row.submittable = true;
-                            }
-                        }
-                    } else {
-                        row.submittable = true;
-                    }
-                });
+                this.chores = this.processFetchedData(response.data);
                 
-                this.chores = response.data;
+                this.setupTableData(response.data);
+            });
+        },
 
-                this.columns = [
-                    {label: 'chore', field: 'chore'}
-                ];
+        processFetchedData(data) {
+            data.forEach((row) => {
 
-                if(this.userIsAdmin) {
-                    this.columns.push({label: 'assigned', field: 'assignedUsers'});
+                row.submittable = false;
+
+                if (row.user && row.user.length) {
+                    row.user = row.user[0];
+                    row.pivot = row.user.pivot;
                 }
                 
-                this.columns.push({label: 'points', field: 'pointvalue'});
+                if (this.userIsAdmin) {
+                    
+                    if(row.assigner && row.assigner.length) {
+                        row.assigner = row.assigner[0];
+                    }
 
-                this.rows = response.data;
+                    // Hrm, I think the thought here was if a chore was assigned to multiple users. I'm not sure I want 
+                    // to go that route, but rather perhaps have chore instances? would need to stay an array for reduce 
+                    // to work
+                    // row.assignedUsers = row.user.reduce((total, user) => {
+                    //     return user.name + ', ';
+                    // }, '');
+                    row.assignedUsers = row.user.name;
+
+                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
+                        row.submittable = true;
+                    }
+                } else {
+                    // I think we can do this because a non admin user wont have unassigned chores in their list.
+                    row.submittable = true;
+                }
             });
+
+            return data;
         },
 
         choreIsSelfAssigned(row) {
@@ -195,7 +192,22 @@ export default {
         },
 
         choreIsReadyForInspection(row) {
-            return row.user && row.user.pivot.inspection_ready;
+            return row.user && row.user.id && row.user.pivot.inspection_ready;
+        },
+
+        setupTableData(data) {
+            
+            this.columns = [
+                {label: 'chore', field: 'chore'}
+            ];
+
+            if(this.userIsAdmin) {
+                this.columns.push({label: 'assigned', field: 'assignedUsers'});
+            }
+            
+            this.columns.push({label: 'points', field: 'pointvalue'});
+
+            this.rows = data;
         },
 
         getAllUsers() {
@@ -221,17 +233,15 @@ export default {
             modalwindow.style.display = 'block';
         },
 
+        findChoreById(allChores, choreId) {
+            return allChores.find(chore => chore.id == choreId);
+        },
+
         showEditChoreModal(el) {
             let modalwindow = document.getElementById("editChoreModal");
             let choreId = el.target.dataset.choreid;
             let allChores = this.chores;
-            let choreBeingEdited;
-
-            allChores.forEach(chore => {
-                if (chore.id == choreId) {
-                    choreBeingEdited = chore;
-                }
-            });
+            let choreBeingEdited = this.findChoreById(allChores, choreId);
 
             this.choreFieldValue = choreBeingEdited.chore;
             this.pointFieldValue = choreBeingEdited.pointvalue;
@@ -248,14 +258,32 @@ export default {
         },
 
         handleCheckClick(el) {
-            let itemId = el.target.dataset.choreid;
-            
-            if(this.userIsAdmin) {
-                console.log("user is admin");
-            
-            } else {
-                console.log("User is not an admin");
-            }
+            let choreId = el.target.dataset.choreid;
+            let allChores = this.chores;
+            let choreBeingEdited = this.findChoreById(allChores, choreId);
+            let user = this.$store.getters.getUser;
+            let choreData = {
+                id: choreBeingEdited.id,
+                userId: choreBeingEdited.user.id,
+                inspection_ready: true
+            };
+
+            console.log(choreBeingEdited);
+
+            // Hrm... do we really need user.id in the route???
+            axios({
+                method: 'put',
+                url: '/api/users/' + user.id + '/chores/' + choreBeingEdited.id,
+                data: choreData,
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                /**
+                 * Still need to handle the response, successful or not.
+                 */
+                console.log(response.data);
+            });
         },
 
         handleTrashClick(el) {
@@ -284,7 +312,7 @@ export default {
             });
         },
 
-        'createChore': function(){
+        createChore(){
             let formEls = document.querySelectorAll('#createChoreModal .form-control');
             let choreData = {};
 
@@ -301,26 +329,15 @@ export default {
                 }
             }).then((response) => {
 
-                response.data.forEach((row) => {
-
-                    // Aggregates user names into a string... perhaps not ideal?
-                    if(row.user){
-
-                        row.assignedUsers = row.user.reduce((total, user) => {
-                            return user.name + ', ';
-                        }, '');
-                    }
-                });
-
-                this.chores = response.data;
-                this.rows = response.data;
+                this.chores = this.processFetchedData(response.data);
+                this.rows = this.chores;
                 
                 // Close the modal
                 eventBus.$emit('close-modal');
             });
         },
         
-        'updateChore': function(){
+        updateChore() {
             let formEls = document.querySelectorAll('#editChoreModal .form-control');
             let choreData = {};
 
@@ -337,19 +354,11 @@ export default {
                 }
             }).then((response) => {
 
-                response.data.forEach((row) => {
+                this.chores = this.processFetchedData(response.data);
 
-                    // Aggregates user names into a string... perhaps not ideal?
-                    if(row.user){
+                console.log(this.chores);
 
-                        row.assignedUsers = row.user.reduce((total, user) => {
-                            return user.name + ', ';
-                        }, '');
-                    }
-                });
-
-                this.chores = response.data;
-                this.rows = response.data;
+                this.rows = this.chores;
                 
                 this.activeElementId = '';
 

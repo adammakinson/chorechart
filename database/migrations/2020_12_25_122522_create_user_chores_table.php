@@ -21,7 +21,7 @@ class CreateUserChoresTable extends Migration
                 ->referneces('id')->on('users')->onDelete('cascade');
             $table->timestamp('inspection_ready')->nullable();
             $table->timestamp('inspected_on')->nullable();
-            $table->boolean('inspection_passed')->default(false);
+            $table->boolean('inspection_passed')->nullable();
             $table->timestamps();
         });
     }

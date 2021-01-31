@@ -78,6 +78,10 @@ const store = new Vuex.Store({
             return authToken;
         },
 
+        getUser: state => {
+            return state.user;
+        },
+
         getUsersName: state => {
             return state.user.name;
         },

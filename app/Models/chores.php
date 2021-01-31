@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Gate;
+use App\Models\UserChores;
 
 class chores extends Model
 {
@@ -24,10 +25,16 @@ class chores extends Model
 
     public function user() {
         if (Gate::allows('manage-chorechart')) {
-            return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->withPivot('inspection_ready', 'inspected_on', 'inspection_passed');
+            return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->withPivot('inspection_ready', 'inspected_on', 'pending', 'inspection_passed');
         } else {
-            return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->withPivot('inspection_ready');
+            return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->withPivot('inspection_ready', 'pending', 'inspection_passed');
         }
+        
+        // if (Gate::allows('manage-chorechart')) {
+        //     return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->using(UserChores::class);
+        // } else {
+        //     return $this->belongsToMany(User::class, 'user_chores', 'chore_id', 'user_id')->using(UserChores::class);
+        // }
     }
 
     public function assigner() {

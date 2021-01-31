@@ -24,11 +24,12 @@ class ChoresApiController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index(User $user, chores $chores)
     {
         if (Gate::allows('manage-chorechart')) {
 
-            $chores = chores::all()->load('user', 'assigner');
+            // $chores = chores::all()->load('user', 'assigner' );
+            $chores = $chores->all()->load('user', 'assigner');
     
             return $chores;
 
@@ -71,7 +72,7 @@ class ChoresApiController extends Controller
                 $userChore->save();
             }
     
-            $chores = chores::all()->load('user');
+            $chores = chores::all()->load('user', 'assigner');
     
             return $chores;
         } else {
@@ -112,6 +113,7 @@ class ChoresApiController extends Controller
 
         if (Gate::allows('manage-chorechart')) {
 
+            $assigner = auth()->user();
             $chore = chores::find($choreId)->load('user');
 
 
@@ -130,10 +132,11 @@ class ChoresApiController extends Controller
                 $userChore = new UserChores;
                 $userChore->chore_id = $chore->id;
                 $userChore->user_id = $request->assignedto;
+                $userChore->assigner_id = $assigner->id;
                 $userChore->save();
             }
 
-            $choresList = chores::all()->load('user');
+            $choresList = chores::all()->load('user', 'assigner');
     
             return $choresList;
         } else {

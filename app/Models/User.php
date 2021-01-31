@@ -56,6 +56,6 @@ class User extends Authenticatable
 
     public function chores()
     {
-        return $this->belongsToMany(chores::class, 'user_chores', 'user_id', 'chore_id');
+        return $this->belongsToMany(chores::class, 'user_chores', 'user_id', 'chore_id')->withPivot('inspection_ready', 'pending', 'inspection_passed');
     }
 }
