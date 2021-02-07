@@ -125,3 +125,35 @@ checkmark states
         the Model and persisted to the DB. An OK 200 response will cause the checkbox
         to get a class coloring green.
 
+Where to put user points?
+    First inclination is to put user points on the users table. We are already fetching the user and doing it this way
+    would mean we don't have to have a join just for displaying the accumulated points.
+    
+    Do I want a concept of transactions? so that a historical log of accumulation and "purchases" could be displayed?
+        What would this look like?
+            transactions
+                id
+                user_id
+                event (such as completed chore, spent points on prize etc.)
+                user_points
+                event_date (timestamp)
+
+            If I did it this way, I could retrieve the transaction log for the user
+            sorted DESC by date and use the zeroeth array element to get the latest points.
+            I'd have everything there to display the event history.
+
+            Question is, do I want to fetch event history based on a user interaction?
+            I suppose they could be separate interactions too. I could just fetch the single most
+            recent event to get the user's current points.
+
+            flow of events:
+                An admin checks a chore to mark as complete. in addition to inspection_passed being
+                set, the transactions table is searched for the most recent transaction for
+                the user the chore was assigned to. If a transaction is found for that user, we
+                grab the user's total score from that most recent transaction and create a new transaction
+                using it. We generate the event message from the chore and we add the chore's point value
+                to the prior transaction's user_points and generate the event_date as NOW().
+
+                The user spending their points will behave similarly to the above except we'd be subtracting
+                the prize point value from the total points (if the user has accumulated enough points to purchase the reward)
+
