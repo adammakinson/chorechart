@@ -29,14 +29,15 @@ Notes:
     c.  User registration process (DONE)
     d.  Admin user management dashboard (DONE)
     e.  User profile dashboard (TODO)
-    f.  User point and prize system (TODO)
-    g.  App onboarding
-    h.  Maybe I really should look into soft deletes... (Added soft deletes for users)
-    i.  Creation of a home screen
-    j.  User notification system
-    k.  add a 404 forbidden error screen for routes the user shouldnt be able to 
+    f.  Handle User points (TODO)
+    g.  Create the prize system (TODO)
+    h.  App onboarding (TODO)
+    i.  Maybe I really should look into soft deletes... (Added soft deletes for users)
+    j.  Creation of a home screen (SORT OF THERE)
+    k.  User notification system (TODO)
+    l.  add a 404 forbidden error screen for routes the user shouldnt be able to 
         access instead of just booting them from the app.
-    l.  Checkbox functionality
+    m.  Checkmark functionality (DONE)
         1.  An admin assigns a chore to another user (could be another admin)
             I think we need an assignee, which would also be the reviewer.
         2.  The person to whom the chore is assigned gets the chore in their
