@@ -19,11 +19,11 @@ class UserChoresController extends Controller
     
     public function update(Request $request, $userId, $choreId)
     {
-        // echo "updating inspection ready for chore $choreId for user $userId";
 
         $isAdmin = false;
         $user = auth()->user(); //currently logged in user which would be the same as what's passed in the route.
-        $chore = UserChores::find($choreId);
+        $chore = UserChores::where('chore_id', $choreId)->first();
+
         $assigneeId = $request->userId;
 
         foreach($user->roles as $role) {
@@ -31,8 +31,6 @@ class UserChoresController extends Controller
                 $isAdmin = true;
             }
         }
-
-        // dd($isAdmin, $userId, $assigneeId);
 
         if ($isAdmin && $userId == $assigneeId) { // The currently logged in admin owns the chore
             $chore->inspection_ready = now();
@@ -42,7 +40,7 @@ class UserChoresController extends Controller
             $chore->inspected_on = now();
             $chore->inspection_passed = true;
             $chore->pending = false;
-        } else {
+        } else { // Not an admin user
             $chore->inspection_ready = now();
             $chore->pending = true;
         }
@@ -56,7 +54,6 @@ class UserChoresController extends Controller
             $chores = $user->chores()->get();
         }
 
-        // return response('Successfully submitted chore for inspection', 200)->header('Content-Type', 'text/plain');
         return $chores;
     }
 }
