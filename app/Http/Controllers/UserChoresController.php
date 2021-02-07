@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\chores;
 use App\Models\UserChores;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserChoresController extends Controller
 {
@@ -48,7 +49,14 @@ class UserChoresController extends Controller
 
         $chore->save();
 
+        if (Gate::allows('manage-chorechart')) {
+            $chores = chores::all()->load('user', 'assigner' );
+        } else {
+            $user = auth()->user();
+            $chores = $user->chores()->get();
+        }
+
         // return response('Successfully submitted chore for inspection', 200)->header('Content-Type', 'text/plain');
-        return chores::all()->load('user', 'assigner' );
+        return $chores;
     }
 }
