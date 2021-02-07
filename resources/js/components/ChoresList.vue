@@ -179,8 +179,19 @@ export default {
                         row.submittable = true;
                     }
                 } else {
-                    // I think we can do this because a non admin user wont have unassigned chores in their list.
+                    /**
+                     * I think we can do this because a non admin user wont have unassigned chores in their list.
+                     * In addition, the user is not returned because as a non admin user, all the chores
+                     * should belong to the currently logged in user and passing back a user should be
+                     * unneccessary.
+                     */
                     row.submittable = true;
+
+                    if(!row.user){
+                        row.user = {};
+                    }
+
+                    row.user.id = row.pivot.user_id;
                 }
             });
 
