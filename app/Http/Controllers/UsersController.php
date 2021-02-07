@@ -88,7 +88,7 @@ class UsersController extends Controller
      * 
      * Admin users only...
      *
-     * @param  \App\Models\chores  $chores
+     * @param  \App\Models\User  $userId
      * @return \Illuminate\Http\Response
      */
     public function destroy($userId)
