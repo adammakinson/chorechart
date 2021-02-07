@@ -290,10 +290,8 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                /**
-                 * Still need to handle the response, successful or not.
-                 */
-                console.log(response.data);
+                this.chores = this.processFetchedData(response.data);
+                this.rows = this.chores;
             });
         },
 
