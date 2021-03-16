@@ -24,7 +24,7 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::middleware('auth:sanctum')->put('/users/{userId}/chores/{choreId}', [UserChoresController::class, 'update']);
+Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
 
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);
 
