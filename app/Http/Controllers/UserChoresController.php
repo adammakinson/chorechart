@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\chores;
 use App\Models\UserChores;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserChoresController extends Controller
@@ -21,27 +20,21 @@ class UserChoresController extends Controller
      * user specified by userId and returns an updated chores list
      * 
      * @param $request - the PSR7 request
-     * @param $userId -  the id of the logged in user
-     * @param $choreId - the chore id
+     * @param $assigneeId -  the id of the user from the route
+     * @param $choreId - the chore id from the route
+     * @return chores collection
      */
-    public function update(Request $request, $assigneeId, $choreId)
+    public function update(Request $request)
     {
-        //currently logged in user which would be the same as what's passed in the route.
-        $user = auth()->user();
+        $this->updateUserChore($request->assigneeId, $request->choreId);
 
-        $this->updateUserChore($assigneeId, $user, $choreId);
-
-        if (Gate::allows('manage-chorechart')) {
-            $chores = chores::all()->load('user', 'assigner' );
-        } else {
-            $chores = $user->chores()->get();
-        }
-
-        return $chores;
+        return true;
     }
 
-    public function updateUserChore($assigneeId, $user, $choreId)
-    {        
+    public function updateUserChore($assigneeId, $choreId)
+    {
+        $user = auth()->user();
+        
         $isAdmin = false;
         foreach($user->roles as $role) {
             if($role->role == "admin") {
@@ -65,5 +58,21 @@ class UserChoresController extends Controller
         }
 
         $chore->save();
+
+        return $chore;
+    }
+
+    public function getUserVisibleChores($user)
+    {
+        //currently logged in user which would be the same as what's passed in the route.
+        $user = auth()->user();
+        
+        if (Gate::allows('manage-chorechart')) {
+            $chores = chores::all()->load('user', 'assigner' );
+        } else {
+            $chores = $user->chores()->get();
+        }
+
+        return $chores;
     }
 }
