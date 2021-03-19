@@ -28,19 +28,23 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 // Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
 
 Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', function(Request $request) {
-    $userChoresController = new UserChoresController;
-    $updatedChore = $userChoresController->update($request);
     
+    $accumulatedPoints = 0;
+    
+    $userChoresController = new UserChoresController;
+    $choresController = new ChoresApiController;
     $transactionsController = new TransactionsController;
-
-    // TODO: Get the most recent transaction for the $assigneeId user
+    
+    $chore = $choresController->getChoreById($request);
+    $userChore = $userChoresController->update($request);
     $mostRecentTransaction = $transactionsController->getUsersMostRecentTransaction($request->assigneeId);
+    
+    if($mostRecentTransaction instanceof App\Models\transactions ) {
+        $accumulatedPoints = $mostRecentTransaction->user_points;
+    }
 
-    // TODO: If the inspection passed for the chore, create a new transaction adding the
-    // points for the chore that was updated to the points from the most recent
-    // transaction to get the users new total point value.
-    if ($updatedChore->inspection_passed) {
-        $transactionsController->store($request, $updatedChore);
+    if ($userChore->inspection_passed) {
+        $transactionsController->store($request, $chore, $accumulatedPoints);
     }
 
     return $userChoresController->getUserVisibleChores();

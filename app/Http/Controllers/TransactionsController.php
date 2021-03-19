@@ -28,9 +28,19 @@ class TransactionsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $chore, $accumulatedPoints)
     {
+        // Hrm, for some reason, updatedChore is empty...
 
+        $transaction = new transactions;
+        $transaction->user_id = $request->assigneeId;
+        $transaction->event = "Completed chore $chore->chore";
+        $transaction->user_points = $accumulatedPoints + $chore->pointvalue;
+        $transaction->occurred_at = now();
+        $transaction->created_at = now();
+        $transaction->updated_at = now();
+
+        $transaction->save();
     }
 
     /**

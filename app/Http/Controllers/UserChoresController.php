@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\chores;
 use App\Models\UserChores;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class UserChoresController extends Controller
@@ -26,9 +27,7 @@ class UserChoresController extends Controller
      */
     public function update(Request $request)
     {
-        $this->updateUserChore($request->assigneeId, $request->choreId);
-
-        return true;
+        return $this->updateUserChore($request->assigneeId, $request->choreId);
     }
 
     public function updateUserChore($assigneeId, $choreId)
@@ -42,27 +41,27 @@ class UserChoresController extends Controller
             }
         }
 
-        $chore = UserChores::where('chore_id', $choreId)->first();
+        $userChore = UserChores::where('chore_id', $choreId)->first();
 
         if ($isAdmin && $user->id == $assigneeId) { // The currently logged in admin owns the chore
-            $chore->inspection_ready = now();
-            $chore->inspected_on = now();
-            $chore->inspection_passed = true;
+            $userChore->inspection_ready = now();
+            $userChore->inspected_on = now();
+            $userChore->inspection_passed = true;
         } elseif ($isAdmin && $user->id != $assigneeId) { // The chore belongs to someone else...
-            $chore->inspected_on = now();
-            $chore->inspection_passed = true;
-            $chore->pending = false;
+            $userChore->inspected_on = now();
+            $userChore->inspection_passed = true;
+            $userChore->pending = false;
         } else { // Not an admin user
-            $chore->inspection_ready = now();
-            $chore->pending = true;
+            $userChore->inspection_ready = now();
+            $userChore->pending = true;
         }
 
-        $chore->save();
+        $userChore->save();
 
-        return $chore;
+        return $userChore;
     }
 
-    public function getUserVisibleChores($user)
+    public function getUserVisibleChores()
     {
         //currently logged in user which would be the same as what's passed in the route.
         $user = auth()->user();

@@ -30,7 +30,7 @@ class ChoresApiController extends Controller
 
             // $chores = chores::all()->load('user', 'assigner' );
             $chores = $chores->all()->load('user', 'assigner');
-    
+
             return $chores;
 
         } else if (Gate::allows('view-chorechart')) {
@@ -42,6 +42,15 @@ class ChoresApiController extends Controller
         } else {
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
         }
+    }
+
+    /**
+     * Return a single chore by id
+     */
+    public function getChoreById(Request $request)
+    {
+        $chore = chores::find($request->choreId)->load('user');
+        return $chore;
     }
 
     /**
@@ -110,13 +119,11 @@ class ChoresApiController extends Controller
      */
     public function update(Request $request, $choreId)
     {
-
         if (Gate::allows('manage-chorechart')) {
 
             $assigner = auth()->user();
+            
             $chore = chores::find($choreId)->load('user');
-
-
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
