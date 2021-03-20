@@ -284,7 +284,7 @@ export default {
             // Hrm... do we really need user.id in the route???
             axios({
                 method: 'put',
-                url: '/api/users/' + user.id + '/chores/' + choreBeingEdited.id,
+                url: '/api/users/' + choreBeingEdited.user.id + '/chores/' + choreBeingEdited.id,
                 data: choreData,
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
