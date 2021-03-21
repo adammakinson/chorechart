@@ -157,3 +157,36 @@ Where to put user points?
                 The user spending their points will behave similarly to the above except we'd be subtracting
                 the prize point value from the total points (if the user has accumulated enough points to purchase the reward)
 
+I think I need to officially convert the user_chores into a proper model and create another
+pivot table to use instead. That means:
+    user_chores becomes chores_log
+    a pivot table is created for users_chores_log that is just a pivot table.
+    a pivot table is created for user_chores
+    a pivot table is created for chore_assinger
+
+    seems to me that it makes sense to use the query builder to manage (at least insert) entries into
+    pivot tables. I think then, the chores model needs to be updated/refactored to take 
+    all the above changes into account.
+
+I do feel like there needs to be the ability to filter at the SQL level because ive observed returning everything
+and then filtering on the front end is problematic.
+
+Should user_chores be more of a log similar to how transactions are supposed to work?
+How should this work?
+    A user should not be able to be assigned the same chore twice (i.e. at the same time)
+    For example, if the user was assigned "mow the lawn" two days ago and it still hasn't
+    been done, they shouldn't be able to get that chore assigned to them again while the
+    former chore is incomplete.
+
+
+Notes on the relationship between a "chores log" and a "transactions log"
+    The purpose of the transactions log is to record points earned for a completed chore
+    AND points spent on a reward.
+
+    The purpose of the chores log is to record the completion of a chore instance.
+    A chore instance is made unique by the combination of the user_id, chore_id and created_at
+
+    For our purposes, I'm not sure it makes much sense to assign the same chore twice
+    on the same day.
+
+Hrm... transactions is still broken...
