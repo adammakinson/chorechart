@@ -40,7 +40,9 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
     state: {
-        user: {}
+        user: {},
+        userPoints: 0,
+        userTransactions: []
     },
     mutations: {
         setCurrentUser (state, data) {
@@ -51,6 +53,14 @@ const store = new Vuex.Store({
         removeCurrentUser (state) {
             state.user = {};
             localStorage.removeItem('user');
+        },
+
+        setUserPoints (state, data) {
+            state.userPoints = data;
+        },
+
+        setUserTransactions (state, transactions) {
+            state.userTransactions = transactions;
         }
     },
     getters: {
@@ -99,6 +109,14 @@ const store = new Vuex.Store({
                 });
             } else {
                 return false;
+            }
+        },
+
+        getUserPoints: state => {
+            if (state.userTransactions[0]) {
+                return state.userTransactions[0].user_points;
+            } else {
+                return 10;
             }
         }
     }

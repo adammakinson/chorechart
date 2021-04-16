@@ -22,6 +22,11 @@ class TransactionsController extends Controller
         return transactions::where('user_id', $userId)->orderBy('created_at', 'desc')->first();
     }
 
+    public function getUserTransactionsOrderedByCreationTime($userId)
+    {
+        return transactions::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+    }
+
     /**
      * Store a new transaction in the transation list
      * 

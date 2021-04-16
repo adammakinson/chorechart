@@ -28,7 +28,6 @@ class ChoresApiController extends Controller
     {
         if (Gate::allows('manage-chorechart')) {
 
-            // $chores = chores::all()->load('user', 'assigner' );
             $chores = $chores->all()->load('user', 'assigner');
 
             return $chores;
@@ -36,7 +35,7 @@ class ChoresApiController extends Controller
         } else if (Gate::allows('view-chorechart')) {
 
             $user = auth()->user();
-            $chores = $user->chores()->get();
+            $chores = $user->chores()->where('inspection_passed', '!=', '1')->get();
     
             return $chores;
         } else {

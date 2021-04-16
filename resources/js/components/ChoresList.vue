@@ -127,6 +127,8 @@ export default {
             
             this.fetchChoresCollection();
 
+            this.fetchUsersTransactions();
+
             if(this.userIsAdmin) {
                 this.getAllUsers();
             }
@@ -145,13 +147,28 @@ export default {
                 }
             }).then((response) => {
                 
-                this.chores = this.processFetchedData(response.data);
+                this.chores = this.processFetchedChores(response.data);
                 
                 this.setupTableData(response.data);
             });
         },
 
-        processFetchedData(data) {
+        fetchUsersTransactions() {
+            let user = this.$store.getters.getUser;
+
+            axios.get('/api/users/' + user.id + '/transactions', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+
+                console.log(response.data[0]);
+
+                this.updateUserTransactions(response.data);
+            });
+        },
+
+        processFetchedChores(data) {
             data.forEach((row) => {
 
                 row.submittable = false;
@@ -290,9 +307,15 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                this.chores = this.processFetchedData(response.data);
+                this.chores = this.processFetchedChores(response.data.userChores);
+                this.updateUserTransactions(response.data.userTransactions);
                 this.rows = this.chores;
+                // this.updateUserPoints();
             });
+        },
+
+        updateUserTransactions(transactions) {
+            this.$store.commit('setUserTransactions', transactions);
         },
 
         handleTrashClick(el) {
@@ -338,7 +361,7 @@ export default {
                 }
             }).then((response) => {
 
-                this.chores = this.processFetchedData(response.data);
+                this.chores = this.processFetchedChores(response.data);
                 this.rows = this.chores;
                 
                 // Close the modal
@@ -363,7 +386,7 @@ export default {
                 }
             }).then((response) => {
 
-                this.chores = this.processFetchedData(response.data);
+                this.chores = this.processFetchedChores(response.data);
 
                 console.log(this.chores);
 

@@ -27,9 +27,9 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 // });
 // Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
 
+Route::middleware('auth:sanctum')->get('/users/{assigneeId}/transactions', [TransactionsController::class, 'getUserTransactionsOrderedByCreationTime']);
+
 Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', function(Request $request) {
-    
-    $accumulatedPoints = 0;
     
     $userChoresController = new UserChoresController;
     $choresController = new ChoresApiController;
@@ -37,17 +37,14 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', f
     
     $chore = $choresController->getChoreById($request);
     $userChore = $userChoresController->update($request);
-    $mostRecentTransaction = $transactionsController->getUsersMostRecentTransaction($request->assigneeId);
-    
-    if($mostRecentTransaction instanceof App\Models\transactions ) {
-        $accumulatedPoints = $mostRecentTransaction->user_points;
-    }
+    $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
+    $mostRecentTransaction = $userTransactions->first();
 
     if ($userChore->inspection_passed) {
-        $transactionsController->store($request, $chore, $accumulatedPoints);
+        $transactionsController->store($request, $chore, $mostRecentTransaction->user_points);
     }
 
-    return $userChoresController->getUserVisibleChores();
+    return [ "userChores" => $userChoresController->getUserVisibleChores(), "userTransactions" => $userTransactions ];
 });
 
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);

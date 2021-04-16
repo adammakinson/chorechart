@@ -14,6 +14,9 @@
                 </div>
             </div>
         </nav>
+        <div>
+            <h1>{{usersName}} - {{this.$store.getters.getUserPoints}} points</h1>
+        </div>
     </div>
 </template>
 
