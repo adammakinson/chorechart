@@ -61,6 +61,15 @@ class UserChoresController extends Controller
         return $userChore;
     }
 
+    public function updateUserChorePointsAwarded($choreId)
+    {
+        $userChore = UserChores::where('chore_id', $choreId)->first();
+
+        $userChore->points_awarded = true;
+
+        $userChore->save();
+    }
+
     public function getUserVisibleChores()
     {
         //currently logged in user which would be the same as what's passed in the route.

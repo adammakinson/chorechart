@@ -35,13 +35,23 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', f
     $choresController = new ChoresApiController;
     $transactionsController = new TransactionsController;
     
+    $userPoints = 0;
     $chore = $choresController->getChoreById($request);
     $userChore = $userChoresController->update($request);
     $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
     $mostRecentTransaction = $userTransactions->first();
 
-    if ($userChore->inspection_passed) {
-        $transactionsController->store($request, $chore, $mostRecentTransaction->user_points);
+    if ($mostRecentTransaction) {
+        $userPoints = $mostRecentTransaction->user_points;
+    }
+
+    // The goal is to NOT award points to a chore that has already been awarded points.
+    // Best I can come up with right now is adding a bool pointsAwarded column to the database
+    // that defaults to false and gets set to true right before recording the transaction.
+    if ($userChore->inspection_passed && !$userChore->points_awarded) {
+        $userChoresController->updateUserChorePointsAwarded($request->choreId);
+        $transactionsController->store($request, $chore, $userPoints);
+        $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
     }
 
     return [ "userChores" => $userChoresController->getUserVisibleChores(), "userTransactions" => $userTransactions ];

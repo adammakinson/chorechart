@@ -22,6 +22,7 @@ class CreateUserChoresTable extends Migration
             $table->timestamp('inspection_ready')->nullable();
             $table->timestamp('inspected_on')->nullable();
             $table->boolean('inspection_passed')->nullable();
+            $table->boolean('points_awarded')->default(false);
             $table->timestamps();
         });
     }

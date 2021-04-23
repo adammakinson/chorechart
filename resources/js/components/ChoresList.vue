@@ -298,6 +298,12 @@ export default {
 
             console.log(choreBeingEdited);
 
+            // TODO: If a chore has been approved and had points awarded for it,
+            // subsequent clicks on the checkbox should NOT incur a server request
+            // anymore.
+            // QUESTION: should a user be allowed to edit or delete a chore after
+            // points have been awarded? Should all actions be disabled?
+
             // Hrm... do we really need user.id in the route???
             axios({
                 method: 'put',

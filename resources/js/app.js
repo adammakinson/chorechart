@@ -116,7 +116,7 @@ const store = new Vuex.Store({
             if (state.userTransactions[0]) {
                 return state.userTransactions[0].user_points;
             } else {
-                return 10;
+                return 0;
             }
         }
     }
