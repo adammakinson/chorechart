@@ -303,6 +303,10 @@ export default {
             // anymore.
             // QUESTION: should a user be allowed to edit or delete a chore after
             // points have been awarded? Should all actions be disabled?
+            // I think what needs to happen is a chore can be edited or deleted
+            // until it has a pending status. Once it has a pending status, the
+            // ability to edit the chore (for example, modify the points or change the user)
+            // OR delete the chore should be disabled.
 
             // Hrm... do we really need user.id in the route???
             axios({
