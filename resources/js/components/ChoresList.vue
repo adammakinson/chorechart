@@ -296,6 +296,7 @@ export default {
                 inspection_ready: true
             };
 
+            console.log("Chore being edited: ");
             console.log(choreBeingEdited);
 
             // TODO: If a chore has been approved and had points awarded for it,
@@ -310,19 +311,20 @@ export default {
 
             // Hrm... do we really need user.id in the route???
             if (!choreBeingEdited.pivot.points_awarded == '1') {
-            axios({
-                method: 'put',
-                url: '/api/users/' + choreBeingEdited.user.id + '/chores/' + choreBeingEdited.id,
-                data: choreData,
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
-                }
-            }).then((response) => {
-                this.chores = this.processFetchedChores(response.data.userChores);
-                this.updateUserTransactions(response.data.userTransactions);
-                this.rows = this.chores;
-                // this.updateUserPoints();
-            });
+                axios({
+                    method: 'put',
+                    url: '/api/users/' + choreBeingEdited.user.id + '/chores/' + choreBeingEdited.id,
+                    data: choreData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    this.chores = this.processFetchedChores(response.data.userChores);
+                    this.updateUserTransactions(response.data.userTransactions);
+                    this.rows = this.chores;
+                    // this.updateUserPoints();
+                });
+            }
         },
 
         updateUserTransactions(transactions) {

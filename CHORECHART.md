@@ -190,3 +190,23 @@ Notes on the relationship between a "chores log" and a "transactions log"
     on the same day.
 
 Hrm... transactions is still broken...
+
+//! Refactoring notes !!
+
+I think I need to fundamentally refactor the application to provide more separation
+between chores and user_chores. I think they're too tightly coupled.
+
+I need separate "views" for chores and chores assigned to users (even if these two
+are encapsulated in the same "page"). The "user chores" would be the main view.
+
+As it is, there's not really a way to assign the same chore to different users.
+Also, a chore should be able to be soft-deleted but still show up in the user_chores list but not in the chores list.
+
+So, user_chores is already a model in its own right and I don't have soft-deletes on that
+table and I should be able to have a relationship between user_chores and chores so that
+the chores information is still present.
+
+In addition, the delete functionality should be different on the "user chores" screen
+than it is on the "chores management" screen. On the "user chores" screen, the user_chore
+should be hard-deleted IF it hasn't been submitted for inspection and if it hasn't had
+points awarded to it. On the "chores management" screen, the chore should be soft-deleted.
