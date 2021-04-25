@@ -18,6 +18,7 @@ class CreateChoresTable extends Migration
             $table->string('chore');
             $table->integer('pointvalue');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
