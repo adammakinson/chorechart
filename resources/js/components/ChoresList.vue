@@ -309,6 +309,7 @@ export default {
             // OR delete the chore should be disabled.
 
             // Hrm... do we really need user.id in the route???
+            if (!choreBeingEdited.pivot.points_awarded == '1') {
             axios({
                 method: 'put',
                 url: '/api/users/' + choreBeingEdited.user.id + '/chores/' + choreBeingEdited.id,
