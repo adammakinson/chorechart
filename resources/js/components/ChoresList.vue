@@ -1,5 +1,6 @@
 <template>
     <div>
+        <appmenu></appmenu>
         <user-status-bar></user-status-bar>
         <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
         <hr>
@@ -86,6 +87,7 @@
 
 <script>
 import Modal from "./Modal";
+import Appmenu from './AppMenu.vue';
 import UserStatusBar from './UserStatusBar.vue';
 import eventBus from '../eventBus';
 
@@ -116,7 +118,8 @@ export default {
 
     components: {
         Modal,
-        UserStatusBar
+        UserStatusBar,
+        Appmenu
     },
 
     mounted() {

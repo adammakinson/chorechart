@@ -1,6 +1,6 @@
 <template>
     <div>
-        <user-status-bar></user-status-bar>
+        <appmenu></appmenu>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
                 <tr v-bind:id="row.id">
@@ -77,7 +77,7 @@
 
 <script>
     import Modal from "./Modal";
-    import UserStatusBar from "./UserStatusBar.vue";
+    import Appmenu from "./AppMenu.vue";
     import eventBus from '../eventBus';
     
     export default {
@@ -98,7 +98,7 @@
 
         components: {
             Modal,
-            UserStatusBar
+            Appmenu
         },
 
         mounted() {

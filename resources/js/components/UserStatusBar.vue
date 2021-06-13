@@ -1,22 +1,6 @@
 <template>
     <div>
-        <nav v-if="authenticatedUser" class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Chore chart</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <div class="container-fluid d-flex justify-content-end px-0">
-                        <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
-                        <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <div>
-            <h1>{{usersName}} - {{this.$store.getters.getUserPoints}} points</h1>
-        </div>
+        <h1>{{usersName}} - {{this.$store.getters.getUserPoints}} points</h1>
     </div>
 </template>
 
@@ -25,17 +9,8 @@ export default {
     data() {
         return {
             authenticatedUser: false,
-            usersName: '',
-            userIsAdmin: false,
+            usersName: ''
         };
-    },
-
-    methods: {
-        logout() {
-            this.$store.commit('removeCurrentUser');
-            // localStorage.removeItem('user');
-            this.$router.push('login');
-        }
     },
 
     mounted() {
@@ -43,8 +18,6 @@ export default {
         
         if(this.authenticatedUser) {
             this.usersName = this.$store.getters.getUsersName;
-
-            this.userIsAdmin = this.$store.getters.userIsAdmin;
         } else {
             this.logout();
         }
