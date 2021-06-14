@@ -36,7 +36,7 @@ class UserChoresController extends Controller
         
         $isAdmin = false;
         foreach($user->roles as $role) {
-            if($role->role == "admin") {
+            if($role->role == "admin" && $role->pivot->user_id == $user->id) {
                 $isAdmin = true;
             }
         }
