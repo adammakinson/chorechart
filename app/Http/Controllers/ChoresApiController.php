@@ -35,9 +35,18 @@ class ChoresApiController extends Controller
         } else if (Gate::allows('view-chorechart')) {
 
             $user = auth()->user();
-            $chores = $user->chores()->where('inspection_passed', '!=', '1')->get();
-    
-            return $chores;
+            $unverifiedChores = [];
+
+            $chores = $user->chores()->get();
+
+            foreach ($chores as $chore) {
+                if($chore->pivot['inspection_passed'] != '1') {
+                    array_push($unverifiedChores, $chore);
+                }
+            }
+
+            return $unverifiedChores;
+
         } else {
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
         }
