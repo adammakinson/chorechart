@@ -180,6 +180,9 @@ export default {
                     row.user = row.user[0];
                     row.pivot = row.user.pivot;
                 }
+
+                console.log("row:");
+                console.log(row);
                 
                 if (this.userIsAdmin) {
                     
@@ -207,11 +210,13 @@ export default {
                      */
                     row.submittable = true;
 
-                    if(!row.user){
+                    if(!row.user || Array.isArray(row.user)){
                         row.user = {};
                     }
 
-                    row.user.id = row.pivot.user_id;
+                    if(!row.user.id && row.pivot){
+                        row.user.id = row.pivot.user_id;
+                    }
                 }
             });
 
@@ -325,6 +330,10 @@ export default {
                     this.chores = this.processFetchedChores(response.data.userChores);
                     this.updateUserTransactions(response.data.userTransactions);
                     this.rows = this.chores;
+
+                    console.log("rows after successful check click:");
+                    console.log(this.rows);
+
                     // this.updateUserPoints();
                 });
             }
