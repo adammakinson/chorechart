@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\chores;
 use App\Models\UserChores;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -73,12 +74,23 @@ class UserChoresController extends Controller
     public function getUserVisibleChores()
     {
         //currently logged in user which would be the same as what's passed in the route.
-        $user = auth()->user();
         
         if (Gate::allows('manage-chorechart')) {
             $chores = chores::all()->load('user', 'assigner' );
         } else {
+            $user = auth()->user();
+
+            $currentUsersChores = [];
+
             $chores = $user->chores()->get();
+
+            foreach($chores as $chore){
+                if($chore->pivot['user_id'] == $user['id']){
+                    array_push($currentUsersChores, $chore);
+                }
+            }
+
+            $chores = $currentUsersChores;
         }
 
         return $chores;
