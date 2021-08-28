@@ -51,7 +51,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-chorechart', function(User $user){
             $authorized = false;
 
-            foreach($user->roles as $role) {
+            $userRoles = $user->roles()->where('user_id', $user->id)->get();
+
+            foreach($userRoles as $role) {
                 if($role->role == 'admin') {
                     $authorized = true;
                 }
