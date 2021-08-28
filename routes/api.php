@@ -53,8 +53,10 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', f
         $transactionsController->store($request, $chore, $userPoints);
         $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
     }
+    
+    $userChores = $userChoresController->getUserVisibleChores($request->assigneeId);
 
-    return [ "userChores" => $userChoresController->getUserVisibleChores(), "userTransactions" => $userTransactions ];
+    return [ "userChores" => $userChores, "userTransactions" => $userTransactions ];
 });
 
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);
