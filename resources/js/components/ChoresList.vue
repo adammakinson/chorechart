@@ -377,6 +377,7 @@ export default {
                 choreData[el.name] = el.value;
             });
 
+            // Create the chore
             axios({
                 method: 'post',
                 url: '/api/chores',
@@ -386,8 +387,23 @@ export default {
                 }
             }).then((response) => {
 
-                this.chores = this.processFetchedChores(response.data);
-                this.rows = this.chores;
+                let chore = response.data;
+
+                // If a user has been specified in the form,
+                // assign the chore to the user.
+                if (choreData['assignedto'] !== '') {
+                    axios({
+                        method: 'post',
+                        url: '/api/users/' + choreData['assignedto'] + '/chores/' + chore.id,
+                        data: choreData,
+                        headers: {
+                            authorization: this.$store.getters.getUserAuthToken
+                        }
+                    });
+                }
+
+            }).then(() => {
+                this.fetchChoresCollection();
                 
                 // Close the modal
                 eventBus.$emit('close-modal');

@@ -78,43 +78,19 @@ class ChoresApiController extends Controller
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
-            $assigner = auth()->user();
-            $assignedTo = $request->assignedto;
+            // $assignedTo = $request->assignedto;
 
-            if (!empty($assignedTo)) {
-                $userChore = new UserChores;
-                $userChore->chore_id = $chore->id;
-                $userChore->user_id = $assignedTo;
-                $userChore->assigner_id = $assigner->id;
-                $userChore->save();
-            }
-    
-            $chores = chores::all()->load('user', 'assigner');
-    
-            return $chores;
+            /**
+             * Redirect to UserChoresController::store to save the
+             * user-chore
+             */
+            // return redirect("/users/{$assignedTo}/{$chore->id}");
+            return $chore;
         } else {
 
-            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+            return response('Forbidden', 403)->header('Content-Type', 'text/plain');
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * This is a details view. I'm not sure I need
-     * this, but if so, I'd suspect it would need
-     * to be admin only?
-     * 
-     * @param  \App\Models\chores  $chores
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(chores $chores, $id)
-    // {
-
-    //     $chore = $chores::where('id', $id)->first();
-
-    //     return view('viewchore', ['chore' => $chore]);
-    // }
 
     /**
      * Update the specified resource in storage.
@@ -161,7 +137,7 @@ class ChoresApiController extends Controller
             return $choresList;
         } else {
 
-            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+            return response('Forbidden', 403)->header('Content-Type', 'text/plain');
         }
     }
 
@@ -195,7 +171,7 @@ class ChoresApiController extends Controller
             return $choresList;
         } else {
 
-            return response('Forbidden', 404)->header('Content-Type', 'text/plain');
+            return response('Forbidden', 403)->header('Content-Type', 'text/plain');
         }
     }
 }

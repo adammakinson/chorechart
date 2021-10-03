@@ -29,6 +29,11 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 
 Route::middleware('auth:sanctum')->get('/users/{assigneeId}/transactions', [TransactionsController::class, 'getUserTransactionsOrderedByCreationTime']);
 
+/**
+ * Assigns a chore to a user
+ */
+Route::middleware('auth:sanctum')->post('/users/{assineeId}/chores/{choreId}', [UserChoresController::class, 'store']);
+
 Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', function(Request $request) {
     
     $userChoresController = new UserChoresController;

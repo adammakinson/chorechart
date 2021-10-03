@@ -16,6 +16,32 @@ class UserChoresController extends Controller
 
     //     return $allUserChores;
     // }
+
+    public function store(Request $request, chores $chore)
+    {
+        if (Gate::allows('manage-chorechart')) {
+            $assigner = auth()->user();
+            
+            $assignedTo = $request->assignedto;
+            $choreId = $request->choreId;
+
+            if (!empty($assignedTo)) {
+                $userChore = new UserChores;
+                $userChore->chore_id = $choreId;
+                $userChore->user_id = $assignedTo;
+                $userChore->assigner_id = $assigner->id;
+                $userChore->save();
+            }
+
+            // $chores = chores::all()->load('user', 'assigner');
+
+            // return $chores;
+
+            return response('OK', 200)->header('Content-Type', 'application/json');
+        } else {
+            return response('Forbidden', 403)->header('Content-Type', 'text/plain');
+        }
+    }
     
     /**
      * Updates a chore entry specified by choreId in the user_chores table for 
