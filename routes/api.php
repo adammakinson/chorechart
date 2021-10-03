@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\ChoresApiController;
+use App\Http\Controllers\ChoresController;
 use App\Http\Controllers\UserChoresController;
 use App\Http\Controllers\TransactionsController;
 
@@ -27,7 +27,7 @@ Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class)
  * Resource route for chores that takes care of GET, POST PUT/PATCH, and DELETE
  * db table - chores
  */
-Route::middleware('auth:sanctum')->apiResource('/chores', ChoresApiController::class);
+Route::middleware('auth:sanctum')->apiResource('/chores', ChoresController::class);
 
 /**
  * Assigns a chore to a user

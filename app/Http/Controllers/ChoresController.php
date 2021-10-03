@@ -12,7 +12,7 @@ use Facade\FlareClient\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-class ChoresApiController extends Controller
+class ChoresController extends Controller
 {
     /**
      * Display a listing of the resource.
