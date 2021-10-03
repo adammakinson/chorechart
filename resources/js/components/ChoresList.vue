@@ -56,7 +56,7 @@
                 Edit chore
             </template>
             <div class="modal-body">
-                <form id="createChoreForm">
+                <form id="eidtChoreForm">
                     <div class="form-group">
                         <label for="editchore">Chore:</label>
                         <input id="editchore" class="form-control" type="text" name="chore" v-bind:value="choreFieldValue">
@@ -68,7 +68,7 @@
                     <div class="form-group">
                         <label for="editassignedto">Assigned to:</label>
                         <!-- <input id="editassignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
-                        <select class="form-select form-control" name="assignedto" aria-label="Assigned to user">
+                        <select id="editassignedto" class="form-select form-control" name="assignedto" aria-label="Assigned to user">
                             <option value="" :selected="assignee == ''">Unassigned</option>
                             <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id" :selected="assignee == user.id">{{user.name}}</option>
                         </select>
