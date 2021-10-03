@@ -53,3 +53,8 @@ Route::middleware('auth:sanctum')->get('/users/{assigneeId}/transactions', [Tran
  * db table - transactions
  */
 Route::middleware('auth:sanctum')->post('/users/{assigneeId}/transactions', [TransactionsController::class, 'store']);
+
+/**
+ * rewards resource route
+ */
+Route::middleware('auth:sanctum')->apiResource('/rewards', RewardController::class);
