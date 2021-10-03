@@ -43,7 +43,7 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', f
     $userPoints = 0;
     $chore = $choresController->getChoreById($request);
     $userChore = $userChoresController->update($request);
-    $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
+    $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request);
     $mostRecentTransaction = $userTransactions->first();
 
     if ($mostRecentTransaction) {
@@ -54,9 +54,9 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', f
     // Best I can come up with right now is adding a bool pointsAwarded column to the database
     // that defaults to false and gets set to true right before recording the transaction.
     if ($userChore->inspection_passed && !$userChore->points_awarded) {
-        $userChoresController->updateUserChorePointsAwarded($request->choreId);
+        $userChoresController->updateUserChorePointsAwarded($request);
         $transactionsController->store($request, $chore, $userPoints);
-        $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request->assigneeId);
+        $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request);
     }
     
     $userChores = $userChoresController->getUserVisibleChores($request->assigneeId);

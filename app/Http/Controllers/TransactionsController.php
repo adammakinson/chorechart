@@ -17,14 +17,14 @@ class TransactionsController extends Controller
 
     }
 
-    public function getUsersMostRecentTransaction($userId)
+    public function getUsersMostRecentTransaction(Request $request)
     {
-        return transactions::where('user_id', $userId)->orderBy('created_at', 'desc')->first();
+        return transactions::where('user_id', $request->assigneeId)->orderBy('created_at', 'desc')->first();
     }
 
-    public function getUserTransactionsOrderedByCreationTime($userId)
+    public function getUserTransactionsOrderedByCreationTime(Request $request)
     {
-        return transactions::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+        return transactions::where('user_id', $request->assigneeId)->orderBy('created_at', 'desc')->get();
     }
 
     /**

@@ -88,9 +88,9 @@ class UserChoresController extends Controller
         return $userChore;
     }
 
-    public function updateUserChorePointsAwarded($choreId)
+    public function updateUserChorePointsAwarded(Request $request)
     {
-        $userChore = UserChores::where('chore_id', $choreId)->first();
+        $userChore = UserChores::where('chore_id', $request->choreId)->first();
 
         $userChore->points_awarded = true;
 
