@@ -74,9 +74,11 @@ class UserChoresController extends Controller
             $userChore->inspection_ready = now();
             $userChore->inspected_on = now();
             $userChore->inspection_passed = true;
+            $userChore->points_awarded = true;
         } elseif ($isAdmin && $user->id != $assigneeId) { // The chore belongs to someone else...
             $userChore->inspected_on = now();
             $userChore->inspection_passed = true;
+            $userChore->points_awarded = true;
             $userChore->pending = false;
         } else { // Not an admin user
             $userChore->inspection_ready = now();
@@ -95,6 +97,8 @@ class UserChoresController extends Controller
         $userChore->points_awarded = true;
 
         $userChore->save();
+
+        return $userChore;
     }
 
     public function getUserVisibleChores()

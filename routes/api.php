@@ -29,40 +29,14 @@ Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCr
 
 Route::middleware('auth:sanctum')->get('/users/{assigneeId}/transactions', [TransactionsController::class, 'getUserTransactionsOrderedByCreationTime']);
 
+Route::middleware('auth:sanctum')->post('/users/{assigneeId}/transactions', [TransactionsController::class, 'store']);
+
 /**
  * Assigns a chore to a user
  */
 Route::middleware('auth:sanctum')->post('/users/{assineeId}/chores/{choreId}', [UserChoresController::class, 'store']);
 
-Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', function(Request $request) {
-    
-    $userChoresController = new UserChoresController;
-    $choresController = new ChoresApiController;
-    $transactionsController = new TransactionsController;
-    
-    $userPoints = 0;
-    $chore = $choresController->getChoreById($request);
-    $userChore = $userChoresController->update($request);
-    $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request);
-    $mostRecentTransaction = $userTransactions->first();
-
-    if ($mostRecentTransaction) {
-        $userPoints = $mostRecentTransaction->user_points;
-    }
-
-    // The goal is to NOT award points to a chore that has already been awarded points.
-    // Best I can come up with right now is adding a bool pointsAwarded column to the database
-    // that defaults to false and gets set to true right before recording the transaction.
-    if ($userChore->inspection_passed && !$userChore->points_awarded) {
-        $userChoresController->updateUserChorePointsAwarded($request);
-        $transactionsController->store($request, $chore, $userPoints);
-        $userTransactions = $transactionsController->getUserTransactionsOrderedByCreationTime($request);
-    }
-    
-    $userChores = $userChoresController->getUserVisibleChores($request->assigneeId);
-
-    return [ "userChores" => $userChores, "userTransactions" => $userTransactions ];
-});
+Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
 
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);
 

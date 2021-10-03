@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\transactions;
+use App\Models\chores;
 use Illuminate\Http\Request;
 
 class TransactionsController extends Controller
@@ -22,6 +23,10 @@ class TransactionsController extends Controller
         return transactions::where('user_id', $request->assigneeId)->orderBy('created_at', 'desc')->first();
     }
 
+    /**
+     * This gets the user transactions ordered by creation time for the user
+     * of the request, not necessarily the currently logged in user.
+     */
     public function getUserTransactionsOrderedByCreationTime(Request $request)
     {
         return transactions::where('user_id', $request->assigneeId)->orderBy('created_at', 'desc')->get();
@@ -33,19 +38,29 @@ class TransactionsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $chore, $accumulatedPoints)
+    public function store(Request $request)
     {
-        // Hrm, for some reason, updatedChore is empty...
+        $userTransactions = $this->getUserTransactionsOrderedByCreationTime($request);
+        $mostRecentTransaction = $userTransactions->first();
+        if ($mostRecentTransaction) {
+            $usersPoints = $mostRecentTransaction->user_points;
+        } else {
+            $usersPoints = 0;
+        }
+
+        $chore = chores::find($request->id)->load('user');
 
         $transaction = new transactions;
         $transaction->user_id = $request->assigneeId;
         $transaction->event = "Completed chore $chore->chore";
-        $transaction->user_points = $accumulatedPoints + $chore->pointvalue;
+        $transaction->user_points = $usersPoints + $chore->pointvalue;
         $transaction->occurred_at = now();
         $transaction->created_at = now();
         $transaction->updated_at = now();
 
         $transaction->save();
+
+        return $this->getUserTransactionsOrderedByCreationTime($request);
     }
 
     /**

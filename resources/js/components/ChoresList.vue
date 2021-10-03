@@ -327,14 +327,22 @@ export default {
                         authorization: this.$store.getters.getUserAuthToken
                     }
                 }).then((response) => {
-                    this.chores = this.processFetchedChores(response.data.userChores);
-                    this.updateUserTransactions(response.data.userTransactions);
-                    this.rows = this.chores;
+                    if (response.data.points_awarded) {
 
-                    console.log("rows after successful check click:");
-                    console.log(this.rows);
+                        axios({
+                            method: 'post',
+                            url: '/api/users/' + choreBeingEdited.user.id + '/transactions', 
+                            data: choreData,
+                            headers: {
+                                authorization: this.$store.getters.getUserAuthToken
+                            }
+                        }).then(() => {
+                            this.updateUserTransactions(response.data);
+                        });
+                    }
 
-                    // this.updateUserPoints();
+                }).then(() => {
+                    this.fetchChoresCollection();
                 });
             }
         },
