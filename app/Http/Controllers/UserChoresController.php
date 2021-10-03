@@ -111,7 +111,7 @@ class UserChoresController extends Controller
             $chores = $user->chores()->get();
 
             foreach($chores as $chore){
-                if($chore->pivot['user_id'] == $user['id']){
+                if($chore->pivot['user_id'] == $user['id'] && $chore->pivot['inspection_passed'] != 1){
                     array_push($currentUsersChores, $chore);
                 }
             }
