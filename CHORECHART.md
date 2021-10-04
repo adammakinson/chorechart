@@ -210,3 +210,11 @@ In addition, the delete functionality should be different on the "user chores" s
 than it is on the "chores management" screen. On the "user chores" screen, the user_chore
 should be hard-deleted IF it hasn't been submitted for inspection and if it hasn't had
 points awarded to it. On the "chores management" screen, the chore should be soft-deleted.
+
+
+So, where we are headed is we are going to tie some communication with the router
+to block certain ip addresses (i.e. roblox) and disallow/filter MAC addresses,
+so "spending" reward time for TV/computer game time will be a bit more complex
+since we will have to send messages to the router to change its settings, then
+set a timer that decrements the number of minutes left for the activity and once
+the time expires, send messages to the router to re-block those ip addresses.

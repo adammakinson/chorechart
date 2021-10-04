@@ -13,6 +13,7 @@ import ChoresListComponent from "./components/ChoresList";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
 import ManageUsers from "./components/ManageUsers";
+import RewardsPage from "./components/RewardsPage";
 
 VuejsDatatableFactory.useDefaultType( false )
     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
@@ -30,7 +31,8 @@ const routes = [
     {path: '/chores-list', name: 'chores-list', component: ChoresListComponent},
     {path: '/login', name: 'login', component: LoginForm},
     {path: '/register', name: 'register', component: RegistrationForm},
-    {path: '/manage-users', name: 'manage-users', component: ManageUsers}
+    {path: '/manage-users', name: 'manage-users', component: ManageUsers},
+    {path: '/rewards', name: 'rewards', component: RewardsPage}
 ];
 
 const router = new VueRouter({
