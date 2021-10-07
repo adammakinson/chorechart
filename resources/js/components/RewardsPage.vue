@@ -3,7 +3,7 @@
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
         <h1>Hello rewards!</h1>
-        <cardgrid :cardCollectionData="cardCollectionData"></cardgrid>
+        <cardgrid :cardCollectionData="rewards"></cardgrid>
     </div>
 </template>
 
@@ -32,8 +32,21 @@ export default {
                     imgalt: 'One 30 minute TV episode',
                     cost: '30 points'
                 }
-            ]
+            ],
+
+            rewards: []
         };
+    },
+
+    mounted() {
+        if (this.$store.getters.getUserAuthToken) {
+            
+            this.userIsAdmin = this.$store.getters.userIsAdmin;
+
+            this.fetchAllRewards();
+        } else {
+            this.$router.push('login');
+        }
     },
 
     components: {
@@ -42,6 +55,23 @@ export default {
         UserStatusBar
     },
 
-    methods: {}
+    methods: {
+        fetchAllRewards() {
+            axios.get('/api/rewards', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                let rewardData = response.data;
+
+                rewardData.forEach(reward => {
+                    reward.title = reward.reward;
+                    reward.cost = reward.point_value;
+                });
+
+                this.rewards = rewardData;
+            });
+        }
+    }
 }
 </script>
