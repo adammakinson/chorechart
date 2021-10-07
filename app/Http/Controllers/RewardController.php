@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Reward AS RewardsModel;
 
-class Reward extends Controller
+class RewardController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Fetch all Rewards
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return RewardsModel::all()->load('images');
     }
 
     /**
