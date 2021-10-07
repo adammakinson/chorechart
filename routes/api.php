@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ChoresController;
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\UserChoresController;
 use App\Http\Controllers\TransactionsController;
 
