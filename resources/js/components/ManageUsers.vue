@@ -181,8 +181,6 @@
                     userData[el.name] = el.value;
                 });
 
-                console.log(userData);
-
                 // TODO validate passwords on the fly with an onchange event.
                 if (userData['password'].length < 8) {
                     this.errorMessages.push({ message: 'Your password needs to be at least eight characters'});

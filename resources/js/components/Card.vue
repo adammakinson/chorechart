@@ -25,8 +25,6 @@ export default {
 
     methods: {
         handleCardClick() {
-            // console.log(this);
-
             eventBus.$emit('reward-card-click', this.cardData);
         }
     }

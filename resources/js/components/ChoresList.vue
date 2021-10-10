@@ -164,9 +164,6 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-
-                console.log(response.data[0]);
-
                 this.updateUserTransactions(response.data);
             });
         },
@@ -180,9 +177,6 @@ export default {
                     row.user = row.user[0];
                     row.pivot = row.user.pivot;
                 }
-
-                console.log("row:");
-                console.log(row);
                 
                 if (this.userIsAdmin) {
                     
@@ -303,9 +297,6 @@ export default {
                 userId: choreBeingEdited.user.id,
                 inspection_ready: true
             };
-
-            console.log("Chore being edited: ");
-            console.log(choreBeingEdited);
 
             // TODO: If a chore has been approved and had points awarded for it,
             // subsequent clicks on the checkbox should NOT incur a server request
@@ -436,8 +427,6 @@ export default {
             }).then((response) => {
 
                 this.chores = this.processFetchedChores(response.data);
-
-                console.log(this.chores);
 
                 this.rows = this.chores;
                 

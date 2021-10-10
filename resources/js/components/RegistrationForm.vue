@@ -49,8 +49,6 @@ export default {
 
     methods: {
         handleRegistration() {
-            console.log("registering the user!");
-
             axios.post('/api/register', {
                 name: this.name,
                 username: this.username,
@@ -58,11 +56,9 @@ export default {
                 password: this.password,
                 confirm_password: this.passwordconfirm
             }).then((response) => {
-                console.log(response.data);
                 this.$router.push('login');
             }).catch((error) => {
                 if (error.response) {
-                    console.log(error.response);
                     this.error = error.response.data.message;
                 }
             });

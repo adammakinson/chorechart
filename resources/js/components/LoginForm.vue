@@ -54,7 +54,6 @@ export default {
                 this.$router.push('chores-list');
             }).catch((error) => {
                 if (error.response) {
-                    console.log(error.response);
                     this.error = error.response.data.message;
                 }
             });
