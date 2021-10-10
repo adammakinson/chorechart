@@ -11,12 +11,19 @@
 import Appmenu from './AppMenu.vue';
 import UserStatusBar from './UserStatusBar.vue';
 import Cardgrid from './Cardgrid.vue';
+import eventBus from '../eventBus';
 
 export default {
     data() {
         return {
             rewards: []
         };
+    },
+
+    created() {
+        eventBus.$on("reward-card-click", (cardData) => {
+            console.log(cardData);
+        });
     },
 
     mounted() {

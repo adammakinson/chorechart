@@ -7,7 +7,6 @@
 <script>
 import Card from './Card.vue';
 import Modal from './Modal.vue';
-import eventBus from '../eventBus';
 
 export default {
     data() {
@@ -24,12 +23,6 @@ export default {
     },
 
     methods: {
-    },
-
-    created() {
-        eventBus.$on("reward-card-click", (cardData) => {
-            console.log(cardData);
-        });
     }
 }
 </script>
