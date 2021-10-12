@@ -56,7 +56,7 @@
                 Edit chore
             </template>
             <div class="modal-body">
-                <form id="eidtChoreForm">
+                <form id="editChoreForm">
                     <div class="form-group">
                         <label for="editchore">Chore:</label>
                         <input id="editchore" class="form-control" type="text" name="chore" v-bind:value="choreFieldValue">
