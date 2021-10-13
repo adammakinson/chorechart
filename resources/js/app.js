@@ -121,6 +121,14 @@ const store = new Vuex.Store({
             } else {
                 return 0;
             }
+        },
+
+        getUserTransactions: state => {
+            if (state.userTransactions) {
+                return state.userTransactions;
+            } else {
+                return [];
+            }
         }
     }
 });
