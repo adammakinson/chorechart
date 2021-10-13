@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\transactions;
 use App\Models\chores;
 use Illuminate\Http\Request;
+use App\Models\Reward;
 
 class TransactionsController extends Controller
 {
@@ -48,6 +49,25 @@ class TransactionsController extends Controller
             $usersPoints = 0;
         }
 
+        switch($request->transactionType) {
+            case 'choreCompletion':
+                $this->createTransactionAwardingPoints($request, $usersPoints);
+                break;
+            
+            case 'rewardPurchase': 
+                if ($usersPoints >= $request->point_value) {
+                    $this->createTransactionSpendingPoints($request, $usersPoints);
+                } else {
+                    return response('You don\'t have enough points for that reward', 403)->header('Content-Type', 'application/json');
+                }
+                break;
+        }
+
+        return $this->getUserTransactionsOrderedByCreationTime($request);
+    }
+
+    private function createTransactionAwardingPoints(Request $request, $usersPoints)
+    {
         $chore = chores::find($request->id)->load('user');
 
         $transaction = new transactions;
@@ -59,8 +79,21 @@ class TransactionsController extends Controller
         $transaction->updated_at = now();
 
         $transaction->save();
+    }
 
-        return $this->getUserTransactionsOrderedByCreationTime($request);
+    private function createTransactionSpendingPoints(Request $request, $usersPoints)
+    {
+        $reward = Reward::find($request->id);
+
+        $transaction = new transactions;
+        $transaction->user_id = $request->assigneeId;
+        $transaction->event = "$reward->point_value points spent on $reward->reward";
+        $transaction->user_points = $usersPoints - $reward->point_value;
+        $transaction->occurred_at = now();
+        $transaction->created_at = now();
+        $transaction->updated_at = now();
+
+        $transaction->save();
     }
 
     /**

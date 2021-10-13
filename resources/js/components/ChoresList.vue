@@ -320,15 +320,18 @@ export default {
                 }).then((response) => {
                     if (response.data.points_awarded) {
 
+                        // Set the transaction type
+                        response.data.transactionType = 'choreCompletion';
+
                         axios({
                             method: 'post',
-                            url: '/api/users/' + choreBeingEdited.user.id + '/transactions', 
-                            data: choreData,
+                            url: '/api/users/' + response.data.user_id + '/transactions', 
+                            data: response.data,
                             headers: {
                                 authorization: this.$store.getters.getUserAuthToken
                             }
-                        }).then(() => {
-                            this.updateUserTransactions(response.data);
+                        }).then((transactionResponse) => {
+                            this.$store.commit('setUserTransactions', response.data);
                         });
                     }
 
