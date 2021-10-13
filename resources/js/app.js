@@ -42,8 +42,9 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
     state: {
-        user: {},
-        userPoints: 0,
+        user: {
+            userPoints: 0
+        },
         userTransactions: []
     },
     mutations: {
@@ -58,7 +59,7 @@ const store = new Vuex.Store({
         },
 
         setUserPoints (state, data) {
-            state.userPoints = data;
+            state.user.userPoints = data;
         },
 
         setUserTransactions (state, transactions) {
