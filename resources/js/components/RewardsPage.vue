@@ -10,7 +10,7 @@
             </template>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="confirmPurchase">Create chore</button>
+                    <button type="button" class="btn btn-primary" v-on:click.prevent="confirmPurchase">Spend points</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
                 </footer>
             </template>
