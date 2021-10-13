@@ -8,7 +8,7 @@
             <template slot-scope="{row, columns}">
                 <tr v-bind:id="row.id">
                     <td>{{row.chore}}</td>
-                    <td v-if="userIsAdmin">{{row.assignedUsers}}</td>v-bind
+                    <td v-if="userIsAdmin">{{row.assignedUsers}}</td>
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
