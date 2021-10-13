@@ -85,8 +85,19 @@ export default {
         confirmPurchase() {
             let user = this.$store.getters.getUser;
 
-            console.log("Confirming spend purchase!");
-            console.log(this.clickedCardData);
+            this.clickedCardData.transactionType = 'rewardPurchase';
+
+            axios({
+                method: 'post',
+                url: '/api/users/' + user.id + '/transactions', 
+                data: this.clickedCardData,
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.$store.commit('setUserTransactions', response.data);
+                this.closeModal();
+            });
         },
 
         closeModal() {
