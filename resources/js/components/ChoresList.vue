@@ -2,7 +2,7 @@
     <div>
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
-        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
+        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="addChore">Add chore</button>
         <hr>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
@@ -12,9 +12,13 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
-                            <span v-if="row.submittable && row.user.id" v-on:click="handleCheckClick" v-bind:class="[{ 'text-warning': row.pivot && row.pivot.pending, 'text-success': row.pivot && row.pivot.inspection_passed, 'text-secondary': ((row.pivot && !row.pivot.inspection_passed) && (row.pivot && !row.pivot.pending)) }, 'fas fa-check']" v-bind:data-choreid="row.id"></span>
-                            <span v-if="userIsAdmin" v-on:click="showEditChoreModal" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
-                            <span v-if="userIsAdmin" v-on:click="handleTrashClick" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
+                            <span v-if="row.submittable && row.user.id" 
+                                v-on:click="handleCheckClick" 
+                                v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
+                                v-bind:data-choreid="row.id">
+                            </span>
+                            <span v-if="userIsAdmin" v-on:click="editChore" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
+                            <span v-if="userIsAdmin" v-on:click="deleteChore" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
                         </div>
                     </td>
                 </tr>
@@ -168,6 +172,20 @@ export default {
             });
         },
 
+        getChoreRowCheckboxColorClass(row) {
+            var colorClass = 'text-secondary';
+
+            if (row.pivot.pending) {
+                colorClass = 'text-warning';
+            }
+
+            if (row.pivot.inspection_passed) {
+                colorClass = 'text-success';
+            }
+
+            return colorClass;
+        },
+
         processFetchedChores(data) {
             data.forEach((row) => {
 
@@ -252,7 +270,7 @@ export default {
             );
         },
 
-        showAddChoreModal() {
+        addChore() {
             let modalwindow = document.getElementById("createChoreModal");
 
             this.choreFieldValue = '';
@@ -267,7 +285,7 @@ export default {
             return allChores.find(chore => chore.id == choreId);
         },
 
-        showEditChoreModal(el) {
+        editChore(el) {
             let modalwindow = document.getElementById("editChoreModal");
             let choreId = el.target.dataset.choreid;
             let allChores = this.chores;
@@ -345,7 +363,7 @@ export default {
             this.$store.commit('setUserTransactions', transactions);
         },
 
-        handleTrashClick(el) {
+        deleteChore(el) {
             let itemId = el.target.dataset.choreid;
 
             axios.delete('/api/chores/' + itemId, {
