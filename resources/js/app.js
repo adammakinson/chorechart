@@ -13,7 +13,7 @@ import ChoresListComponent from "./components/ChoresList";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
 import ManageUsers from "./components/ManageUsers";
-import RewardsPage from "./components/RewardsPage";
+import RewardsPage from "./pages/RewardsPage";
 
 VuejsDatatableFactory.useDefaultType( false )
     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
