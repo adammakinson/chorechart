@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reward AS RewardsModel;
+use App\Models\Image AS ImageModel;
 use Illuminate\Support\Facades\Gate;
 
 class RewardController extends Controller
@@ -27,6 +28,29 @@ class RewardController extends Controller
     public function store(Request $request)
     {
         if (Gate::allows('manage-chorechart')) {
+            
+            $validatedData = $request->validate([
+                'reward' => 'required',
+                'pointvalue' => 'required',
+                'file' => 'required'
+            ]);
+            
+            $extension = $request->file->getClientOriginalExtension();
+    
+            $request->file->store('public/images');
+    
+            $reward = new RewardsModel;
+            $reward->reward = $validatedData['reward'];
+            $reward->point_value = $validatedData['pointvalue'];
+            $rewardId = $reward->save();
+    
+            $image = new ImageModel;
+            $image->reward_id = $rewardId;
+            $image->path = '/images/';
+            $image->filename = $request->file->hashName();
+            $image->file_extension = $extension;
+            $image->alt_text = "test image";
+            $image->save();
 
         } else {
             return response('Fobidden', 403)->header('Content-Type', 'application/json');

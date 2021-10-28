@@ -137,15 +137,14 @@ export default {
         },
 
         createReward() {
-            // let formEls = document.querySelectorAll('#createRewardForm .form-control');
-            let createRewardForm = document.forms.namedItem("createRewardForm");
-            let rewardData = new FormData(createRewardForm);
+            let rewardData = new FormData()
+            let rewardField = document.querySelector('#reward');
+            let pointvalueField = document.querySelector('#pointvalue');
+            let filesInput = document.querySelector('#file-input');
 
-            // rewardData.append('reward', document.querySelector('#reward').value);
-            // rewardData.append('point_value', document.querySelector('#pointvalue').value);
-            // rewardData.append('image', document.querySelector('#file-input').files[0]);
-
-            // console.log(formEls);
+            rewardData.append('reward', rewardField.value);
+            rewardData.append('pointvalue', pointvalueField.value);
+            rewardData.append('file', filesInput.files[0]);
 
             axios({
                 method: 'post',
