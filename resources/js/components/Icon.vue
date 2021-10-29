@@ -22,3 +22,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    span {
+        display: inline-block;
+        padding: 5px;
+    }
+</style>
