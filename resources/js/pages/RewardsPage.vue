@@ -57,7 +57,8 @@ export default {
     data() {
         return {
             rewards: [],
-            clickedCardData: []
+            clickedCardData: [],
+            userIsAdmin: false
         };
     },
 
@@ -108,6 +109,7 @@ export default {
                 rewardData.forEach(reward => {
                     reward.title = reward.reward;
                     reward.cost = reward.point_value;
+                    if (this.userIsAdmin) {
                     reward.actionIcons = [
                         {
                             "event": "editReward",
@@ -124,6 +126,7 @@ export default {
                             ]
                         }
                     ];
+                    }
                 });
 
                 this.rewards = rewardData;
