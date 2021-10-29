@@ -29,20 +29,6 @@ export default {
     methods: {
         handleCardClick() {
             eventBus.$emit('reward-card-click', this.cardData);
-        },
-
-        editCardClick(e) {
-            e.stopPropagation();
-
-            console.log("editing ");
-            console.log(e);
-        },
-
-        deleteCardClick(e) {
-            e.stopPropagation();
-
-            console.log("deleting");
-            console.log(e);
         }
     }
 }
