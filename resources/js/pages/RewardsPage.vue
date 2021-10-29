@@ -13,11 +13,11 @@
                 <form id="createRewardForm" name="createRewardForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="chore">Reward:</label>
-                        <input id="reward" name="reward" class="form-control" type="text" v-bind:value="rewardName">
+                        <input id="reward" name="reward" class="form-control" type="text">
                     </div>
                     <div class="form-group">
                         <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="rewardPointValue">
+                        <input id="pointvalue" name="pointvalue" class="form-control" type="number">
                     </div>
                     <div class="form-group">
                         <label for="assignedto">Image:</label>
