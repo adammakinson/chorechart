@@ -20,9 +20,6 @@ export default {
     components: {
         Card,
         Modal
-    },
-
-    methods: {
     }
 }
 </script>
