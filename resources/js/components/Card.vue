@@ -1,4 +1,5 @@
 <template>
+    <div v-on:click="handleCardClick" class="card p-1 border rounded bg-light justify-content-between" v-bind:data-itemId="cardData.id">
         <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
         <h4 class="text-dark">{{cardData.title}}</h4>
         <h5><b>cost: </b>{{cardData.cost}}</h5>
