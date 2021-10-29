@@ -110,22 +110,22 @@ export default {
                     reward.title = reward.reward;
                     reward.cost = reward.point_value;
                     if (this.userIsAdmin) {
-                    reward.actionIcons = [
-                        {
-                            "event": "editReward",
-                            "class": "fas fa-edit text-info",
-                            "visibleTo": [
-                                "admins"
-                            ]
-                        },
-                        {
-                            "event": "deleteReward",
-                            "class": "fas fa-trash text-danger",
-                            "visibleTo": [
-                                "admins"
-                            ]
-                        }
-                    ];
+                        reward.actionIcons = [
+                            {
+                                "event": "editReward",
+                                "class": "fas fa-edit text-info",
+                                "visibleTo": [
+                                    "admins"
+                                ]
+                            },
+                            {
+                                "event": "deleteReward",
+                                "class": "fas fa-trash text-danger",
+                                "visibleTo": [
+                                    "admins"
+                                ]
+                            }
+                        ];
                     }
                 });
 
