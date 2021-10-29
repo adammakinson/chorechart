@@ -42,10 +42,10 @@ class RewardController extends Controller
             $reward = new RewardsModel;
             $reward->reward = $validatedData['reward'];
             $reward->point_value = $validatedData['pointvalue'];
-            $rewardId = $reward->save();
+            $reward->save();
     
             $image = new ImageModel;
-            $image->reward_id = $rewardId;
+            $image->reward_id = $reward->id;
             $image->path = '/images/';
             $image->filename = $request->file->hashName();
             $image->file_extension = $extension;
