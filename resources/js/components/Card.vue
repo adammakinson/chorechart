@@ -3,11 +3,19 @@
         <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename+image.file_extension" :alt="cardData.imgalt">
         <h4 class="text-dark">{{cardData.title}}</h4>
         <h5><b>cost: </b>{{cardData.cost}}</h5>
+        <div v-if="userIsAdmin" class="flex-column m-3">
+            <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
+                v-bind:class="actionicon.class" 
+                v-bind:iconevent="actionicon.event" 
+                v-bind:data-itemId="cardData.id">
+            </icon>
+        </div>
     </div>
 </template>
 
 <script>
 import eventBus from '../eventBus';
+import icon from '../components/Icon';
 export default {
     data() {
         return {
@@ -16,7 +24,7 @@ export default {
     },
 
     components: {
-
+        icon
     },
 
     props: [
