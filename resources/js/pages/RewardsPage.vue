@@ -40,11 +40,12 @@
         </modal>
         <modal id="rewardConfirmationModal">
             <template v-slot:header>
-                Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?
+                <p v-if="userHasEnoughPoints(clickedCardData)">Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?</p>
+                <p v-if="!userHasEnoughPoints(clickedCardData)">You don't have enough points for this reward</p>
             </template>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="confirmPurchase">Spend points</button>
+                    <button v-if="userHasEnoughPoints(clickedCardData)" type="button" class="btn btn-primary" v-on:click.prevent="confirmPurchase">Spend points</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
                 </footer>
             </template>
@@ -146,6 +147,10 @@ export default {
                 // maybe have some sort of mechanism to invalidate the vuex "cache"
                 this.rewards = rewardData;
             });
+        },
+
+        userHasEnoughPoints(clickedCardData) {
+            return this.$store.getters.getUserPoints >= clickedCardData.point_value;
         },
 
         showRewardModal() {
