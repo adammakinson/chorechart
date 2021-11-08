@@ -2,32 +2,38 @@
     <div>
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
-        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#createRewardModal" v-on:click="showCreateRewardModal">Create a reward</button>
+        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
         <h1>Rewards</h1>
         <cardgrid :cardCollectionData="rewards"></cardgrid>
-        <modal id="createRewardModal">
+        <modal id="rewardModal">
             <template v-slot:header>
-                Create a Reward
+                {{rewardModalTitle}}
             </template>
             <div class="modal-body">
-                <form id="createRewardForm" name="createRewardForm" enctype="multipart/form-data">
+                <form id="rewardForm" name="rewardForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="chore">Reward:</label>
-                        <input id="reward" name="reward" class="form-control" type="text">
+                        <input id="reward" name="reward" class="form-control" type="text" v-bind:value="clickedCardData.reward">
                     </div>
                     <div class="form-group">
                         <label for="pointvalue">Point value:</label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number">
+                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="clickedCardData.point_value">
                     </div>
                     <div class="form-group">
-                        <label for="assignedto">Image:</label>
-                        <input type="file" accept="image/*" class="form-control" id="file-input">
+                        <label for="file-input">Image:</label>
+                        <div id="image-wrapper" v-bind:class = "(editingReward)?'image-wrapper':''">
+                            <div v-if="editingReward" id="currentImage">
+                                <img v-bind:src="[clickedCardData.images[0].path + clickedCardData.images[0].filename]" v-bind:alt="clickedCardData.images[0].alt_text">
+                            </div>
+                            <input type="file" accept="image/*" class="form-control" id="file-input">
+                        </div>
                     </div>
                 </form>
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="createReward">Create</button>
+                    <button v-if="!editingReward" type="button" class="btn btn-primary" v-on:click.prevent="createReward">{{rewardModalPrimaryButtonLabel}}</button>
+                    <button v-if="editingReward" type="button" class="btn btn-primary" v-on:click.prevent="updateReward(clickedCardData)">{{rewardModalPrimaryButtonLabel}}</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
                 </footer>
             </template>
@@ -58,7 +64,11 @@ export default {
         return {
             rewards: [],
             clickedCardData: [],
-            userIsAdmin: false
+            userIsAdmin: false,
+            editingReward: false,
+            rewardModalTitle: "Create Reward",
+            rewardModalPrimaryButtonAction: "createReward",
+            rewardModalPrimaryButtonLabel: "Create"
         };
     },
 
@@ -69,13 +79,16 @@ export default {
         });
 
         eventBus.$on("editReward", (iconCmp) => {
-            console.log(iconCmp);
-            console.log("editing a reward");
+            let rewardId = iconCmp.$parent.$el.dataset.itemid;
+            let reward = this.rewards.filter((reward) => reward.id == rewardId)[0];
+
+            this.showEditRewardModal(reward);
         });
         
         eventBus.$on("deleteReward", (iconCmp) => {
-            console.log(iconCmp);
-            console.log("deleting a reward");
+            let rewardId = iconCmp.$parent.$el.dataset.itemid;
+
+            this.deleteReward(rewardId);
         });
     },
 
@@ -129,21 +142,47 @@ export default {
                     }
                 });
 
+                // TODO - store rewards in vuex on fetch, update single record on update, remove on delete.
+                // maybe have some sort of mechanism to invalidate the vuex "cache"
                 this.rewards = rewardData;
             });
         },
 
-        showCreateRewardModal() {
-            let createRewardModal = document.getElementById("createRewardModal");
+        showRewardModal() {
+            let RewardModal = document.getElementById("rewardModal");
 
-            createRewardModal.style.display = 'block';
+            this.clickedCardData = [];
+            
+            this.rewardModalTitle = "Create Reward";
+            this.rewardModalPrimaryButtonAction = "createReward";
+            this.rewardModalPrimaryButtonLabel = "Create";
+            this.editingReward = false;
+
+            RewardModal.style.display = 'block';
+        },
+
+        showEditRewardModal(reward) {
+            let rewardModal = document.getElementById("rewardModal");
+
+            this.clickedCardData = reward;
+
+            this.rewardModalTitle = "Update Reward";
+
+            this.rewardModalPrimaryButtonAction = "updateReward";
+            this.rewardModalPrimaryButtonLabel = "Update";
+            this.editingReward = true;
+
+            rewardModal.style.display = 'block';
+
+            console.log(reward);
         },
 
         createReward() {
-            let rewardData = new FormData()
+            let rewardData = new FormData();
             let rewardField = document.querySelector('#reward');
             let pointvalueField = document.querySelector('#pointvalue');
             let filesInput = document.querySelector('#file-input');
+
 
             rewardData.append('reward', rewardField.value);
             rewardData.append('pointvalue', pointvalueField.value);
@@ -157,8 +196,69 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+                // TODO -  this should return a 200 OK or an 403 Forbidden
                 console.log(response);
+                this.fetchAllRewards();
+                this.closeModal();
             });
+        },
+
+        updateReward(reward) {
+            if(this.userIsAdmin) {
+                let rewardData = new FormData();
+                let rewardField = document.querySelector('#reward');
+                let pointvalueField = document.querySelector('#pointvalue');
+                let filesInput = document.querySelector('#file-input');
+
+                rewardData.append('reward', rewardField.value);
+                rewardData.append('pointvalue', pointvalueField.value);
+                
+                /**
+                 * This has to be done because PHP won't process multipart/formdata
+                 * requests unless the HTTP verb is POST. We have to use laravels
+                 * _method spoofing to get the job done. Kind of ugly, but works
+                 */
+                rewardData.append('_method', 'PUT');
+
+                if(filesInput.files) {
+                    rewardData.append('file', filesInput.files[0]);
+                }
+
+                console.log(rewardData.get('reward'));
+                console.log(rewardData.get('pointvalue'));
+
+                axios({
+                    method: 'post',
+                    url: '/api/rewards/' + reward.id,
+                    data: rewardData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    // TODO -  this should return a 200 OK or an 403 Forbidden
+                    console.log(response);
+                    this.fetchAllRewards();
+                    this.closeModal();
+                });
+            }
+        },
+        
+        deleteReward(rewardId) {
+            if(this.userIsAdmin) {
+                axios({
+                    method: 'delete',
+                    url: '/api/rewards/' + rewardId,
+                    data: rewardId,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    // TODO -  this should return a 200 OK or an 403 Forbidden
+                    console.log(response);
+                    this.fetchAllRewards();
+                    this.closeModal();
+                });
+            }
         },
 
         showRewardConfirmationModal() {
@@ -191,3 +291,18 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+    #currentImage img {
+        width: 100%;
+    }
+
+    .image-wrapper {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+    }
+
+    #file-input {
+        align-self: center;
+    }
+</style>

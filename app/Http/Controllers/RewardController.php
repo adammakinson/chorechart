@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Reward AS RewardsModel;
 use App\Models\Image AS ImageModel;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class RewardController extends Controller
 {
@@ -58,31 +59,45 @@ class RewardController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        if (Gate::allows('manage-chorechart')) {
-
-        } else {
-            return response('Fobidden', 403)->header('Content-Type', 'application/json');
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $rewardId)
     {
         if (Gate::allows('manage-chorechart')) {
 
+            $validatedData = $request->validate([
+                'reward' => 'required',
+                'pointvalue' => 'required'
+            ]);
+            
+            $reward = RewardsModel::find($rewardId);
+            $reward->reward = $validatedData['reward'];
+            $reward->point_value = $validatedData['pointvalue'];
+            $reward->save();
+
+            // dd($request->file);
+ 
+            if($request->file && $request->file('file')->isValid()) {
+                
+                $storedImage = ImageModel::where('reward_id', $rewardId)->first();
+
+                // dd($storedImage);
+
+                Storage::delete($storedImage->filename);
+                
+                $extension = $request->file->getClientOriginalExtension();
+                $request->file->store('public/images');
+
+                $storedImage->filename = $request->file->hashName();
+                $storedImage->file_extension = $extension;
+                $storedImage->save();
+
+                return response('OK', 200)->header('Content-Type', 'application/json');
+            }
         } else {
             return response('Fobidden', 403)->header('Content-Type', 'application/json');
         }
@@ -94,10 +109,10 @@ class RewardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(RewardsModel $reward)
     {
         if (Gate::allows('manage-chorechart')) {
-
+            $reward->delete();
         } else {
             return response('Fobidden', 403)->header('Content-Type', 'application/json');
         }
