@@ -7,6 +7,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="container-fluid d-flex justify-content-end px-0">
+                    <a href="/chores-list" class="nav-link">Chores</a>
                     <a href="/rewards" class="nav-link">Rewards</a>
                     <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
                     <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
