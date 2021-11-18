@@ -12,7 +12,7 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
-                            <span v-if="row.submittable && row.user.id" 
+                            <span v-if="row.submittable" 
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                 v-bind:data-choreid="row.id">
@@ -73,8 +73,8 @@
                         <label for="editassignedto">Assigned to:</label>
                         <!-- <input id="editassignedto" name="assignedto" class="form-control" type="number" v-bind:value="pointFieldValue"> -->
                         <select id="editassignedto" class="form-select form-control" name="assignedto" aria-label="Assigned to user">
-                            <option value="" :selected="assignee == ''">Unassigned</option>
-                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id" :selected="assignee == user.id">{{user.name}}</option>
+                            <option value="''" v-bind:selected="assignee == ''">Unassigned</option>
+                            <option v-for="user in allUsers" :key="user.id" v-bind:value="user.id" v-bind:selected="assignee == user.id">{{user.name}}</option>
                         </select>
                     </div>
                 </form>
@@ -385,21 +385,7 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-
-                // TODO refactor this out because it's duplicated everywhere
-                response.data.forEach((row) => {
-
-                    // Aggregates user names into a string... perhaps not ideal?
-                    if(row.user){
-
-                        row.assignedUsers = row.user.reduce((total, user) => {
-                            return user.name + ', ';
-                        }, '');
-                    }
-                });
-
-                this.chores = response.data;
-                this.rows = response.data;
+                this.fetchChoresCollection();
             });
         },
 
