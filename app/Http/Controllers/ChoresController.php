@@ -111,6 +111,12 @@ class ChoresController extends Controller
             $assigner = auth()->user();
             
             $chore = chores::find($choreId)->load('user');
+            
+            // disallow editing if a chore has been started
+            if(!empty($chore->user->first()->pivot->inspection_ready)) {
+                return response('Forbidden', 403)->header('Content-Type', 'text/plain');    
+            }
+
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
@@ -154,12 +160,20 @@ class ChoresController extends Controller
         //
         if (Gate::allows('manage-chorechart')) {
             $chore = $chores->find($id);
+            
+            if ($chore->user->first()->pivot->inspection_passed == 1) {
+                return response('Forbidden - you cannot delete a completed item', 403)->header('Content-Type', 'text/plain');
+            }
+            
             /**
              * I need soft-deletes on chores because a chore should be able to be "deleted"
              * from the chores list without having an effect on the user_chores list.
              * The user_chore should be able to still be associated with the chore
              * 
              */
+
+            
+
             $chore->delete();
 
             // Hrm... I'm really not sure the on-delete cascade is working here

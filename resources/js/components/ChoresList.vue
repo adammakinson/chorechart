@@ -17,8 +17,8 @@
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                 v-bind:data-choreid="row.id">
                             </span>
-                            <span v-if="userIsAdmin" v-on:click="editChore" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
-                            <span v-if="userIsAdmin" v-on:click="deleteChore" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
+                            <span v-if="userIsAdmin && row.editable" v-on:click="editChore" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
+                            <span v-if="userIsAdmin && row.deletable" v-on:click="deleteChore" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
                         </div>
                     </td>
                 </tr>
@@ -190,6 +190,8 @@ export default {
             data.forEach((row) => {
 
                 row.submittable = false;
+                row.editable = true;
+                row.deletable = true;
 
                 if (row.user && row.user.length) {
                     row.user = row.user[0];
@@ -212,6 +214,14 @@ export default {
 
                     if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
                         row.submittable = true;
+                    }
+
+                    if (this.choreIsReadyForInspection(row)) {
+                        row.editable = false;
+                    }
+
+                    if (this.choreIsFinished(row)) {
+                        row.deletable = false;
                     }
                 } else {
                     /**
@@ -241,6 +251,10 @@ export default {
 
         choreIsReadyForInspection(row) {
             return row.user && row.user.id && row.user.pivot.inspection_ready;
+        },
+
+        choreIsFinished(row) {
+            return row.user && row.user.id && row.user.pivot.inspection_passed;
         },
 
         setupTableData(data) {
