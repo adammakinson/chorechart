@@ -10,6 +10,7 @@ import { VuejsDatatableFactory } from 'vuejs-datatable';
 
 import LoginForm from "./components/LoginForm";
 import ChoresListComponent from "./components/ChoresList";
+import ManageChoresComponent from "./components/ManageChores";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
 import ManageUsers from "./components/ManageUsers";
@@ -29,6 +30,7 @@ Vue.use(Vuex);
 const routes = [
     {path: '/', name: 'welcome-screen', component: WelcomeScreen},
     {path: '/chores-list', name: 'chores-list', component: ChoresListComponent},
+    {path: '/manage-chores', name: 'manage-chores', component: ManageChoresComponent},
     {path: '/login', name: 'login', component: LoginForm},
     {path: '/register', name: 'register', component: RegistrationForm},
     {path: '/manage-users', name: 'manage-users', component: ManageUsers},
