@@ -56,23 +56,6 @@ export default {
         TabComponent,
         ManageChoresTabContents,
         ViewAssignmentsTabContents
-    },
-
-    methods: {
-        loadTab(event) {
-            let allNavLinks = document.querySelectorAll('.nav-link');
-            let clickedNavLink = event.target;
-
-            allNavLinks.forEach((link) => {
-                link.className = 'nav-link';
-                link.removeAttribute('aria-current');
-            });
-            
-            clickedNavLink.className = 'nav-link active';
-            clickedNavLink.setAttribute('aria-current', 'page');
-
-            console.log(event.target);
-        }
     }
     
 }
