@@ -3,125 +3,59 @@
         <appmenu></appmenu>
         <h1>Manage Chores</h1>
         <div id="choreManagement">
-            <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#" v-on:click="loadTab">Manage chores</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" v-on:click="loadTab">view assignments</a>
-                </li>
-            </ul>
-            <div class="tabcontent">
-                <div class="container">
-                    <div class="row">
-                        <div class="col">
-                            <h2>chores</h2>
-                            <div class="card">
-                                <div class="card-body">
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal">Add chore</button>
-
-                                    <!-- this should be a component that accepts props -->
-                                    <ul id="chores-list-group" class="list-group mt-4">
-                                        <li class="list-group-item">
-                                            <div style="display:flex; justify-content: space-between">
-                                                <div>
-                                                    An item
-                                                </div>
-                                                <div>
-                                                    <span class="fas fa-edit text-info"></span>
-                                                    <span class="fas fa-trash text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div style="display:flex; justify-content: space-between;">
-                                                <div>
-                                                    A second item
-                                                </div>
-                                                <div>
-                                                    <span class="fas fa-edit text-info"></span>
-                                                    <span class="fas fa-trash text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div style="display:flex; justify-content: space-between;">
-                                                <div>
-                                                    A third item
-                                                </div>
-                                                <div>
-                                                    <span class="fas fa-edit text-info"></span>
-                                                    <span class="fas fa-trash text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div style="display:flex; justify-content: space-between;">
-                                                <div>
-                                                    A fourth item
-                                                </div>
-                                                <div>
-                                                    <span class="fas fa-edit text-info"></span>
-                                                    <span class="fas fa-trash text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <div style="display:flex; justify-content: space-between;">
-                                                <div>
-                                                    And a fifth one
-                                                </div>
-                                                <div>
-                                                    <span class="fas fa-edit text-info"></span>
-                                                    <span class="fas fa-trash text-danger"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <h2>Assign to:</h2>
-                            <div class="card">
-                                <div class="card-body">
-                                    <ul class="nav nav-tabs">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" aria-current="page" href="#" v-on:click="loadTab">Individuals</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" v-on:click="loadTab">Groups</a>
-                                        </li>
-                                    </ul>
-                                    <div>
-                                        <!-- same component as above -->
-                                        <ul id="users-list-group" class="list-group mt-4">
-                                             <li class="list-group-item">Adam</li>
-                                            <li class="list-group-item">Catie</li>
-                                            <li class="list-group-item">Nia</li>
-                                            <li class="list-group-item">Thatcher</li>
-                                        </ul>
-
-                                        <button class="btn btn-primary mt-4" data-toggle="modal" data-target="#createChoreModal">Assign</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <tab-component :tabsData="mainTabsData">
+                <component :is="mainTabContents"></component>
+            </tab-component>
+            
         </div>
     </div>
 </template>
 
 <script>
 import Appmenu from "./AppMenu.vue";
-
+import TabComponent from "./TabComponent";
+import ManageChoresTabContents from "../pages/ManageChoresTabContents.vue";
+import ViewAssignmentsTabContents from "../pages/ViewAssignmentsTabContents.vue";
+import eventBus from '../eventBus';
 
 export default {
+
+    created() {
+        eventBus.$on("manage-chores-tab-click", (contents) => {
+            this.mainTabContents = contents;
+        });
+        
+        eventBus.$on("view-assignments-tab-click", (contents) => {
+            this.mainTabContents = contents;
+        });
+    },
+
+    data() {
+        return {
+            mainTabsData: [{
+                'id': 1,
+                'label': 'Manage Chores',
+                'active': true,
+                'firesEvent': 'manage-chores-tab-click',
+                'loadsContent': 'ManageChoresTabContents'
+            },
+            {
+                'id': 2,
+                'label': 'View Assignments',
+                'firesEvent': 'view-assignments-tab-click',
+                'loadsContent': 'ViewAssignmentsTabContents'
+            }],
+
+            mainTabContents: 'ManageChoresTabContents'
+        }
+    },
     
     components: {
-        Appmenu
+        Appmenu,
+        TabComponent,
+        TabComponent,
+        ManageChoresTabContents,
+        ViewAssignmentsTabContents
     },
 
     methods: {
