@@ -7,65 +7,9 @@
                     <div class="card">
                         <div class="card-body">
                             <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal">Add chore</button>
-
-                            <!-- this should be a component that accepts props -->
-                            <ul id="chores-list-group" class="list-group mt-4">
-                                <li class="list-group-item">
-                                    <div style="display:flex; justify-content: space-between">
-                                        <div>
-                                            An item
-                                        </div>
-                                        <div>
-                                            <span class="fas fa-edit text-info"></span>
-                                            <span class="fas fa-trash text-danger"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <div>
-                                            A second item
-                                        </div>
-                                        <div>
-                                            <span class="fas fa-edit text-info"></span>
-                                            <span class="fas fa-trash text-danger"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <div>
-                                            A third item
-                                        </div>
-                                        <div>
-                                            <span class="fas fa-edit text-info"></span>
-                                            <span class="fas fa-trash text-danger"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <div>
-                                            A fourth item
-                                        </div>
-                                        <div>
-                                            <span class="fas fa-edit text-info"></span>
-                                            <span class="fas fa-trash text-danger"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div style="display:flex; justify-content: space-between;">
-                                        <div>
-                                            And a fifth one
-                                        </div>
-                                        <div>
-                                            <span class="fas fa-edit text-info"></span>
-                                            <span class="fas fa-trash text-danger"></span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                            <list-group>
+                                <component v-for="choreData in choresList" :key="choreData.id" :is='listGroupContents' :listItem="choreData"></component>
+                            </list-group>
                         </div>
                     </div>
                 </div>
@@ -74,7 +18,9 @@
                     <div class="card">
                         <div class="card-body">
                             <tab-component :tabsData="assignmentTabsData">
-                                <component :is="assignmentTabContents"></component>
+                                <list-group>
+                                    <component v-for="assigneeData in assignmentTabContentData" :key="assigneeData.id" :is="assignmentTabContents" :listItem="assigneeData"></component>
+                                </list-group>
                             </tab-component>
                             <button class="btn btn-primary mt-4" data-toggle="modal" data-target="#createChoreModal">Assign</button>
                         </div>
@@ -89,17 +35,23 @@
 import IndividualsSubView from "./IndividualsSubView.vue";
 import GroupsSubView from "./GroupsSubView.vue";
 import TabComponent from "../components/TabComponent.vue";
+import ListGroup from "../components/ListGroup.vue";
+import ChoreListItem from "../components/ChoreListItem.vue";
 import eventBus from "../eventBus.js";
 
 export default {
     created() {
         eventBus.$on("assign-to-individuals-tab-click", (contents) => {
             this.assignmentTabContents = contents;
+            this.assignmentTabContentData = this.users;
         });
         
         eventBus.$on("assign-to-group-tab-click", (contents) => {
             this.assignmentTabContents = contents;
+            this.assignmentTabContentData = this.groups;
         });
+
+        this.assignmentTabContentData = this.users;
     },
 
     data() {
@@ -109,23 +61,100 @@ export default {
                 'label': 'Individuals',
                 'active': true,
                 'firesEvent': 'assign-to-individuals-tab-click',
-                'loadsContent': 'IndividualsSubView'
+                'loadsContent': 'IndividualsSubView',
+                'dataToPass': 'users'
             },
             {
                 'id': 2,
                 'label': 'Groups',
                 'firesEvent': 'assign-to-group-tab-click',
-                'loadsContent': 'GroupsSubView'
+                'loadsContent': 'GroupsSubView',
+                'dataToPass': 'groups'
             }],
 
-            assignmentTabContents: 'IndividualsSubView'
+            choresList: [
+                {
+                    id: 1,
+                    title: 'Wash the dishes',
+                },
+                {
+                    id: 2,
+                    title: 'clean the bathroom',
+                },
+                {
+                    id: 3,
+                    title: 'sweep the floor',
+                },
+                {
+                    id: 4,
+                    title: 'feed the dog',
+                },
+                {
+                    id: 5,
+                    title: 'clean room',
+                },
+                {
+                    id: 6,
+                    title: 'sweep the stairs'
+                }
+            ],
+
+            users: [
+                {
+                    id: 1,
+                    title: 'Adam'
+                },
+                {
+                    id: 2,
+                    title: 'Catie'
+                },
+                {
+                    id: 1,
+                    title: 'Nia'
+                },
+                {
+                    id: 1,
+                    title: 'Thatcher'
+                }
+            ],
+
+            groups: [
+                {
+                    id: 1,
+                    title: 'Whole family'
+                },
+                {
+                    id: 2,
+                    title: 'Boys team'
+                },
+                {
+                    id: 3,
+                    title: 'Girls team'
+                },
+                {
+                    id: 4,
+                    title: 'Parents'
+                },
+                {
+                    id: 5,
+                    title: 'Kids'
+                }
+            ],
+
+            assignmentTabContents: 'IndividualsSubView',
+
+            assignmentTabContentData: '',
+
+            listGroupContents: 'ChoreListItem'
         }
     },
 
     components: {
         IndividualsSubView,
         GroupsSubView,
-        TabComponent
+        TabComponent,
+        ListGroup,
+        ChoreListItem
     }
 }
 </script>

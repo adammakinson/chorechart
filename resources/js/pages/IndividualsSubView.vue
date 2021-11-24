@@ -1,8 +1,11 @@
 <template>
-    <ul>
-        <li>Adam</li>
-        <li>Catie</li>
-        <li>Nia</li>
-        <li>Thatcher</li>
-    </ul>
+        <li class="list-group-item">{{listItem.title}}</li>
 </template>
+
+<script>
+export default {
+    props: [
+        'listItem'
+    ]
+}
+</script>
