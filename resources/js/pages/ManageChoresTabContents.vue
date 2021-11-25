@@ -72,32 +72,7 @@ export default {
                 'dataToPass': 'groups'
             }],
 
-            choresList: [
-                {
-                    id: 1,
-                    title: 'Wash the dishes',
-                },
-                {
-                    id: 2,
-                    title: 'clean the bathroom',
-                },
-                {
-                    id: 3,
-                    title: 'sweep the floor',
-                },
-                {
-                    id: 4,
-                    title: 'feed the dog',
-                },
-                {
-                    id: 5,
-                    title: 'clean room',
-                },
-                {
-                    id: 6,
-                    title: 'sweep the stairs'
-                }
-            ],
+            choresList: [],
 
             users: [
                 {
@@ -155,6 +130,94 @@ export default {
         TabComponent,
         ListGroup,
         ChoreListItem
+    },
+
+    mounted() {
+        this.fetchChoresCollection();
+    },
+
+    methods: {
+        fetchChoresCollection() {
+
+            /**
+             * Im sure this can be cleaned up
+             */
+
+            axios.get('/api/chores', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                
+                this.choresList = this.processFetchedChores(response.data);
+
+                console.log(this.choresList);
+            });
+        },
+
+        processFetchedChores(data) {
+
+            /**
+             * I'm sure this can be cleaned up
+             */
+
+            data.forEach((row) => {
+
+                row.submittable = false;
+                row.editable = true;
+                row.deletable = true;
+
+                if (row.user && row.user.length) {
+                    row.user = row.user[0];
+                    row.pivot = row.user.pivot;
+                }
+                
+                if (this.userIsAdmin) {
+                    
+                    if(row.assigner && row.assigner.length) {
+                        row.assigner = row.assigner[0];
+                    }
+
+                    // Hrm, I think the thought here was if a chore was assigned to multiple users. I'm not sure I want 
+                    // to go that route, but rather perhaps have chore instances? would need to stay an array for reduce 
+                    // to work
+                    // row.assignedUsers = row.user.reduce((total, user) => {
+                    //     return user.name + ', ';
+                    // }, '');
+                    row.assignedUsers = row.user.name;
+
+                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
+                        row.submittable = true;
+                    }
+
+                    if (this.choreIsReadyForInspection(row)) {
+                        row.editable = false;
+                    }
+
+                    if (this.choreIsFinished(row)) {
+                        row.deletable = false;
+                    }
+                } else {
+                    /**
+                     * I think we can do this because a non admin user wont have unassigned chores in their list.
+                     * In addition, the user is not returned because as a non admin user, all the chores
+                     * should belong to the currently logged in user and passing back a user should be
+                     * unneccessary.
+                     */
+                    row.submittable = true;
+
+                    if(!row.user || Array.isArray(row.user)){
+                        row.user = {};
+                    }
+
+                    if(!row.user.id && row.pivot){
+                        row.user.id = row.pivot.user_id;
+                    }
+                }
+            });
+
+            return data;
+        },
     }
 }
 </script>

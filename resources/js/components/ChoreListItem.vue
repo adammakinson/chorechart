@@ -2,7 +2,7 @@
     <li class="list-group-item" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick">
         <div style="display:flex; justify-content: space-between">
             <div>
-                {{listItem.title}}
+                {{listItem.chore}} ({{listItem.pointvalue}} points)
             </div>
             <div>
                 <span class="fas fa-edit text-info" v-bind:data-itemId="listItem.id" v-on:click.stop="handleChoreEditClick"></span>
