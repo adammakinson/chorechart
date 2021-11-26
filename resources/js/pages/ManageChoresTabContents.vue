@@ -139,19 +139,12 @@ export default {
     methods: {
         fetchChoresCollection() {
 
-            /**
-             * Im sure this can be cleaned up
-             */
-
             axios.get('/api/chores', {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                
                 this.choresList = this.processFetchedChores(response.data);
-
-                console.log(this.choresList);
             });
         },
 
@@ -163,9 +156,8 @@ export default {
 
             data.forEach((row) => {
 
-                row.submittable = false;
-                row.editable = true;
-                row.deletable = true;
+                // row.editable = true;
+                // row.deletable = true;
 
                 if (row.user && row.user.length) {
                     row.user = row.user[0];
@@ -173,39 +165,20 @@ export default {
                 }
                 
                 if (this.userIsAdmin) {
-                    
                     if(row.assigner && row.assigner.length) {
                         row.assigner = row.assigner[0];
                     }
 
-                    // Hrm, I think the thought here was if a chore was assigned to multiple users. I'm not sure I want 
-                    // to go that route, but rather perhaps have chore instances? would need to stay an array for reduce 
-                    // to work
-                    // row.assignedUsers = row.user.reduce((total, user) => {
-                    //     return user.name + ', ';
-                    // }, '');
                     row.assignedUsers = row.user.name;
 
-                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
-                        row.submittable = true;
-                    }
+                    // if (this.choreIsReadyForInspection(row)) {
+                    //     row.editable = false;
+                    // }
 
-                    if (this.choreIsReadyForInspection(row)) {
-                        row.editable = false;
-                    }
-
-                    if (this.choreIsFinished(row)) {
-                        row.deletable = false;
-                    }
+                    // if (this.choreIsFinished(row)) {
+                    //     row.deletable = false;
+                    // }
                 } else {
-                    /**
-                     * I think we can do this because a non admin user wont have unassigned chores in their list.
-                     * In addition, the user is not returned because as a non admin user, all the chores
-                     * should belong to the currently logged in user and passing back a user should be
-                     * unneccessary.
-                     */
-                    row.submittable = true;
-
                     if(!row.user || Array.isArray(row.user)){
                         row.user = {};
                     }
