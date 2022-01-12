@@ -1,13 +1,11 @@
 <template>
-    <li class="list-group-item" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick">
-        <div style="display:flex; justify-content: space-between">
-            <div>
-                {{listItem.chore}} ({{listItem.pointvalue}} points)
-            </div>
-            <div>
-                <span class="fas fa-edit text-info" v-bind:data-itemId="listItem.id" v-on:click.stop="editChore"></span>
-                <span class="fas fa-trash text-danger" v-bind:data-itemId="listItem.id" v-on:click.stop="deleteChore"></span>
-            </div>
+    <li :id="'chore_'+listItem.id" class="list-group-item" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick" v-on:dragstart="dragStart" draggable="true" style="display:flex; justify-content: space-between">
+        <div>
+            {{listItem.chore}} ({{listItem.pointvalue}} points)
+        </div>
+        <div>
+            <span class="fas fa-edit text-info" v-bind:data-itemId="listItem.id" v-on:click.stop="editChore"></span>
+            <span class="fas fa-trash text-danger" v-bind:data-itemId="listItem.id" v-on:click.stop="deleteChore"></span>
         </div>
     </li>
 </template>
@@ -65,6 +63,11 @@ export default {
             }).then((response) => {
                 eventBus.$emit('refetch-chores');
             });
+        },
+
+        dragStart(e) {
+            e.dataTransfer.setData('text/html', e.target.innerText);
+            e.dataTransfer.setData('text/choreId', e.target.dataset.itemid);
         },
     }
 }
