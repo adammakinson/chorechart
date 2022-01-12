@@ -3,26 +3,27 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h2>chores</h2>
+                    <h2 style="margin-top: .75em">chores</h2>
                     <div class="card">
                         <div class="card-body">
                             <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
-                            <list-group>
+                            <list-group :listId="'chores-list'">
                                 <component v-for="choreData in choresList" :key="choreData.id" :is='listGroupContents' :listItem="choreData"></component>
                             </list-group>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <h2>Assign to:</h2>
+                    <!-- <h2>Assign to:</h2> -->
+                    <button class="btn btn-primary mt-4 mb-2" v-on:click="assignToUser">Assign to ></button>
                     <div class="card">
                         <div class="card-body">
                             <tab-component :tabsData="assignmentTabsData">
-                                <list-group>
+                                <list-group :listId="'recipients-list'">
                                     <component v-for="assigneeData in assignmentTabContentData" :key="assigneeData.id" :is="assignmentTabContents" :listItem="assigneeData"></component>
                                 </list-group>
                             </tab-component>
-                            <button class="btn btn-primary mt-4" data-toggle="modal" data-target="#createChoreModal">Assign</button>
+                            <button class="btn btn-primary mt-4" v-on:click="assignChores">Assign</button>
                         </div>
                     </div>
                 </div>
@@ -105,7 +106,13 @@ export default {
         eventBus.$on('refetch-chores', () => {
             this.fetchChoresCollection();
         });
-        this.assignmentTabContentData = this.users;
+
+        // const chores = document.querySelectorAll('#chores-list .list-group-item');
+
+        this.getAllUsers().then((response) => {
+            this.users = response.data;
+            this.assignmentTabContentData = this.users;
+        });
     },
 
     data() {
@@ -313,6 +320,78 @@ export default {
                 eventBus.$emit('close-modal');
             });
         },
+
+        assignToUser() {
+            let highlightedChores = document.querySelectorAll('#chores-list .list-group-item.active');
+            let highlightedUsers = document.querySelectorAll('#recipients-list .list-group-item.active');
+
+            highlightedUsers.forEach((user) => {
+                let recipientsListUl;
+
+                if (!user.querySelector('ul.assignmentsList')) {
+                    recipientsListUl = document.createElement('ul');
+                    recipientsListUl.classList.add('assignmentsList');
+                    user.appendChild(recipientsListUl);
+                } else {
+                    recipientsListUl = user.querySelector('ul.assignmentsList');
+                }
+
+                highlightedChores.forEach((chore) => {
+                    let choreName = chore.innerText.trim();
+                    let choreId = chore.dataset.itemid.trim();
+
+                    let userChore = document.createElement('li');
+                    userChore.classList.add('assignment');
+                    userChore.dataset.choreid = choreId;
+                    userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-trash text-danger discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                
+                    recipientsListUl.append(userChore);
+
+                    chore.classList.remove('active');
+                });
+
+                user.classList.remove('active');
+
+            });
+        },
+
+        assignChores() {
+            let highlightedUsers = document.querySelectorAll('#recipients-list .list-group-item');
+            let assignmentsData = {};
+
+            highlightedUsers.forEach((user) => {
+                let userAssignments = user.querySelectorAll('.assignment');
+
+                userAssignments.forEach((assignment) => {
+                    if(! assignmentsData.hasOwnProperty(user.dataset.userid)) {
+                        assignmentsData[user.dataset.userid] = [];
+                    }
+
+                    assignmentsData[user.dataset.userid].push(assignment.dataset.choreid);
+                });
+            });
+
+            if (! this.isEmpty(assignmentsData)) {
+
+                axios({
+                    method: 'post',
+                    url: '/api/user-chores',
+                    data: assignmentsData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    console.log(response);
+                });
+            } else {
+                // TODO - create user friendly notifications
+                console.log('no chores to assign.')
+            }
+        },
+
+        isEmpty(obj) {
+            return Object.keys(obj).length === 0;
+        }
     }
 }
 </script>

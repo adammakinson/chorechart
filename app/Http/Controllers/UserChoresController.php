@@ -19,23 +19,28 @@ class UserChoresController extends Controller
 
     public function store(Request $request, chores $chore)
     {
+    public function store(Request $request)
+    {
+        
         if (Gate::allows('manage-chorechart')) {
             $assigner = auth()->user();
             
-            $assignedTo = $request->assignedto;
-            $choreId = $request->choreId;
+            $userAssignmentsData = $request->all();
+            
+            foreach($userAssignmentsData as $userId => $userAssignments) {
+                $assignedTo = $userId;
 
-            if (!empty($assignedTo)) {
-                $userChore = new UserChores;
-                $userChore->chore_id = $choreId;
-                $userChore->user_id = $assignedTo;
-                $userChore->assigner_id = $assigner->id;
-                $userChore->save();
+                foreach ($userAssignments as $choreId) {
+
+                    if (!empty($assignedTo)) {
+                        $userChore = new UserChores;
+                        $userChore->chore_id = $choreId;
+                        $userChore->user_id = $assignedTo;
+                        $userChore->assigner_id = $assigner->id;
+                        $userChore->save();
+                    }
+                }
             }
-
-            // $chores = chores::all()->load('user', 'assigner');
-
-            // return $chores;
 
             return response('OK', 200)->header('Content-Type', 'application/json');
         } else {
