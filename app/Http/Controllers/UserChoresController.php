@@ -53,11 +53,13 @@ class UserChoresController extends Controller
     /**
      * Updates a chore entry specified by choreId in the user_chores table for 
      * user specified by userId and returns an updated chores list
+     * This updates the state of the chore when a user clicks the check
+     * mark icon for the chore.
      * 
      * @param $request - the PSR7 request
      * @param $assigneeId -  the id of the user from the route
      * @param $choreId - the chore id from the route
-     * @return chores collection
+     * @return userchores collection
      */
     public function update(Request $request)
     {
