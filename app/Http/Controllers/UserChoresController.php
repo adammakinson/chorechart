@@ -36,6 +36,8 @@ class UserChoresController extends Controller
                         $userChore = new UserChores;
                         $userChore->chore_id = $choreId;
                         $userChore->user_id = $assignedTo;
+                        $userChore->chore = $chore->chore;
+                        $userChore->pointvalue = $chore->pointvalue;
                         $userChore->assigner_id = $assigner->id;
                         $userChore->save();
                     }
