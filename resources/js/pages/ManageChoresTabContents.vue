@@ -201,53 +201,10 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                this.choresList = this.processFetchedChores(response.data);
+                this.choresList = response.data;
             });
         },
 
-        processFetchedChores(data) {
-
-            /**
-             * I'm sure this can be cleaned up
-             */
-
-            data.forEach((row) => {
-
-                // row.editable = true;
-                // row.deletable = true;
-
-                if (row.user && row.user.length) {
-                    row.user = row.user[0];
-                    row.pivot = row.user.pivot;
-                }
-                
-                if (this.userIsAdmin) {
-                    if(row.assigner && row.assigner.length) {
-                        row.assigner = row.assigner[0];
-                    }
-
-                    row.assignedUsers = row.user.name;
-
-                    // if (this.choreIsReadyForInspection(row)) {
-                    //     row.editable = false;
-                    // }
-
-                    // if (this.choreIsFinished(row)) {
-                    //     row.deletable = false;
-                    // }
-                } else {
-                    if(!row.user || Array.isArray(row.user)){
-                        row.user = {};
-                    }
-
-                    if(!row.user.id && row.pivot){
-                        row.user.id = row.pivot.user_id;
-                    }
-                }
-            });
-
-            return data;
-        },
 
         getAllUsers() {
             return axios.get('/api/users', {
