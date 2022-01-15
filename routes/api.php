@@ -36,6 +36,12 @@ Route::middleware('auth:sanctum')->apiResource('/chores', ChoresController::clas
  */
 Route::middleware('auth:sanctum')->post('/user-chores', [UserChoresController::class, 'store']);
 
+
+/**
+ * Get user-chores
+ */
+Route::middleware('auth:sanctum')->get('/user-chores/{userId}', [UserChoresController::class, 'getUserChores']);
+
 /**
  * Updates a chore assigned to a user
  * db table - user_chores

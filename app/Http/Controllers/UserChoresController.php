@@ -17,8 +17,15 @@ class UserChoresController extends Controller
     //     return $allUserChores;
     // }
 
-    public function store(Request $request, chores $chore)
+    public function getUserChores($userId)
     {
+        $user = auth()->user();
+
+        $userChores = $user->chores()->get();
+
+        return $userChores;
+    }
+
     public function store(Request $request)
     {
         
