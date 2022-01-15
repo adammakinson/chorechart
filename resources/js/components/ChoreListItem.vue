@@ -29,24 +29,15 @@ export default {
             let choreItem = event.target.closest('.list-group-item');
 
             choreItem.classList.toggle('active');
-           console.log('clicked a general chore item');
         },
 
         editChore(el) {
             let modalwindow = document.getElementById("editChoreModal");
-            // let choreId = el.target.dataset.choreid;
             let choreId = this.listItem.id;
             let choreBeingEdited = this.listItem;
 
             this.choreFieldValue = choreBeingEdited.chore;
             this.pointFieldValue = choreBeingEdited.pointvalue;
-
-            // if(choreBeingEdited.user && choreBeingEdited.user.length > 0) {
-            //     this.assignee = choreBeingEdited.user[0].id;
-            // } else {
-            //     this.assignee = '';
-            // }
-
             this.activeElementId = choreId;
 
             eventBus.$emit('chore-edit-click', choreBeingEdited);
