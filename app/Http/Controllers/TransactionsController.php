@@ -68,7 +68,7 @@ class TransactionsController extends Controller
 
     private function createTransactionAwardingPoints(Request $request, $usersPoints)
     {
-        $chore = chores::find($request->id)->load('user');
+        $chore = chores::find($request->chore_id);
 
         $transaction = new transactions;
         $transaction->user_id = $request->assigneeId;
