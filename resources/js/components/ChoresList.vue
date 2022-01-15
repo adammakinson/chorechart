@@ -12,13 +12,12 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
-                            <span v-if="row.submittable" 
+                            <span v-if="row.submittable"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                 v-bind:data-choreid="row.id">
                             </span>
-                            <span v-if="userIsAdmin && row.editable" v-on:click="editChore" class="fas fa-edit text-info" v-bind:data-choreid="row.id"></span>
-                            <span v-if="userIsAdmin && row.deletable" v-on:click="deleteChore" class="fas fa-trash text-danger" v-bind:data-choreid="row.id"></span>
+                            <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
                         </div>
                     </td>
                 </tr>
@@ -147,8 +146,9 @@ export default {
 
     methods: {
         fetchChoresCollection() {
+            let user = this.$store.getters.getUser;
 
-            axios.get('/api/chores', {
+            axios.get('/api/user-chores/' + user.id, {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
                 }
@@ -175,11 +175,11 @@ export default {
         getChoreRowCheckboxColorClass(row) {
             var colorClass = 'text-secondary';
 
-            if (row.pivot.pending) {
+            if (row.pending) {
                 colorClass = 'text-warning';
             }
 
-            if (row.pivot.inspection_passed) {
+            if (row.inspection_passed) {
                 colorClass = 'text-success';
             }
 
@@ -212,25 +212,11 @@ export default {
                     // }, '');
                     row.assignedUsers = row.user.name;
 
-                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)) {
+                if(!this.choreIsFinished(row)) {
+                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)){
                         row.submittable = true;
                     }
-
-                    if (this.choreIsReadyForInspection(row)) {
-                        row.editable = false;
-                    }
-
-                    if (this.choreIsFinished(row)) {
-                        row.deletable = false;
-                    }
-                } else {
-                    /**
-                     * I think we can do this because a non admin user wont have unassigned chores in their list.
-                     * In addition, the user is not returned because as a non admin user, all the chores
-                     * should belong to the currently logged in user and passing back a user should be
-                     * unneccessary.
-                     */
-                    row.submittable = true;
+                }
 
                     if(!row.user || Array.isArray(row.user)){
                         row.user = {};
@@ -246,15 +232,15 @@ export default {
         },
 
         choreIsSelfAssigned(row) {
-            return row.assigner && row.user && row.assigner.id == row.user.id;
+            return row.assigner_id && row.user_id && row.assigner_id == row.user_id;
         },
 
         choreIsReadyForInspection(row) {
-            return row.user && row.user.id && row.user.pivot.inspection_ready;
+            return !!row.inspection_ready;
         },
 
         choreIsFinished(row) {
-            return row.user && row.user.id && row.user.pivot.inspection_passed;
+            return !!row.inspection_passed;
         },
 
         setupTableData(data) {
@@ -326,7 +312,7 @@ export default {
             let user = this.$store.getters.getUser;
             let choreData = {
                 id: choreBeingEdited.id,
-                userId: choreBeingEdited.user.id,
+                userId: choreBeingEdited.user_id,
                 inspection_ready: true
             };
 
@@ -341,10 +327,10 @@ export default {
             // OR delete the chore should be disabled.
 
             // Hrm... do we really need user.id in the route???
-            if (!choreBeingEdited.pivot.points_awarded == '1') {
+            if (!choreBeingEdited.points_awarded == '1') {
                 axios({
                     method: 'put',
-                    url: '/api/users/' + choreBeingEdited.user.id + '/chores/' + choreBeingEdited.id,
+                    url: '/api/users/' + choreBeingEdited.user_id + '/chores/' + choreBeingEdited.id,
                     data: choreData,
                     headers: {
                         authorization: this.$store.getters.getUserAuthToken
