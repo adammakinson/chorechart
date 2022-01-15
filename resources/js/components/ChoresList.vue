@@ -201,7 +201,7 @@ export default {
                                 authorization: this.$store.getters.getUserAuthToken
                             }
                         }).then((transactionResponse) => {
-                            this.$store.commit('setUserTransactions', response.data);
+                            this.$store.commit('setUserTransactions', transactionResponse.data);
                         });
                     }
 
