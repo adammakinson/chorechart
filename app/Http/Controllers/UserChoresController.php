@@ -77,7 +77,12 @@ class UserChoresController extends Controller
             }
         }
 
-        $userChore = UserChores::where('chore_id', $choreId)->first();
+        $userChore = UserChores::find($choreId);
+
+        $chore = chores::where('id', $userChore->chore_id)->first();
+
+        $userChore->chore = $chore->chore;
+        $userChore->pointvalue = $chore->pointvalue;
 
         if ($isAdmin && $user->id == $assigneeId) { // The currently logged in admin owns the chore
             $userChore->inspection_ready = now();
