@@ -28,24 +28,9 @@ class ChoresController extends Controller
     {
         if (Gate::allows('manage-chorechart')) {
 
-            $chores = $chores->all()->load('user', 'assigner');
+            $chores = $chores->all();
 
             return $chores;
-
-        } else if (Gate::allows('view-chorechart')) {
-
-            $user = auth()->user();
-            $unverifiedChores = [];
-
-            $chores = $user->chores()->get();
-
-            foreach ($chores as $chore) {
-                if($chore->pivot['inspection_passed'] != '1') {
-                    array_push($unverifiedChores, $chore);
-                }
-            }
-
-            return $unverifiedChores;
 
         } else {
             return response('Forbidden', 404)->header('Content-Type', 'text/plain');
@@ -78,13 +63,6 @@ class ChoresController extends Controller
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
-            // $assignedTo = $request->assignedto;
-
-            /**
-             * Redirect to UserChoresController::store to save the
-             * user-chore
-             */
-            // return redirect("/users/{$assignedTo}/{$chore->id}");
             return $chore;
         } else {
 
@@ -110,35 +88,17 @@ class ChoresController extends Controller
 
             $assigner = auth()->user();
             
-            $chore = chores::find($choreId)->load('user');
-            
-            // disallow editing if a chore has been started
-            if(!empty($chore->user->first()->pivot->inspection_ready)) {
-                return response('Forbidden', 403)->header('Content-Type', 'text/plain');    
-            }
+            $chore = chores::find($choreId);
+
 
             $chore->chore = $request->chore;
             $chore->pointvalue = $request->pointvalue;
             $chore->save();
 
-            // we have a user assigned to the chore
-            // I.e. the entry already exists in the user_chore table with the user_id
-            if (isset($chore->user) && count($chore->user) > 0) {
 
-                // Assign chore to user id passed in via the form
-                $userChore = UserChores::where([['chore_id', $chore->id], ['user_id', $chore->user[0]->id]])->first();
-    
-                $userChore->user_id = $request->assignedto;
-                $userChore->save();
-            } else {  // no user_chore entry exists for the chore. (i.e. it hasn't been assigned to anyone)
-                $userChore = new UserChores;
-                $userChore->chore_id = $chore->id;
-                $userChore->user_id = $request->assignedto;
-                $userChore->assigner_id = $assigner->id;
-                $userChore->save();
-            }
+            $choresList = chores::all();
 
-            $choresList = chores::all()->load('user', 'assigner');
+
     
             return $choresList;
         } else {
@@ -157,21 +117,9 @@ class ChoresController extends Controller
      */
     public function destroy(chores $chores, $id)
     {
-        //
         if (Gate::allows('manage-chorechart')) {
             $chore = $chores->find($id);
             
-            if ($chore->user->first()->pivot->inspection_passed == 1) {
-                return response('Forbidden - you cannot delete a completed item', 403)->header('Content-Type', 'text/plain');
-            }
-            
-            /**
-             * I need soft-deletes on chores because a chore should be able to be "deleted"
-             * from the chores list without having an effect on the user_chores list.
-             * The user_chore should be able to still be associated with the chore
-             * 
-             */
-
             
 
             $chore->delete();
@@ -180,7 +128,7 @@ class ChoresController extends Controller
             // It might be something I need to get working.
             UserChores::where('chore_id', $id)->delete();
 
-            $choresList = chores::all()->load('user');
+            $choresList = chores::all();
     
             return $choresList;
         } else {
