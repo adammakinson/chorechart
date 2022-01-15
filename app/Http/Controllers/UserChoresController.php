@@ -39,6 +39,8 @@ class UserChoresController extends Controller
 
                 foreach ($userAssignments as $choreId) {
 
+                    $chore = chores::find($choreId);
+
                     if (!empty($assignedTo)) {
                         $userChore = new UserChores;
                         $userChore->chore_id = $choreId;
