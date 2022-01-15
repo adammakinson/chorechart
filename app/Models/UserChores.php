@@ -21,4 +21,8 @@ class UserChores extends Pivot
         'inspection_passed',
         'pending'
     ];
+
+    function user() {
+        return $this->belongsTo(User::class);
+    }
 }

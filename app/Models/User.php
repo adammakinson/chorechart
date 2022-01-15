@@ -54,8 +54,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
+    // public function chores()
+    // {
+    //     return $this->belongsToMany(chores::class, 'user_chores', 'user_id', 'chore_id')->withPivot('inspection_ready', 'pending', 'inspection_passed');
+    // }
+    
     public function chores()
     {
-        return $this->belongsToMany(chores::class, 'user_chores', 'user_id', 'chore_id')->withPivot('inspection_ready', 'pending', 'inspection_passed');
+        return $this->hasMany(UserChores::class);
     }
 }
