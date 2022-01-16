@@ -1,8 +1,14 @@
 <template>
     <div class="tabcontent">
+        <!-- So, I want to change this so that I have essentially 2 main columns
+            the first column is an overall list of chores. The second column is
+            a tabbed column that allows switching between individuals and groups
+            and contains a card layout. Each card represents an individual OR
+            group's current list of chores along with a "plus" button to add
+            chores from the main list -->
         <div class="container">
             <div class="row">
-                <div class="col">
+                <div class="col-4">
                     <h2 style="margin-top: .75em">chores</h2>
                     <div class="card">
                         <div class="card-body">
