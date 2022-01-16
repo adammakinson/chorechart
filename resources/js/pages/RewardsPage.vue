@@ -123,6 +123,7 @@ export default {
                 rewardData.forEach(reward => {
                     reward.title = reward.reward;
                     reward.cost = reward.point_value;
+                    reward.eventToFire = 'reward-card-click';
                     if (this.userIsAdmin) {
                         reward.actionIcons = [
                             {
