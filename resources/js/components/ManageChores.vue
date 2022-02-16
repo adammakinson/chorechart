@@ -3,10 +3,7 @@
         <appmenu></appmenu>
         <h1>Manage Chores</h1>
         <div id="choreManagement">
-            <tab-component :tabsData="mainTabsData">
-                <component :is="mainTabContents"></component>
-            </tab-component>
-            
+            <component :is="mainTabContents"></component>
         </div>
     </div>
 </template>
