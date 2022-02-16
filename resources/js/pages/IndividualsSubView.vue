@@ -1,12 +1,38 @@
 <template>
-        <li class="list-group-item user-item" v-bind:data-userid="listItem.id" v-on:click="handleIndividualClick" v-on:dragenter="dragEnter" v-on:dragover="dragOver" v-on:dragleave="dragLeave" v-on:drop="drop">{{listItem.name}}</li>
+    <cardgrid>
+        <card
+            class="user-chores-list-card" 
+            v-bind:data-userid="cardData.id" 
+            v-on:click="handleIndividualClick" 
+            v-on:dragenter="dragEnter" 
+            v-on:dragover="dragOver" 
+            v-on:dragleave="dragLeave"
+            v-on:drop="drop" 
+            :cardData="cardData"
+            >
+                <h5>{{cardData.name}}</h5>
+                <list-group v-if="cardData.chores" class="user-chores-list">
+                    <li v-for="userChore in cardData.chores" :key="userChore.id" class="list-group-item">{{userChore.chore}}</li>
+                </list-group>
+            </card>
+    </cardgrid>
 </template>
 
 <script>
+import Card from '../components/Card.vue';
+import Cardgrid from '../components/Cardgrid.vue';
+import ListGroup from '../components/ListGroup.vue';
+
 export default {
     props: [
-        'listItem'
+        'cardData'
     ],
+
+    components: {
+        Cardgrid,
+        Card,
+        ListGroup
+    },
 
     methods: {
         /**
