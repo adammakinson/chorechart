@@ -218,3 +218,9 @@ so "spending" reward time for TV/computer game time will be a bit more complex
 since we will have to send messages to the router to change its settings, then
 set a timer that decrements the number of minutes left for the activity and once
 the time expires, send messages to the router to re-block those ip addresses.
+
+
+I need to add due dates to chore insances, and the created date/due date combination
+needs to be a part of what makes that chore unique because something like "sweep
+the floor" will be a re-occurring event. Note that a user should not be able to
+have multiples of the same chore overlapping (i.e. the time frames should not overlap.)
