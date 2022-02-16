@@ -1,6 +1,6 @@
 <template>
-    <ul v-bind:id="listId" class="list-group mt-4">
-            <slot></slot>
+    <ul v-bind:id="listId" class="list-group">
+        <slot></slot>
     </ul>
 </template>
 
