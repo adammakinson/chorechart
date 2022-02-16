@@ -429,7 +429,7 @@ export default {
             userChore.classList.add('assignment');
             userChore.classList.add('list-group-item');
             userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${droppedChoreName}</div><div><span class="fas fa-minus text-danger discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
-            userChore.dataset.choreid = droppedChoreId;
+            userChore.dataset.itemid = droppedChoreId;
 
             if (!this.assignmentsStarted(dropTarget)) {
                 userChoresList = document.createElement('ul');
