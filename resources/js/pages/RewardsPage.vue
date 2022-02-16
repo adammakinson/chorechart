@@ -4,7 +4,20 @@
         <user-status-bar></user-status-bar>
         <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
         <h1>Rewards</h1>
-        <cardgrid :cardCollectionData="rewards"></cardgrid>
+        <cardgrid :cardCollectionData="rewards">
+            <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
+                <h4 class="text-dark">{{cardData.title}}</h4>
+                <h5><b>cost: </b>{{cardData.cost}}</h5>
+                <div v-if="cardData.actionIcons" class="flex-column m-3">
+                    <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
+                        v-bind:class="actionicon.class" 
+                        v-bind:iconevent="actionicon.event" 
+                        v-bind:data-itemId="cardData.id">
+                    </icon>
+                </div>
+            </card>
+        </cardgrid>
         <modal id="rewardModal">
             <template v-slot:header>
                 {{rewardModalTitle}}
@@ -57,13 +70,16 @@
 import Appmenu from '../components/AppMenu.vue';
 import UserStatusBar from '../components/UserStatusBar.vue';
 import Cardgrid from '../components/Cardgrid.vue';
+import Card from '../components/Card.vue';
 import eventBus from '../eventBus';
 import Modal from '../components/Modal.vue';
+import icon from '../components/Icon';
 
 export default {
     data() {
         return {
             rewards: [],
+            cardCollectionData: [],
             clickedCardData: [],
             userIsAdmin: false,
             editingReward: false,
@@ -107,8 +123,10 @@ export default {
     components: {
         Appmenu,
         Cardgrid,
+        Card,
         UserStatusBar,
-        Modal
+        Modal,
+        icon
     },
 
     methods: {
@@ -124,6 +142,13 @@ export default {
                     reward.title = reward.reward;
                     reward.cost = reward.point_value;
                     reward.eventToFire = 'reward-card-click';
+
+                    reward.eventsObject = {
+                        click: this.showRewardConfirmationModal
+                    };
+
+                    reward.contentItems = [];
+                    
                     if (this.userIsAdmin) {
                         reward.actionIcons = [
                             {
@@ -146,6 +171,7 @@ export default {
 
                 // TODO - store rewards in vuex on fetch, update single record on update, remove on delete.
                 // maybe have some sort of mechanism to invalidate the vuex "cache"
+                this.cardCollectionData = rewardData;
                 this.rewards = rewardData;
             });
         },
@@ -267,8 +293,21 @@ export default {
             }
         },
 
-        showRewardConfirmationModal() {
+        showRewardConfirmationModal(e) {
             let modalwindow = document.getElementById("rewardConfirmationModal");
+            let card = e.target.closest('.card');
+            let rewardId = card.dataset.itemid;
+            let reward;
+
+            this.cardCollectionData.forEach((card) => {
+                console.log(card);
+
+                if(card.id == rewardId){
+                    reward = card;
+                }
+            });
+
+            this.clickedCardData = reward;
 
             modalwindow.style.display = 'block';
         },
