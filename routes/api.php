@@ -36,9 +36,13 @@ Route::middleware('auth:sanctum')->apiResource('/chores', ChoresController::clas
  */
 Route::middleware('auth:sanctum')->post('/user-chores', [UserChoresController::class, 'store']);
 
+/**
+ * Get all incomplete chores that are assigned to users
+ */
+Route::middleware('auth:sanctum')->get('/user-chores', [UserChoresController::class, 'getAllIncompleteChores']);
 
 /**
- * Get user-chores
+ * Get a specific user's assigned chores
  */
 Route::middleware('auth:sanctum')->get('/user-chores/{userId}', [UserChoresController::class, 'getUserChores']);
 

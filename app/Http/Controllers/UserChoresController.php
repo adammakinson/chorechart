@@ -17,6 +17,13 @@ class UserChoresController extends Controller
     //     return $allUserChores;
     // }
 
+    public function getAllIncompleteChores()
+    {
+        if (Gate::allows('manage-chorechart')) {
+            return UserChores::all();
+        }
+    }
+
     public function getUserChores($userId)
     {
         $user = auth()->user();
