@@ -23,6 +23,8 @@ export default {
 
     methods: {
         handleChoreClick(event) {
+            event.stopPropagation();
+
             let choreItem = event.target.closest('.list-group-item');
 
             choreItem.classList.toggle('active');
