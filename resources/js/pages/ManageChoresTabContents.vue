@@ -13,13 +13,13 @@
                     <div class="card">
                         <div class="card-body">
                             <list-group :listId="'chores-list'">
-                                <component v-for="choreData in choresList" :key="choreData.id" :is='listGroupContents' :listItem="choreData">
+                                <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData">
                                     {{choreData.chore}} ({{choreData.pointvalue}} pts)
                                     <template v-slot:actions>
                                         <span class="fas fa-edit text-info" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
                                         <span class="fas fa-trash text-danger" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
                                     </template>
-                                </component>
+                                </list-item>
                             </list-group>
                         </div>
                     </div>
@@ -30,7 +30,6 @@
                             <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                                 <h4>{{cardData.name}}</h4>
                                 <list-group v-if="cardData.chores">
-                                    <!-- <li v-for="userChore in cardData.chores" :key="userChore.chore_id" v-bind:data-itemId="userChore.chore_id" class="list-group-item">{{userChore.chore}}</li> -->
                                     <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
                                         {{userChore.chore}}
                                         <template v-slot:actions>
@@ -106,16 +105,6 @@ import Modal from "../components/Modal";
 
 export default {
     created() {
-        eventBus.$on("assign-to-individuals-tab-click", (contents) => {
-            this.assignmentTabContents = contents;
-            this.assignmentTabContentData = this.users;
-        });
-        
-        eventBus.$on("assign-to-group-tab-click", (contents) => {
-            this.assignmentTabContents = contents;
-            this.assignmentTabContentData = this.groups;
-        });
-
         eventBus.$on("chore-edit-click", (chore) => {
             this.choreBeingEdited = chore
         });
@@ -151,9 +140,7 @@ export default {
                     dragleave: this.dragLeave,
                     drop: this.drop
                 };
-            }); 
-
-            console.log(this.users);
+            });
 
             this.users = users;
         });
@@ -172,9 +159,7 @@ export default {
 
             choresList: [],
             users: [],
-            assignmentTabContents: 'IndividualsSubView',
             assignmentTabContentData: this.users,
-            listGroupContents: 'ListItem',
             userIsAdmin: false,
             pointFieldValue: '',
             choreFieldValue: '',
@@ -185,9 +170,7 @@ export default {
     },
 
     components: {
-        // IndividualsSubView,
         GroupsSubView,
-        // TabComponent,
         ListGroup,
         ListItem,
         Cardgrid,
@@ -458,16 +441,11 @@ export default {
 
             let choresList = dropTarget.querySelectorAll('.list-group-item');
 
-            console.log(choresList);
-
             return choresList.length > 0;
         },
 
         userListHasChore(userChoresList, userChore) {
             let hasChore = false;
-
-            console.log(userChoresList);
-            console.log(userChore);
 
             userChoresList.childNodes.forEach((assignment) => {
                 if(assignment.dataset.itemid === userChore.dataset.itemid) {
