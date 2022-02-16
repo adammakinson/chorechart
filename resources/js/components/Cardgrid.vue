@@ -1,25 +1,5 @@
 <template>
     <div class="cardgrid">
-        <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData"></card>
+        <slot></slot>
     </div>
 </template>
-
-<script>
-import Card from './Card.vue';
-import Modal from './Modal.vue';
-
-export default {
-    data() {
-        return {};
-    },
-
-    props: [
-        'cardCollectionData'
-    ],
-
-    components: {
-        Card,
-        Modal
-    }
-}
-</script>
