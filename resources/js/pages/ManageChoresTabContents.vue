@@ -1,36 +1,45 @@
 <template>
     <div class="tabcontent">
-        <!-- So, I want to change this so that I have essentially 2 main columns
-            the first column is an overall list of chores. The second column is
-            a tabbed column that allows switching between individuals and groups
-            and contains a card layout. Each card represents an individual OR
-            group's current list of chores along with a "plus" button to add
-            chores from the main list -->
         <div class="container">
             <div class="row">
-                <div class="col-4">
-                    <h2 style="margin-top: .75em">chores</h2>
+                <div class="col-sm p-2 m-2">
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
+                    <button class="btn btn-primary" v-on:click="assignToUser">add to all</button>
+                    <button class="btn btn-primary" v-on:click="assignChores">Assign</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
                             <list-group :listId="'chores-list'">
-                                <component v-for="choreData in choresList" :key="choreData.id" :is='listGroupContents' :listItem="choreData"></component>
+                                <component v-for="choreData in choresList" :key="choreData.id" :is='listGroupContents' :listItem="choreData">
+                                    {{choreData.chore}} ({{choreData.pointvalue}} pts)
+                                    <template v-slot:actions>
+                                        <span class="fas fa-edit text-info" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
+                                        <span class="fas fa-trash text-danger" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
+                                    </template>
+                                </component>
                             </list-group>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <!-- <h2>Assign to:</h2> -->
-                    <button class="btn btn-primary mt-4 mb-2" v-on:click="assignToUser">Assign to ></button>
-                    <div class="card">
-                        <div class="card-body">
-                            <tab-component :tabsData="assignmentTabsData">
-                                <list-group :listId="'recipients-list'">
-                                    <component v-for="assigneeData in assignmentTabContentData" :key="assigneeData.id" :is="assignmentTabContents" :listItem="assigneeData"></component>
+                    <div>
+                        <cardgrid>
+                            <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
+                                <h4>{{cardData.name}}</h4>
+                                <list-group v-if="cardData.chores">
+                                    <!-- <li v-for="userChore in cardData.chores" :key="userChore.chore_id" v-bind:data-itemId="userChore.chore_id" class="list-group-item">{{userChore.chore}}</li> -->
+                                    <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
+                                        {{userChore.chore}}
+                                        <template v-slot:actions>
+                                            <span class="fas fa-trash text-danger" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                        </template>
+                                    </list-item>
                                 </list-group>
-                            </tab-component>
-                            <button class="btn btn-primary mt-4" v-on:click="assignChores">Assign</button>
-                        </div>
+                            </card>
+                        </cardgrid>
                     </div>
                 </div>
             </div>
@@ -85,11 +94,13 @@
 </template>
 
 <script>
-import IndividualsSubView from "./IndividualsSubView.vue";
+// import IndividualsSubView from "./IndividualsSubView.vue";
 import GroupsSubView from "./GroupsSubView.vue";
-import TabComponent from "../components/TabComponent.vue";
+// import TabComponent from "../components/TabComponent.vue";
+import Cardgrid from '../components/Cardgrid.vue';
+import Card from '../components/Card.vue';
 import ListGroup from "../components/ListGroup.vue";
-import ChoreListItem from "../components/ChoreListItem.vue";
+import ListItem from "../components/ListItem.vue";
 import eventBus from "../eventBus.js";
 import Modal from "../components/Modal";
 
@@ -113,11 +124,38 @@ export default {
             this.fetchChoresCollection();
         });
 
-        // const chores = document.querySelectorAll('#chores-list .list-group-item');
+        this.fetchChoresCollection();
 
-        this.getAllUsers().then((response) => {
-            this.users = response.data;
-            this.assignmentTabContentData = this.users;
+        Promise.all([
+            this.getAllUsers(),
+            this.fetchAllIncompletedUserChores()
+        ]).then((response) => {
+            let users = response[0].data;
+            let allUsersChores = response[1].data;
+            let choresSegregatedByUser = {};
+
+            allUsersChores.forEach((chore) => {
+                if(!Array.isArray(choresSegregatedByUser[chore.user_id])) {
+                    choresSegregatedByUser[chore.user_id] = [];
+                }
+
+                choresSegregatedByUser[chore.user_id].push(chore);
+            });
+
+            users.forEach((user) => {
+                user.chores = choresSegregatedByUser[user.id];
+                user.eventsObject = {
+                    click: this.handleIndividualClick,
+                    dragenter: this.dragEnter,
+                    dragover: this.dragOver,
+                    dragleave: this.dragLeave,
+                    drop: this.drop
+                };
+            }); 
+
+            console.log(this.users);
+
+            this.users = users;
         });
     },
 
@@ -130,78 +168,39 @@ export default {
                 'firesEvent': 'assign-to-individuals-tab-click',
                 'loadsContent': 'IndividualsSubView',
                 'dataToPass': 'users'
-            },
-            {
-                'id': 2,
-                'label': 'Groups',
-                'firesEvent': 'assign-to-group-tab-click',
-                'loadsContent': 'GroupsSubView',
-                'dataToPass': 'groups'
             }],
 
             choresList: [],
-
             users: [],
-
-            groups: [
-                {
-                    id: 1,
-                    title: 'Whole family'
-                },
-                {
-                    id: 2,
-                    title: 'Boys team'
-                },
-                {
-                    id: 3,
-                    title: 'Girls team'
-                },
-                {
-                    id: 4,
-                    title: 'Parents'
-                },
-                {
-                    id: 5,
-                    title: 'Kids'
-                }
-            ],
-
             assignmentTabContents: 'IndividualsSubView',
-
-            assignmentTabContentData: '',
-
-            listGroupContents: 'ChoreListItem',
-
+            assignmentTabContentData: this.users,
+            listGroupContents: 'ListItem',
             userIsAdmin: false,
-
             pointFieldValue: '',
-
             choreFieldValue: '',
-
             activeElementId: '',
-
-            choreBeingEdited: []
+            choreBeingEdited: [],
+            allUsersChores: {}
         }
     },
 
     components: {
-        IndividualsSubView,
+        // IndividualsSubView,
         GroupsSubView,
-        TabComponent,
+        // TabComponent,
         ListGroup,
-        ChoreListItem,
+        ListItem,
+        Cardgrid,
+        Card,
         Modal
     },
 
     mounted() {
         this.userIsAdmin = this.$store.getters.userIsAdmin;
-
-        this.fetchChoresCollection();
     },
 
     methods: {
         fetchChoresCollection() {
-
             axios.get('/api/chores', {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
@@ -211,6 +210,13 @@ export default {
             });
         },
 
+        fetchAllIncompletedUserChores(users) {
+            return axios.get('/api/user-chores', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            });
+        },
 
         getAllUsers() {
             return axios.get('/api/users', {
@@ -253,7 +259,6 @@ export default {
             }).then(() => {
                 this.fetchChoresCollection();
                 
-                // Close the modal
                 eventBus.$emit('close-modal');
             });
         },
@@ -286,31 +291,36 @@ export default {
 
         assignToUser() {
             let highlightedChores = document.querySelectorAll('#chores-list .list-group-item.active');
-            let highlightedUsers = document.querySelectorAll('#recipients-list .list-group-item.active');
+            let highlightedUsers = document.querySelectorAll('.card.active');
 
             highlightedUsers.forEach((user) => {
                 let recipientsListUl;
 
-                if (!user.querySelector('ul.assignmentsList')) {
+                if (!user.querySelector('ul.list-group')) {
                     recipientsListUl = document.createElement('ul');
-                    recipientsListUl.classList.add('assignmentsList');
+                    recipientsListUl.classList.add('list-group');
                     user.appendChild(recipientsListUl);
                 } else {
-                    recipientsListUl = user.querySelector('ul.assignmentsList');
+                    recipientsListUl = user.querySelector('ul.list-group');
                 }
 
                 highlightedChores.forEach((chore) => {
-                    let choreName = chore.innerText.trim();
-                    let choreId = chore.dataset.itemid.trim();
 
-                    let userChore = document.createElement('li');
-                    userChore.classList.add('assignment');
-                    userChore.dataset.choreid = choreId;
-                    userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-trash text-danger discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                    if(!this.userListHasChore(recipientsListUl, chore)) {
+                        let choreName = chore.innerText.trim();
+                        let choreId = chore.dataset.itemid.trim();
+
+                        let userChore = document.createElement('li');
+                        userChore.classList.add('assignment');
+                        userChore.classList.add('list-group-item');
+                        userChore.dataset.itemid = choreId;
+                        userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-minus text-danger discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                    
+                        recipientsListUl.append(userChore);
                 
-                    recipientsListUl.append(userChore);
-
-                    chore.classList.remove('active');
+                        let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
+                        choreDiscardButton.addEventListener('click', this.discardAssignment);
+                    }
                 });
 
                 user.classList.remove('active');
@@ -319,10 +329,10 @@ export default {
         },
 
         assignChores() {
-            let highlightedUsers = document.querySelectorAll('#recipients-list .list-group-item');
+            let userCards = document.querySelectorAll('.card');
             let assignmentsData = {};
 
-            highlightedUsers.forEach((user) => {
+            userCards.forEach((user) => {
                 let userAssignments = user.querySelectorAll('.assignment');
 
                 userAssignments.forEach((assignment) => {
@@ -330,7 +340,7 @@ export default {
                         assignmentsData[user.dataset.userid] = [];
                     }
 
-                    assignmentsData[user.dataset.userid].push(assignment.dataset.choreid);
+                    assignmentsData[user.dataset.userid].push(assignment.dataset.itemid);
                 });
             });
 
@@ -345,6 +355,24 @@ export default {
                     }
                 }).then((response) => {
                     console.log(response);
+
+                    if(response.status == 200){
+                        let choresList = document.querySelectorAll('#chores-list .list-group-item.active');
+                        let assignedItems = document.querySelectorAll('.assignment');
+
+                        choresList.forEach((choreListItem) => {
+                            choreListItem.classList.remove('active');
+                        });
+
+                        assignedItems.forEach((assignedChore) => {
+                            let discardAssignmentButton = assignedChore.querySelector('.discardAssignmentIcon');
+
+                            discardAssignmentButton.classList.remove('fa-minus');
+                            discardAssignmentButton.classList.add('fa-trash');
+                            discardAssignmentButton.removeEventListener('click', this.discardAssignment);
+                            discardAssignmentButton.addEventListener('click', this.deleteUserAssignment);
+                        });
+                    }
                 });
             } else {
                 // TODO - create user friendly notifications
@@ -354,6 +382,152 @@ export default {
 
         isEmpty(obj) {
             return Object.keys(obj).length === 0;
+        },
+
+        // toggles active class on the user cards
+        handleIndividualClick(event) {
+            let userCard = event.target.closest('.card');
+
+            userCard.classList.toggle('active');
+        },
+
+        dragEnter(e) {
+            e.preventDefault();
+
+            let userCard = e.toElement.closest('.card');
+
+            userCard.classList.add('border-success');
+        },
+
+        dragOver(e) {
+            e.preventDefault();
+
+            let userCard = e.toElement.closest('.card');
+
+            userCard.classList.add('border-success');
+        },
+
+        dragLeave(e) {
+            let userCard = e.toElement;
+
+            userCard.classList.remove('border-success');
+        },
+
+        drop(e) {
+            e.stopPropagation();
+
+            let card = e.toElement.closest('.card');
+            let dropTarget = card.querySelector('.list-group');
+            let userChoresList;
+            let userChore;
+            let droppedChoreName = e.dataTransfer.getData('text/html'); 
+            let droppedChoreId = e.dataTransfer.getData('text/choreId');
+            
+            card.classList.remove('border-success');
+
+            userChore = document.createElement('li');
+            userChore.classList.add('assignment');
+            userChore.classList.add('list-group-item');
+            userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${droppedChoreName}</div><div><span class="fas fa-minus text-danger discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
+            userChore.dataset.choreid = droppedChoreId;
+
+            if (!this.assignmentsStarted(dropTarget)) {
+                userChoresList = document.createElement('ul');
+                userChoresList.className = 'list-group';
+                card.appendChild(userChoresList);
+            } else {
+                userChoresList = dropTarget;
+            }
+            
+            // User shouldn't have duplicate chores
+            if(!this.userListHasChore(userChoresList, userChore)) {
+                userChoresList.appendChild(userChore);
+            }
+
+            // Create an event listener to handle discarding assignments
+            let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
+            choreDiscardButton.addEventListener('click', this.discardAssignment);
+            
+            return false;
+        },
+
+        assignmentsStarted(dropTarget) {
+            if(!dropTarget) {
+                return false;
+            }
+
+            let choresList = dropTarget.querySelectorAll('.list-group-item');
+
+            console.log(choresList);
+
+            return choresList.length > 0;
+        },
+
+        userListHasChore(userChoresList, userChore) {
+            let hasChore = false;
+
+            console.log(userChoresList);
+            console.log(userChore);
+
+            userChoresList.childNodes.forEach((assignment) => {
+                if(assignment.dataset.itemid === userChore.dataset.itemid) {
+                    hasChore = true;
+                    console.log(hasChore);
+                }
+            });
+
+            return hasChore;
+        },
+
+        discardAssignment(e) {
+            e.stopPropagation();
+
+            let assignment = e.target.closest('.assignment');
+
+            assignment.remove();
+        },
+
+        editChore(el) {
+            console.log(el);
+
+            let modalwindow = document.getElementById("editChoreModal");
+            let choreId = el.target.dataset.itemid;
+            let choreBeingEdited = this.getChoreById(choreId);
+
+            this.choreFieldValue = choreBeingEdited.chore;
+            this.pointFieldValue = choreBeingEdited.pointvalue;
+            this.activeElementId = choreId;
+
+            eventBus.$emit('chore-edit-click', choreBeingEdited);
+
+            modalwindow.style.display = 'block';
+        },
+
+        getChoreById(id) {
+            return this.choresList.filter((choreItem) => {
+                return choreItem.id == id;
+            })[0];
+        },
+
+        deleteChore(el) {
+            let choreId = el.target.dataset.itemid;
+
+            axios.delete('/api/chores/' + choreId, {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                eventBus.$emit('refetch-chores');
+            });
+        },
+
+        /**
+         * We need to check that the assignment has not been submitted by the user
+         * before deleting. We should only be able to delete chores that have not
+         * been submitted.
+         */
+        deleteUserAssignment(e) {
+            console.log('deleting user assignment!');
         }
     }
 }
