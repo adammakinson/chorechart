@@ -1,6 +1,6 @@
 <template>
     <div class="tabcontent">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm p-2 m-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card">
                         <div class="card-body">
                             <list-group :listId="'chores-list'">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-md-9">
                     <div>
                         <cardgrid>
                             <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
