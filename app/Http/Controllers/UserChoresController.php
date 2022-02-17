@@ -20,7 +20,7 @@ class UserChoresController extends Controller
     public function getAllIncompleteChores()
     {
         if (Gate::allows('manage-chorechart')) {
-            return UserChores::all();
+            return UserChores::whereNull('inspection_passed')->get();
         }
     }
 
