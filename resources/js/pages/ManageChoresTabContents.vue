@@ -33,7 +33,8 @@
                                     <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
                                         {{userChore.chore}}
                                         <template v-slot:actions>
-                                            <span class="fas fa-trash text-danger" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                            <span v-if="isApprovable(userChore)" class="fas fa-check"></span><!-- chore approval if chore has been submitted -->
+                                            <span v-if="isDeletable(userChore)" class="fas fa-trash text-danger" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
                                         </template>
                                     </list-item>
                                 </list-group>
@@ -497,6 +498,14 @@ export default {
             }).then((response) => {
                 eventBus.$emit('refetch-chores');
             });
+        },
+
+        isApprovable(chore) {
+            return chore.inspection_ready !== null && chore.pending === 1;
+        },
+
+        isDeletable(chore) {
+            return chore.inspection_ready === null && !chore.pending;
         },
 
         /**
