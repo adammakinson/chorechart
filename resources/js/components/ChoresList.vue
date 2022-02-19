@@ -111,9 +111,9 @@ export default {
         setupTableData(data) {
             
             this.columns = [
-                {label: 'chore', field: 'chore'}
+                {label: 'chore', field: 'chore', headerAlign: 'Left'}
             ];
-            this.columns.push({label: 'points', field: 'pointvalue'});
+            this.columns.push({label: 'points', field: 'pointvalue', headerAlign: 'Left'});
 
             this.rows = data;
         },
