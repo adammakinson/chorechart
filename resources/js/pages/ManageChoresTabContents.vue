@@ -94,9 +94,7 @@
 </template>
 
 <script>
-// import IndividualsSubView from "./IndividualsSubView.vue";
 import GroupsSubView from "./GroupsSubView.vue";
-// import TabComponent from "../components/TabComponent.vue";
 import Cardgrid from '../components/Cardgrid.vue';
 import Card from '../components/Card.vue';
 import ListGroup from "../components/ListGroup.vue";
@@ -262,7 +260,6 @@ export default {
                 choreData[el.name] = el.value;
             });
 
-            // Create the chore
             axios({
                 method: 'post',
                 url: '/api/chores',
@@ -298,7 +295,6 @@ export default {
 
                 this.fetchChoresCollection();
 
-                // Close the modal
                 eventBus.$emit('close-modal');
             });
         },

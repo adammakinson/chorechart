@@ -27,7 +27,6 @@
 <script>
 import Appmenu from './AppMenu.vue';
 import UserStatusBar from './UserStatusBar.vue';
-import eventBus from '../eventBus';
 
 export default {
     props: ['id'],
@@ -119,7 +118,6 @@ export default {
             this.rows = data;
         },
 
-        
         findUserChoreByChoreId(allChores, userId, choreId) {
             return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
         },

@@ -5,21 +5,9 @@
 </template>
 
 <script>
-import eventBus from "../eventBus.js";
-
 export default {
     props: [
         'listId'
-    ],
-
-    created() {
-
-    },
-
-    data() {
-        return {
-
-        }
-    }
+    ]
 }
 </script>

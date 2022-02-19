@@ -9,9 +9,7 @@ export default {
     ],
 
     methods: {
-        /**
-         * Adds or removes the active class from the clicked list group item element
-         */
+        
         handleGroupClick(event) {
             let group = event.target.closest('.list-group-item');
 

@@ -8,18 +8,10 @@
 </template>
 
 <script>
-import eventBus from "../eventBus.js";
-
 export default {
     props: [
         'listItem'
     ],
-
-    data() {
-        return {
-
-        }
-    },
 
     methods: {
         handleChoreClick(event) {
