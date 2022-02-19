@@ -573,6 +573,23 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+                if (response.data.points_awarded) {
+
+                        // Set the transaction type
+                        response.data.transactionType = 'choreCompletion';
+
+                        axios({
+                            method: 'post',
+                            url: '/api/users/' + response.data.user_id + '/transactions', 
+                            data: response.data,
+                            headers: {
+                                authorization: this.$store.getters.getUserAuthToken
+                            }
+                        }).then((transactionResponse) => {
+                            this.$store.commit('setUserTransactions', transactionResponse.data);
+                        });
+                    }
+            }).then((response) => {
                 eventBus.$emit('refetch-userchores');
             });
         }
