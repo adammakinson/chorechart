@@ -10,7 +10,7 @@
                     <td>{{row.pointvalue}}</td>
                     <td>
                         <div class="actionsContainer">
-                            <span v-if="row.submittable"
+                            <span v-if="!choreIsFinished(row)"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                 v-bind:data-choreid="row.chore_id">
@@ -35,21 +35,13 @@ export default {
     data() {
         return {
             chores: null,
-
             columns: [],
-
             rows: [],
-
             choreFieldValue: '',
-
             pointFieldValue: '',
-
             activeElementId: '',
-
             assignee: '',
-
             userIsAdmin: false,
-
             allUsers: []
         }
     },
@@ -81,9 +73,9 @@ export default {
                 }
             }).then((response) => {
                 
-                this.chores = this.processFetchedChores(response.data);
+                this.chores = response.data;
                 
-                this.setupTableData(response.data);
+                this.setupTableData(this.chores);
             });
         },
 
@@ -113,31 +105,6 @@ export default {
             return colorClass;
         },
 
-        processFetchedChores(data) {
-            data.forEach((row) => {
-
-                row.submittable = false;
-
-                if(!this.choreIsFinished(row)) {
-                    if (this.choreIsSelfAssigned(row) || this.choreIsReadyForInspection(row)){
-                        row.submittable = true;
-                    }
-                }
-
-
-            });
-
-            return data;
-        },
-
-        choreIsSelfAssigned(row) {
-            return row.assigner_id && row.user_id && row.assigner_id == row.user_id;
-        },
-
-        choreIsReadyForInspection(row) {
-            return !!row.inspection_ready;
-        },
-
         choreIsFinished(row) {
             return !!row.inspection_passed;
         },
@@ -157,7 +124,6 @@ export default {
             return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
         },
 
-
         handleCheckClick(el) {
             let choreId = el.target.dataset.choreid;
             let user = this.$store.getters.getUser;
@@ -170,16 +136,6 @@ export default {
                 userId: choreBeingEdited.user_id,
                 inspection_ready: true
             };
-
-            // TODO: If a chore has been approved and had points awarded for it,
-            // subsequent clicks on the checkbox should NOT incur a server request
-            // anymore.
-            // QUESTION: should a user be allowed to edit or delete a chore after
-            // points have been awarded? Should all actions be disabled?
-            // I think what needs to happen is a chore can be edited or deleted
-            // until it has a pending status. Once it has a pending status, the
-            // ability to edit the chore (for example, modify the points or change the user)
-            // OR delete the chore should be disabled.
 
             // Hrm... do we really need user.id in the route???
             if (!choreBeingEdited.points_awarded == '1') {
