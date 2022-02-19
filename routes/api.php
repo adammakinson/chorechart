@@ -49,6 +49,7 @@ Route::middleware('auth:sanctum')->get('/user-chores/{userId}', [UserChoresContr
 /**
  * Updates a chore assigned to a user
  * db table - user_chores
+ * TODO: refactor this because it is more complicated than it needs to be.
  */
 Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
 

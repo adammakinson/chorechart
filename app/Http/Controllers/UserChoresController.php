@@ -76,6 +76,8 @@ class UserChoresController extends Controller
      * @param $assigneeId -  the id of the user from the route
      * @param $choreId - the chore id from the route
      * @return userchores collection
+     * TODO: simplify this to handle any update instead of just the approval state
+     *      I think I still want a specific use case of updating approval state... need to think this one throug...
      */
     public function update(Request $request)
     {
@@ -93,7 +95,7 @@ class UserChoresController extends Controller
             }
         }
 
-        $userChore = UserChores::find($choreId);
+        $userChore = UserChores::where(['user_id' => $assigneeId, 'chore_id' => $choreId])->first();
 
         $chore = chores::where('id', $userChore->chore_id)->first();
 

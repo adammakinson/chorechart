@@ -13,7 +13,7 @@
                             <span v-if="row.submittable"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
-                                v-bind:data-choreid="row.id">
+                                v-bind:data-choreid="row.chore_id">
                             </span>
                             <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
                         </div>
@@ -152,18 +152,21 @@ export default {
             this.rows = data;
         },
 
-
-        findChoreById(allChores, choreId) {
-            return allChores.find(chore => chore.id == choreId);
+        
+        findUserChoreByChoreId(allChores, userId, choreId) {
+            return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
         },
 
 
         handleCheckClick(el) {
             let choreId = el.target.dataset.choreid;
+            let user = this.$store.getters.getUser;
             let allChores = this.chores;
-            let choreBeingEdited = this.findChoreById(allChores, choreId);
+            let choreBeingEdited = this.findUserChoreByChoreId(allChores, user.id, choreId);
+
+            // The way the update function works right now, I'm not even using the data payload.
             let choreData = {
-                id: choreBeingEdited.id,
+                chore_id: choreBeingEdited.chore_id,
                 userId: choreBeingEdited.user_id,
                 inspection_ready: true
             };
@@ -182,7 +185,7 @@ export default {
             if (!choreBeingEdited.points_awarded == '1') {
                 axios({
                     method: 'put',
-                    url: '/api/users/' + choreBeingEdited.user_id + '/chores/' + choreBeingEdited.id,
+                    url: '/api/users/' + choreBeingEdited.user_id + '/chores/' + choreBeingEdited.chore_id,
                     data: choreData,
                     headers: {
                         authorization: this.$store.getters.getUserAuthToken

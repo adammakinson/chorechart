@@ -33,7 +33,7 @@
                                     <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
                                         {{userChore.chore}}
                                         <template v-slot:actions>
-                                            <span v-if="isApprovable(userChore)" class="fas fa-check"></span><!-- chore approval if chore has been submitted -->
+                                            <span v-if="isApprovable(userChore)" class="fas fa-check" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
                                             <span v-if="isDeletable(userChore)" class="fas fa-trash text-danger" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
                                         </template>
                                     </list-item>
@@ -556,6 +556,25 @@ export default {
                 eventBus.$emit('refetch-userchores');
             });
         },
+
+        /**
+         * Approves user assignment
+         */
+        approveUsersAssignment(e) {
+            let assignment = e.target.closest('.list-group-item');
+            let userCard = e.target.closest('.card');
+            let choreId = assignment.dataset.itemid;
+            let userId = userCard.dataset.userid;
+
+            axios({
+                method: 'put',
+                url: '/api/users/' + userId + '/chores/' + choreId,
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                eventBus.$emit('refetch-userchores');
+            });
         }
     }
 }
