@@ -59,6 +59,11 @@ Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [
 Route::middleware('auth:sanctum')->get('/users/{assigneeId}/transactions', [TransactionsController::class, 'getUserTransactionsOrderedByCreationTime']);
 
 /**
+ * Deletes a user-chore instance
+ */
+Route::middleware('auth:sanctum')->delete('/user-chores/{userChoreId}', [UserChoresController::class, 'deleteUsersChore']);
+
+/**
  * Creates a new transaction. A transaction is created from the most recent one
  * IF a chore has been awarded points.
  * db table - transactions

@@ -155,4 +155,21 @@ class UserChoresController extends Controller
 
         return $chores;
     }
+
+    public function deleteUsersChore(Request $request, $userChoreId)
+    {   
+        if (Gate::allows('manage-chorechart')) {
+            $userChore = UserChores::where('id', $userChoreId)->first();
+
+            // The chore cannot be in progress. It has to be unstarted.
+            if (empty($userChore['inspection_ready'])) {
+                $userChore->delete();
+                return response('OK', 200)->header('Content-Type', 'application/json');
+            } else {
+                return response('Forbidden - you cannot delete a users chore that has been started', 403)->header('Content-Type', 'text/plain');
+            }
+        } else {
+            return response('Forbidden - You don\'t have permission to delet users chores', 403)->header('Content-Type', 'text/plain');
+        }
+    }
 }

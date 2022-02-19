@@ -114,6 +114,36 @@ export default {
             this.fetchChoresCollection();
         });
 
+        eventBus.$on('refetch-userchores', () => {
+            this.fetchAllIncompletedUserChores().then((response) => {
+                let allUsersChores = response.data;
+                let users = this.users;
+                let choresSegregatedByUser = {};
+
+                allUsersChores.forEach((chore) => {
+                    if(!Array.isArray(choresSegregatedByUser[chore.user_id])) {
+                        choresSegregatedByUser[chore.user_id] = [];
+                    }
+
+                    choresSegregatedByUser[chore.user_id].push(chore);
+                });
+
+                users.forEach((user) => {
+                user.chores = choresSegregatedByUser[user.id];
+                user.eventsObject = {
+                    click: this.handleIndividualClick,
+                    dragenter: this.dragEnter,
+                    dragover: this.dragOver,
+                    dragleave: this.dragLeave,
+                    drop: this.drop
+                };
+            });
+
+            this.users = users;
+                
+            });
+        });
+
         this.fetchChoresCollection();
 
         Promise.all([
@@ -514,7 +544,18 @@ export default {
          * been submitted.
          */
         deleteUserAssignment(e) {
-            console.log('deleting user assignment!');
+            let assignment = e.target.closest('.list-group-item');
+
+            let userChoreId = assignment.id;
+
+            axios.delete('/api/user-chores/' + userChoreId, {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                eventBus.$emit('refetch-userchores');
+            });
+        },
         }
     }
 }
