@@ -1,20 +1,26 @@
 <template>
-    <nav v-if="authenticatedUser" class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/chores-list">Chore chart</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="container-fluid d-flex justify-content-end px-0">
-                    <a href="/chores-list" class="nav-link">My Chores</a>
-                    <a v-if="userIsAdmin" href="/manage-chores" class="nav-link">Manage Chores</a>
-                    <a href="/rewards" class="nav-link">Rewards</a>
-                    <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
-                    <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
-                </div>
-            </div>
-        </div>
+    <nav v-if="authenticatedUser" class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/chores-list">Chore chart</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul id="navbarSupportedContent" class="nav navbar-collapse collapse justify-content-end px-0 flex-column flex-md-row">
+            <li class="nav-item">
+                <a href="/chores-list" class="nav-link">My Chores</a>
+            </li>
+            <li class="nav-item">
+                <a v-if="userIsAdmin" href="/manage-chores" class="nav-link">Manage Chores</a>
+            </li>
+            <li class="nav-item">
+                <a href="/rewards" class="nav-link">Rewards</a>
+            </li>
+            <li class="nav-item">
+                <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
+            </li>
+        </ul>
     </nav>
 </template>
 <script>
