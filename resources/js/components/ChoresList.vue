@@ -2,7 +2,6 @@
     <div>
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
-        <hr>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">
                 <tr v-bind:id="row.id">

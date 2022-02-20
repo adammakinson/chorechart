@@ -6,20 +6,22 @@
             </div>
             <div class="card-body">
                 <form id="loginForm">
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="username">Username:</label>
                         <input type="text" name="username" v-model="username" id="username" class="form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label for="password">Password:</label>
                         <input type="password" name="password" v-model="password" id="password" class="form-control">
                     </div>
-                    <!-- <div class="form-group">
+                    <!-- <div class="form-group mb-3">
                         <input type="checkbox" id="remember_me" name="remember">
                         <label for="remember_me">Remember me</label>
                     </div> -->
-                    <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
-                    <p v-if="error">{{error}}</p>
+                    <div class="form-group mb-3">
+                        <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
+                        <p v-if="error">{{error}}</p>
+                    </div>
                 </form>
             </div>
             <div class="card-footer">
