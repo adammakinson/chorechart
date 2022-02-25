@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class AuthController extends Controller
 {
@@ -25,8 +26,6 @@ class AuthController extends Controller
             $credentials = request(['username', 'password']);
 
             if (!Auth::attempt($credentials)) {
-                
-                // return response('Invalid credentials', 401);
 
                 return response()->json(['message' => 'Invalid credentials'], 401);
             }
@@ -44,6 +43,7 @@ class AuthController extends Controller
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
+                    'username' => $user->username,
                     'email' => $user->email,
                     'access_token' => $tokenResult,
                     'token_type' => 'Bearer',
@@ -56,6 +56,25 @@ class AuthController extends Controller
                 'status_code' => 500,
                 'message' => 'Error logging in',
                 'error' => $error
+            ]);
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        $loggedInUser = Auth::user();
+
+        if ($loggedInUser) {
+            $loggedInUser->tokens()->delete();
+
+            return response()->json([
+                'status_code' => 200,
+                'message' => 'OK'
+            ]);
+        } else {
+            return response()->json([
+                'status_code' => 403,
+                'message' => 'Forbidden'
             ]);
         }
     }
@@ -135,27 +154,62 @@ class AuthController extends Controller
 
     public function updateUserCredentials(Request $request)
     {
-        // Validate the request
-        $request->validate([
+        $loggedInUser = Auth::user();
+        
+        if (Gate::allows('manage-chorechart') || $request->username === $loggedInUser->username ) {
+
+            // Validate the request
+            $request->validate([
+                'username' => 'required',
+                'password' => 'required|min:8',
+                'confirm_password' => 'required|min:8|same:password'
+            ]);
+    
+            $user = User::where('username', $request->username)->first();
+            
+            try {
+                $user->password = Hash::make($request->password);
+                $user->save();
+    
+                return response()->json([
+                    'status_code' => 200,
+                    'message' => 'Successfully updated credentials'
+                ]);
+            } catch(Exception $error) {
+                return response()->json([
+                    'status_code' => 500,
+                    'message' => 'Error updating credentials',
+                    'error' => $error
+                ]);
+            }
+        }
+    }
+
+    public function updateUserInfo(Request $request, $userId)
+    {
+        $user = User::find($userId);
+
+        $validatedRequest = $request->validate([
+            'name' => 'required',
             'username' => 'required',
-            'password' => 'required|min:8',
-            'confirm_password' => 'required|min:8|same:password'
+            'email' => 'required'
         ]);
 
-        $user = User::where('username', $request->username)->first();
-        
         try {
-            $user->password = Hash::make($request->password);
+            $user->name = $validatedRequest['name'];
+            $user->username = $validatedRequest['username'];
+            $user->email = $validatedRequest['email'];
+
             $user->save();
 
             return response()->json([
                 'status_code' => 200,
-                'message' => 'Successfully updated credentials'
+                'message' => 'Successfully updated user information'
             ]);
-        } catch(Exception $error) {
+        } catch (Exception $error) {
             return response()->json([
                 'status_code' => 500,
-                'message' => 'Error updating credentials',
+                'message' => 'Error updating user information',
                 'error' => $error
             ]);
         }

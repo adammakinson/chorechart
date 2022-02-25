@@ -23,6 +23,11 @@
 .card {
     border: solid 1px #CCC;
 
+    .card-header {
+        background-color: #FFF;
+        border-bottom: none;
+    }
+
     &.active {
         background-color: #0d6efd !important;
         border-color: #0d6efd !important;

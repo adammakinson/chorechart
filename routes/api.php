@@ -21,7 +21,9 @@ use App\Http\Controllers\TransactionsController;
 */
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::put('/update-credentials/{userid}', [AuthController::class, 'updateUserCredentials']);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->put('/update-credentials/{userid}', [AuthController::class, 'updateUserCredentials']);
+Route::middleware('auth:sanctum')->put('/user-info/{userid}', [AuthController::class, 'updateUserInfo']);
 Route::middleware('auth:sanctum')->apiResource('/users', UsersController::class);
 
 /**

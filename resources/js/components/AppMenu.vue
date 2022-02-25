@@ -18,6 +18,9 @@
                 <a v-if="userIsAdmin" class="nav-link" href="/manage-users">Manage users</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="/manage-account">Manage Account</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#" v-on:click.prevent="logout">Logout</a>
             </li>
         </ul>
@@ -35,9 +38,18 @@ export default {
 
     methods: {
         logout() {
-            this.$store.commit('removeCurrentUser');
+            axios({
+                method: 'post',
+                url: '/api/logout',
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.$store.commit('removeCurrentUser');
+                
+                this.$router.push('login');
+            });
             
-            this.$router.push('login');
         }
     },
 

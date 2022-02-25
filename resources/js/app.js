@@ -15,6 +15,7 @@ import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
 import ManageUsers from "./components/ManageUsers";
 import RewardsPage from "./pages/RewardsPage";
+import ManageAccount from "./pages/ManageAccount";
 
 VuejsDatatableFactory.useDefaultType( false )
     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
@@ -34,7 +35,8 @@ const routes = [
     {path: '/login', name: 'login', component: LoginForm},
     {path: '/register', name: 'register', component: RegistrationForm},
     {path: '/manage-users', name: 'manage-users', component: ManageUsers},
-    {path: '/rewards', name: 'rewards', component: RewardsPage}
+    {path: '/rewards', name: 'rewards', component: RewardsPage},
+    {path: '/manage-account', name: 'manage-account', component: ManageAccount}
 ];
 
 const router = new VueRouter({
@@ -44,9 +46,7 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
     state: {
-        user: {
-            userPoints: 0
-        },
+        user: {},
         userTransactions: []
     },
     mutations: {
@@ -94,7 +94,18 @@ const store = new Vuex.Store({
         },
 
         getUser: state => {
-            return state.user;
+            let userData;
+
+            if (state.user.name) {
+                userData = state.user; // fetch from vuex.
+            } else if (localStorage.getItem('user')) {
+                userData = JSON.parse(localStorage.getItem('user'));
+                state.user = userData;
+            } else {
+                // fetch the user from the database
+            }
+
+            return userData;
         },
 
         getUsersName: state => {
