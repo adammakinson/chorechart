@@ -8,11 +8,11 @@ import VueRouter from "vue-router";
 import App from "./components/App";
 import { VuejsDatatableFactory } from 'vuejs-datatable';
 
-import LoginForm from "./components/LoginForm";
+import RegistrationForm from "./pages/RegistrationForm";
+import LoginForm from "./pages/LoginForm";
 import ChoresListComponent from "./pages/ChoresList";
 import ManageChoresComponent from "./components/ManageChores";
 import WelcomeScreen from "./pages/WelcomeScreen";
-import RegistrationForm from "./components/RegistrationForm";
 import ManageUsers from "./components/ManageUsers";
 import RewardsPage from "./pages/RewardsPage";
 import ManageAccount from "./pages/ManageAccount";
