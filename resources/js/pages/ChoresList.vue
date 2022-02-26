@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Appmenu from './AppMenu.vue';
-import UserStatusBar from './UserStatusBar.vue';
+import Appmenu from '../components/AppMenu.vue';
+import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
     props: ['id'],

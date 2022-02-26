@@ -9,7 +9,7 @@ import App from "./components/App";
 import { VuejsDatatableFactory } from 'vuejs-datatable';
 
 import LoginForm from "./components/LoginForm";
-import ChoresListComponent from "./components/ChoresList";
+import ChoresListComponent from "./pages/ChoresList";
 import ManageChoresComponent from "./components/ManageChores";
 import WelcomeScreen from "./components/WelcomeScreen";
 import RegistrationForm from "./components/RegistrationForm";
