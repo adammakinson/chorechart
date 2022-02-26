@@ -11,9 +11,9 @@ import { VuejsDatatableFactory } from 'vuejs-datatable';
 import RegistrationForm from "./pages/RegistrationForm";
 import LoginForm from "./pages/LoginForm";
 import ChoresListComponent from "./pages/ChoresList";
-import ManageChoresComponent from "./components/ManageChores";
+import ManageChoresComponent from "./pages/ManageChores";
 import WelcomeScreen from "./pages/WelcomeScreen";
-import ManageUsers from "./components/ManageUsers";
+import ManageUsers from "./pages/ManageUsers";
 import RewardsPage from "./pages/RewardsPage";
 import ManageAccount from "./pages/ManageAccount";
 

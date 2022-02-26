@@ -76,8 +76,8 @@
 </template>
 
 <script>
-    import Modal from "./Modal";
-    import Appmenu from "./AppMenu.vue";
+    import Modal from "../components/Modal";
+    import Appmenu from "../components/AppMenu.vue";
     import eventBus from '../eventBus';
     
     export default {

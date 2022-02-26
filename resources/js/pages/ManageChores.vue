@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import Appmenu from "./AppMenu.vue";
-import TabComponent from "./TabComponent";
-import ManageChoresTabContents from "../pages/ManageChoresTabContents.vue";
-import ViewAssignmentsTabContents from "../pages/ViewAssignmentsTabContents.vue";
+import Appmenu from "../components/AppMenu.vue";
+import TabComponent from "../components/TabComponent";
+import ManageChoresTabContents from "./ManageChoresTabContents.vue";
+import ViewAssignmentsTabContents from "./ViewAssignmentsTabContents.vue";
 import eventBus from '../eventBus';
 
 export default {
