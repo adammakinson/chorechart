@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
         <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <appmenu></appmenu>
         <user-status-bar></user-status-bar>
         <datatable :columns="columns" :data="rows">

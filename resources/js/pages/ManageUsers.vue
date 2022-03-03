@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <appmenu></appmenu>
         <datatable :columns="columns" :data="rows">
             <template slot-scope="{row, columns}">

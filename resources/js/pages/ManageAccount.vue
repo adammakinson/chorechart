@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <appmenu></appmenu>
         <h1>Manage users</h1>
         <div class="container-fluid">

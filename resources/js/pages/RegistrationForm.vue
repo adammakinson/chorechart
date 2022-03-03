@@ -1,9 +1,5 @@
 <template>
-    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh">
-        <div class="row">
-            <h1>Register</h1>
-            <div class="card">
-                <div class="card-header">
+    <div class="container-fluid">
                 </div>
                 <div class="card-body">
                     <form id="loginForm">

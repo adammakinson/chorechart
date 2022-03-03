@@ -1,6 +1,6 @@
 <template>
     <div class="container d-flex align-items-center justify-content-center" style="height: 100vh">
-        <div class="card" style="width: 40em;">
+        <div class="card" style="width: 30em;">
             <div class="card-header">
                 <h1>Chorechart Login</h1>
             </div>

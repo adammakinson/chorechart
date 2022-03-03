@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <appmenu></appmenu>
         <h1>Manage Chores</h1>
         <div id="choreManagement">
