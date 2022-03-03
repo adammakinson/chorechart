@@ -86,7 +86,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'string',
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'required|same:confirm_password',
             'confirm_password' => 'required'
         ]);
             
@@ -94,31 +94,55 @@ class AuthController extends Controller
             $request->validate(['email' => 'email']);
         }
         
-        $password = $request->password;
-        $passwordConfirmation = $request->confirm_password;            
-        if ($password !== $passwordConfirmation) {
-            throw new \Exception('Your password and password confirmation need to match!');
-        }
-        
         $userExistsWithUsername = User::withTrashed()->where('username', $request->username)->first();
         $userExistsWithEmail = User::withTrashed()->where('email', $request->email)->first();
 
         if($userExistsWithUsername != null && $userExistsWithUsername->trashed()) {
 
-            throw new \Exception("The user associated with $request->username was removed. Please contact an admin about restoring it.");
+            $errorMessage = [
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "username" => ["$request->username was removed. Contact an admin about it."]
+                ]
+            ];
+
+            return response($errorMessage, 403);
         }
         
         if($userExistsWithEmail != null && $userExistsWithEmail->trashed()) {
 
-            throw new \Exception("The user associated with $request->email was removed. Please contact an admin about restoring it.");
+            $errorMessage = [
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "username" => ["$request->email was removed. Contact an admin about it."]
+                ]
+            ];
+
+            return response($errorMessage, 403);
         }
 
         if ($userExistsWithUsername) {
-            throw new \Exception("$request->username already exists. Choose another user name.");
+
+            $errorMessage = [
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "username" => ["$request->username already exists. Choose another user name."]
+                ]
+            ];
+
+            return response($errorMessage, 403);
         }
         
         if ($userExistsWithEmail) {
-            throw new \Exception("$request->email already exists. Have you registered here before?");
+
+            $errorMessage = [
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "email" => ["$request->email already exists. Have you registered here before?"]
+                ]
+            ];
+
+            return response($errorMessage, 403);
         }
         
         try {
