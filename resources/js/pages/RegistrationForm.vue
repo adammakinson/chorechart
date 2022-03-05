@@ -73,11 +73,9 @@ export default {
                 this.$router.push('login');
             }).catch((error) => {
                 if (error.response) {
-                    console.log(error.response.data.errors);
-
                     this.errorsNotice = {
                         message: error.response.data.message,
-                        type: 'error'
+                        status: error.response.status
                     };
 
                     this.errors = error.response.data.errors;
