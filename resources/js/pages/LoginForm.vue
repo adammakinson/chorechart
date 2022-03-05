@@ -54,14 +54,13 @@ export default {
 
     methods: {
         handleLogin: function() {
-            let me = this;
             
             // Send the POST request
             axios.post('/api/login', {
                 username: this.username,
                 password: this.password
             }).then((response) => {
-
+                console.log(response);
                 this.$store.commit('setCurrentUser', response.data.user);
                 this.$router.push('chores-list');
             }).catch((error) => {
@@ -78,12 +77,7 @@ export default {
     },
 
     mounted() {
-        // if (!this.cookie.get('XSRF-TOKEN')) {
-            axios.get('/sanctum/csrf-cookie').then(response => {
-                // this.csrfToken = this.cookie.get('XSRF-TOKEN');  
-                // The csrfToken cooke should be set in the browser.
-            });
-        // }
+        axios.get('/sanctum/csrf-cookie');
 
         if(this.$store.getters.getUserAuthToken) {
             this.$router.push('chores-list'); // This may change to a different view...

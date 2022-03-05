@@ -27,7 +27,12 @@ class AuthController extends Controller
 
             if (!Auth::attempt($credentials)) {
 
-                return response()->json(['message' => 'Invalid credentials'], 401);
+                $errorMessage = [
+                    "message" => "The credentials you provided were invalid.",
+                    "errors" => []
+                ];
+    
+                return response($errorMessage, 403);
             }
 
             $user = User::where('username', $request->username)->first();
@@ -39,7 +44,6 @@ class AuthController extends Controller
             $tokenResult = $user->createToken('authToken')->plainTextToken;
 
             return response()->json([
-                'status_code' => 200,
                 'user' => [
                     'id' => $user->id,
                     'name' => $user->name,
@@ -66,17 +70,12 @@ class AuthController extends Controller
 
         if ($loggedInUser) {
             $loggedInUser->tokens()->delete();
-
-            return response()->json([
-                'status_code' => 200,
-                'message' => 'OK'
-            ]);
-        } else {
-            return response()->json([
-                'status_code' => 403,
-                'message' => 'Forbidden'
-            ]);
         }
+        
+        return response()->json([
+            'status_code' => 200,
+            'message' => 'OK'
+        ]);
     }
 
     public function register(Request $request)
