@@ -73,13 +73,14 @@
                 Edit chore
             </template>
             <div class="modal-body">
+                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="editChoreForm">
                     <div class="form-group">
-                        <label for="editchore">Chore:</label>
+                        <label for="editchore">Chore: <span class="text-danger text-opacity-50" v-if="modalErrors.chore">{{modalErrors.chore[0]}}</span></label>
                         <input id="editchore" class="form-control" type="text" name="chore" v-bind:value="choreBeingEdited.chore">
                     </div>
                     <div class="form-group">
-                        <label for="editpointvalue">Point value:</label>
+                        <label for="editpointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
                         <input id="editpointvalue" class="form-control" type="number" name="pointvalue" v-bind:value="choreBeingEdited.pointvalue">
                     </div>
                 </form>
@@ -313,6 +314,18 @@ export default {
                 this.fetchChoresCollection();
 
                 eventBus.$emit('close-modal');
+            }).catch((error) => {
+                console.log(error.response);
+
+                this.modalNotice = {
+                    message: error.response.data.message,
+                    status: error.response.status
+                }
+
+                this.choreFieldValue = choreData.chore;
+                this.pointFieldValue = choreData.pointvalue;
+
+                this.modalErrors = error.response.data.errors;
             });
         },
 
