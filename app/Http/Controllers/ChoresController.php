@@ -58,15 +58,24 @@ class ChoresController extends Controller
     {
         if (Gate::allows('manage-chorechart')) {
 
+            $validatedRequest = $request->validate([
+                'chore' => 'required',
+                'pointvalue' => 'required'
+            ]);
+
             $chore = new Chores;
-            $chore->chore = $request->chore;
-            $chore->pointvalue = $request->pointvalue;
+            $chore->chore = $validatedRequest->chore;
+            $chore->pointvalue = $validatedRequest->pointvalue;
             $chore->save();
 
             return $chore;
         } else {
+            $errorMessage = [
+                "message" => "You don't have permission to do that.",
+                "errors" => []
+            ];
 
-            return response('Forbidden', 403)->header('Content-Type', 'text/plain');
+            return response($errorMessage, 403);
         }
     }
 

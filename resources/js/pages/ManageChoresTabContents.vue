@@ -49,13 +49,14 @@
                 Create a chore
             </template>
             <div class="modal-body">
+                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="createChoreForm">
                     <div class="form-group">
-                        <label for="chore">Chore:</label>
+                        <label for="chore">Chore: <span class="text-danger text-opacity-50" v-if="modalErrors.chore">{{modalErrors.chore[0]}}</span></label>
                         <input id="chore" name="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
                     </div>
                     <div class="form-group">
-                        <label for="pointvalue">Point value:</label>
+                        <label for="pointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
                         <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
                     </div>
                 </form>
@@ -101,6 +102,7 @@ import ListGroup from "../components/ListGroup.vue";
 import ListItem from "../components/ListItem.vue";
 import eventBus from "../eventBus.js";
 import Modal from "../components/Modal";
+import Notification from "../components/Notification.vue";
 
 export default {
     created() {
@@ -194,7 +196,9 @@ export default {
             choreFieldValue: '',
             activeElementId: '',
             choreBeingEdited: [],
-            allUsersChores: {}
+            allUsersChores: {},
+            modalNotice: '',
+            modalErrors: []
         }
     },
 
@@ -204,7 +208,8 @@ export default {
         ListItem,
         Cardgrid,
         Card,
-        Modal
+        Modal,
+        Notification
     },
 
     mounted() {
@@ -271,6 +276,18 @@ export default {
                 this.fetchChoresCollection();
                 
                 eventBus.$emit('close-modal');
+            }).catch((error) => {
+                console.log(error.response);
+
+                this.modalNotice = {
+                    message: error.response.data.message,
+                    status: error.response.status
+                }
+
+                this.choreFieldValue = choreData.chore;
+                this.pointFieldValue = choreData.pointvalue;
+
+                this.modalErrors = error.response.data.errors;
             });
         },
 
