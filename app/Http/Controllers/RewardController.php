@@ -78,14 +78,10 @@ class RewardController extends Controller
             $reward->reward = $validatedData['reward'];
             $reward->point_value = $validatedData['pointvalue'];
             $reward->save();
-
-            // dd($request->file);
  
-            if($request->file && $request->file('file')->isValid()) {
+            if($request->hasFile('file') && $request->file('file')->isValid()) {
                 
                 $storedImage = ImageModel::where('reward_id', $rewardId)->first();
-
-                // dd($storedImage);
 
                 Storage::delete($storedImage->filename);
                 
