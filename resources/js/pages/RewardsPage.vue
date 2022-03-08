@@ -203,6 +203,9 @@ export default {
 
             this.clickedCardData = reward;
 
+            this.modalNotice = '';
+            this.modalErrors = [];
+
             this.rewardModalTitle = "Update Reward";
 
             this.rewardModalPrimaryButtonAction = "updateReward";
