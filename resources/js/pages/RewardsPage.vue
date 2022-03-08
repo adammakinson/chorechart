@@ -213,8 +213,6 @@ export default {
             this.editingReward = true;
 
             rewardModal.style.display = 'block';
-
-            console.log(reward);
         },
 
         createReward() {
@@ -222,7 +220,6 @@ export default {
             let rewardField = document.querySelector('#reward');
             let pointvalueField = document.querySelector('#pointvalue');
             let filesInput = document.querySelector('#file-input');
-
 
             rewardData.append('reward', rewardField.value);
             rewardData.append('pointvalue', pointvalueField.value);
@@ -283,10 +280,18 @@ export default {
                         authorization: this.$store.getters.getUserAuthToken
                     }
                 }).then((response) => {
-                    // TODO -  this should return a 200 OK or an 403 Forbidden
-                    console.log(response);
                     this.fetchAllRewards();
                     this.closeModal();
+                }).catch((error) => {
+                    this.modalNotice = {
+                        message: error.response.data.message,
+                        status: error.response.status
+                    };
+
+                    this.clickedCardData.reward = rewardData.get('reward');
+                    this.clickedCardData.point_value = rewardData.get('pointvalue');
+
+                    this.modalErrors = error.response.data.errors;
                 });
             }
         },
