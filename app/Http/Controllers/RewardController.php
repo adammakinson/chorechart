@@ -33,7 +33,7 @@ class RewardController extends Controller
             $validatedData = $request->validate([
                 'reward' => 'required',
                 'pointvalue' => 'required',
-                'file' => 'required'
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]);
             
             $extension = $request->file->getClientOriginalExtension();

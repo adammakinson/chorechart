@@ -23,22 +23,23 @@
                 {{rewardModalTitle}}
             </template>
             <div class="modal-body">
+                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="rewardForm" name="rewardForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="chore">Reward:</label>
+                        <label for="chore">Reward: <span class="text-danger text-opacity-50" v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
                         <input id="reward" name="reward" class="form-control" type="text" v-bind:value="clickedCardData.reward">
                     </div>
                     <div class="form-group">
-                        <label for="pointvalue">Point value:</label>
+                        <label for="pointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
                         <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="clickedCardData.point_value">
                     </div>
                     <div class="form-group">
-                        <label for="file-input">Image:</label>
+                        <label for="file-input">Image: <span class="text-danger text-opacity-50" v-if="modalErrors.file">{{modalErrors.file[0]}}</span></label>
                         <div id="image-wrapper" v-bind:class = "(editingReward)?'image-wrapper':''">
                             <div v-if="editingReward" id="currentImage">
                                 <img v-bind:src="[clickedCardData.images[0].path + clickedCardData.images[0].filename]" v-bind:alt="clickedCardData.images[0].alt_text">
                             </div>
-                            <input type="file" accept="image/*" class="form-control" id="file-input">
+                            <input type="file" name="image" accept="image/*" class="form-control" id="file-input">
                         </div>
                     </div>
                 </form>
@@ -74,6 +75,7 @@ import Card from '../components/Card.vue';
 import eventBus from '../eventBus';
 import Modal from '../components/Modal.vue';
 import icon from '../components/Icon';
+import Notification from '../components/Notification.vue';
 
 export default {
     data() {
@@ -85,7 +87,9 @@ export default {
             editingReward: false,
             rewardModalTitle: "Create Reward",
             rewardModalPrimaryButtonAction: "createReward",
-            rewardModalPrimaryButtonLabel: "Create"
+            rewardModalPrimaryButtonLabel: "Create",
+            modalNotice: '',
+            modalErrors: []
         };
     },
 
@@ -126,7 +130,8 @@ export default {
         Card,
         UserStatusBar,
         Modal,
-        icon
+        icon,
+        Notification
     },
 
     methods: {
@@ -228,10 +233,18 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                // TODO -  this should return a 200 OK or an 403 Forbidden
-                console.log(response);
                 this.fetchAllRewards();
                 this.closeModal();
+            }).catch((error) => {
+                this.modalNotice = {
+                    message: error.response.data.message,
+                    status: error.response.status
+                };
+
+                this.clickedCardData.reward = rewardData['reward'];
+                this.clickedCardData.point_value = rewardData['pointvalue'];
+
+                this.modalErrors = error.response.data.errors;
             });
         },
 

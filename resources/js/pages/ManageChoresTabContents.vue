@@ -283,7 +283,7 @@ export default {
                 this.modalNotice = {
                     message: error.response.data.message,
                     status: error.response.status
-                }
+                };
 
                 this.choreFieldValue = choreData.chore;
                 this.pointFieldValue = choreData.pointvalue;
