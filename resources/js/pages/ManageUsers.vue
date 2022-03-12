@@ -20,17 +20,18 @@
                 Edit User
             </template>
             <div class="modal-body">
+                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="editUserForm">
                     <div class="form-group">
-                        <label for="name">Name:</label>
+                        <label for="name">Name: <span class="text-danger text-opacity-50" v-if="modalErrors.name">{{modalErrors.name[0]}}</span></label>
                         <input id="name" name="name" class="form-control" type="text" v-bind:value="editingUsersNameValue">
                     </div>
                     <div class="form-group">
-                        <label for="username">Username:</label>
+                        <label for="username">Username: <span class="text-danger text-opacity-50" v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
                         <input id="username" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
                     </div>
                     <div class="form-group">
-                        <label for="email">Email:</label>
+                        <label for="email">Email: <span class="text-danger text-opacity-50" v-if="modalErrors.email">{{modalErrors.email[0]}}</span></label>
                         <input id="email" name="email" class="form-control" type="text" v-bind:value="editingUserEmailValue">
                     </div>
                 </form>
@@ -47,23 +48,21 @@
                 Change user credentials
             </template>
             <div class="modal-body">
+                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="changeUserCredentialsForm">
                     <div class="form-group">
-                        <label for="uname">Username:</label>
+                        <label for="uname">Username: <span class="text-danger text-opacity-50" v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
                         <input id="uname" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
                     </div>
                     <div class="form-group">
-                        <label for="password">Password:</label>
+                        <label for="password">Password: <span class="text-danger text-opacity-50" v-if="modalErrors.password">{{modalErrors.password[0]}}</span></label>
                         <input id="password" name="password" class="form-control" type="password" value="">
                     </div>
                     <div class="form-group">
-                        <label for="confirm_password">Confirm password:</label>
+                        <label for="confirm_password">Confirm password: <span class="text-danger text-opacity-50" v-if="modalErrors.confirm_password">{{modalErrors.confirm_password[0]}}</span></label>
                         <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
                     </div>
                 </form>
-                <div id="errorMessage">
-                    <p v-for="errorMessage in errorMessages" :key="errorMessage.message">{{errorMessage.message}}</p>
-                </div>
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
@@ -79,6 +78,7 @@
     import Modal from "../components/Modal";
     import Appmenu from "../components/AppMenu.vue";
     import eventBus from '../eventBus';
+    import Notification from '../components/Notification.vue';
     
     export default {
         data() {
@@ -92,13 +92,16 @@
                 editingUsersNameValue: '',
                 editingUsernameValue: '',
                 editingUserEmailValue: '',
-                errorMessages: []
+                errorMessages: [],
+                modalNotice: '',
+                modalErrors: {}
             }
         },
 
         components: {
             Modal,
-            Appmenu
+            Appmenu,
+            Notification
         },
 
         mounted() {
@@ -138,6 +141,9 @@
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
+                this.modalNotice = '';
+                this.modalErrors = {};
+
                 this.users.forEach(user => {
                     if (user.id == userId) {
                         userBeingEdited = user;
@@ -157,6 +163,9 @@
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
+                this.modalNotice = '';
+                this.modalErrors = {};
+
                 this.users.forEach(user => {
                     if (user.id == userId) {
                         userBeingEdited = user;
@@ -172,34 +181,43 @@
             changeUserCredentials() {
                 let formEls = document.querySelectorAll('#updateUserCredentialsModal .form-control');
                 let userData = {};
+                let formErrors = {};
                 let validPasswords = false;
-
-                // reset errorMessages to an empty array
-                this.errorMessages = [];
 
                 formEls.forEach((el) => {
                     userData[el.name] = el.value;
                 });
 
                 // TODO validate passwords on the fly with an onchange event.
-                if (userData['password'].length < 8) {
-                    this.errorMessages.push({ message: 'Your password needs to be at least eight characters'});
+                if (userData.password.length < 8) {
+                    formErrors.password = ['You must have at least eight characters'];
                 }
                 
-                if (userData['confirm_password'].length < 8) {
-                    this.errorMessages.push({ message: 'Your password confirmation needs to be at least eight characters'});
+                if (userData.confirm_password.length < 8) {
+                    formErrors.confirm_password = ['You must have at least eight characters'];
                 }
                 
-                if (userData['password'] != userData['confirm_password']) {
-                    this.errorMessages.push({ message: 'Your passwords do not match'});
+                if (userData.password != userData.confirm_password) {
+                    if(formErrors.password) {
+                        formErrors.password.push('Your passwords do not match');
+                    } else {
+                        formErrors.password = ['Your passwords do not match'];
+                    }
                 }
 
-                if(this.errorMessages.length == 0) {
+                if(Object.keys(formErrors).length == 0) {
                     validPasswords = true;
+                } else {
+                    this.modalNotice = {
+                        message: 'The given data was invalid.',
+                        type: 'error'
+                    };
+
+                    this.modalErrors = formErrors;
                 }
 
                 if(validPasswords) {
-
+                    console.log('we have valid passwords');
                     axios({
                         method: 'put',
                         url: '/api/update-credentials/' + this.editingUsersId, // TODO rework this. its not restful
@@ -209,10 +227,16 @@
                         }
                     }).then((response) => {
                         // Close the modal
+                        this.modalNotice = '';
+                        this.modalErrors = {};
                         eventBus.$emit('close-modal');
                     }).catch((error) => {
-                        // TODO - log a nice message to the user
-                        console.log(error);
+                        this.modalNotice = {
+                            message: error.response.data.message,
+                            status: error.response.status
+                        };
+
+                        this.modalErrors = error.response.data.errors;
                     });
                 }
             },
@@ -235,12 +259,22 @@
                 }).then((response) => {
                     this.users = response.data;
                     this.rows = response.data;
+                    
+                    // Close the modal
+                    eventBus.$emit('close-modal');
                 }).catch((error) => {
-                    console.log(error);
-                });
+                    this.modalNotice = {
+                        message: error.response.data.message,
+                        status: error.response.status
+                    };
+                    
+                    this.modalErrors = error.response.data.errors;
 
-                // Close the modal
-                eventBus.$emit('close-modal');
+                    this.editingUsersNameValue = userData.name;
+                    this.editingUsernameValue = userData.username;
+                    this.editingUserEmailValue = userData.email;
+
+                });
             },
 
             removeUser(el) {

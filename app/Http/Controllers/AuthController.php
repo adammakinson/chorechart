@@ -167,11 +167,14 @@ class AuthController extends Controller
             ]);
 
         } catch(Exception $error) {
-            return response()->json([
-                'status_code' => 500,
-                'message' => 'Error registering',
-                'error' => $error
-            ]);
+            $errorMessage = [
+                "message" => "Error registering.",
+                "errors" => [
+                    "generalErrors" => ["$error"]
+                ]
+            ];
+
+            return response($errorMessage, 500);
         }
     }
 
@@ -182,16 +185,16 @@ class AuthController extends Controller
         if (Gate::allows('manage-chorechart') || $request->username === $loggedInUser->username ) {
 
             // Validate the request
-            $request->validate([
+            $validatedRequest = $request->validate([
                 'username' => 'required',
                 'password' => 'required|min:8',
                 'confirm_password' => 'required|min:8|same:password'
             ]);
     
-            $user = User::where('username', $request->username)->first();
+            $user = User::where('username', $validatedRequest['username'])->first();
             
             try {
-                $user->password = Hash::make($request->password);
+                $user->password = Hash::make($validatedRequest['password']);
                 $user->save();
     
                 return response()->json([
