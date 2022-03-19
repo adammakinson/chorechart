@@ -3,6 +3,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm p-2 m-2">
+                    <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm p-2 m-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
                     <button class="btn btn-primary" v-on:click="assignToUser">add to all</button>
                     <button class="btn btn-primary" v-on:click="assignChores">Assign</button>
@@ -198,6 +203,7 @@ export default {
             activeElementId: '',
             choreBeingEdited: [],
             allUsersChores: {},
+            generalNotice: '',
             modalNotice: '',
             modalErrors: []
         }
@@ -415,8 +421,10 @@ export default {
                     }
                 });
             } else {
-                // TODO - create user friendly notifications
-                console.log('no chores to assign.')
+                this.generalNotice = {
+                    message: 'No chores to assign.',
+                    type: 'error'
+                }
             }
         },
 
