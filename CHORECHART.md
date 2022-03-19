@@ -24,20 +24,27 @@ Notes:
     f. Users accumiulate points and are able to spend them on prizes
 
 3.  TODOS
+    a.  User profile dashboard (TODO)
+    b.  App onboarding (TODO)
+    c.  Maybe I really should look into soft deletes... (Added soft deletes for users)
+    d.  Creation of a home screen (SORT OF THERE)
+        I.  Nia to create a home screen design.
+    e.  add a 404 forbidden error screen for routes the user shouldnt be able to 
+        access instead of just booting them from the app.
+    f.  fix modal close button styling
+    g.  On the chores management screen handle cases where the user clicks
+        the add to all or assign buttons without having done anything else.
+    h.  Add a check to remove the list-group ul IF no list items are in it.
+
+4.  Items that are done
     a.  Chore creation and management (DONE)
     b.  Assigning chores to a user (DONE)
     c.  User registration process (DONE)
     d.  Admin user management dashboard (DONE)
-    e.  User profile dashboard (TODO)
-    f.  Handle User points (TODO)
-    g.  Create the prize system (TODO)
-    h.  App onboarding (TODO)
-    i.  Maybe I really should look into soft deletes... (Added soft deletes for users)
-    j.  Creation of a home screen (SORT OF THERE)
-    k.  User notification system (TODO)
-    l.  add a 404 forbidden error screen for routes the user shouldnt be able to 
-        access instead of just booting them from the app.
-    m.  Checkmark functionality (DONE)
+    e.  Handle User points (DONE)
+    f.  Create the prize system (DONE)
+    g.  User notification system (TODO)
+    h.  Checkmark functionality (DONE)
         1.  An admin assigns a chore to another user (could be another admin)
             I think we need an assignee, which would also be the reviewer.
         2.  The person to whom the chore is assigned gets the chore in their

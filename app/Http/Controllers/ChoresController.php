@@ -82,9 +82,6 @@ class ChoresController extends Controller
     /**
      * Update the specified resource in storage.
      * 
-     * TODO: This thing is doing more than one thing. I need to extract it out
-     * into the UserChoresController.
-     * 
      * Admin only
      *
      * @param  \Illuminate\Http\Request  $request
