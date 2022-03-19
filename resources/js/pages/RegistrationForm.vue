@@ -5,7 +5,7 @@
                 <h1>Register</h1>
                 <div class="card">
                     <div class="card-header">
-                        <notification v-if="typeof errorsNotice === 'object'" v-bind:notice="errorsNotice"></notification> <!-- v-bind:notice="error" -->
+                        <notification v-if="typeof registerFormNotification === 'object'" v-bind:notice="registerFormNotification"></notification> <!-- v-bind:notice="error" -->
                     </div>
                     <div class="card-body">
                         <form id="loginForm">
@@ -56,7 +56,7 @@ export default {
             email: '',
             password: '',
             passwordconfirm: '',
-            errorsNotice: '',
+            registerFormNotification: '',
             errors: ''
         };
     },
@@ -73,7 +73,7 @@ export default {
                 this.$router.push('login');
             }).catch((error) => {
                 if (error.response) {
-                    this.errorsNotice = {
+                    this.registerFormNotification = {
                         message: error.response.data.message,
                         status: error.response.status
                     };

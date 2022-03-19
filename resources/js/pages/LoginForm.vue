@@ -5,7 +5,7 @@
                 <h1>Chorechart Login</h1>
                 <div class="card" style="width: 30em;">
                     <div class="card-header">
-                        <notification v-if="typeof errorsNotice === 'object'" v-bind:notice="errorsNotice"></notification>
+                        <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
                     </div>
                     <div class="card-body">
                         <form id="loginForm">
@@ -47,7 +47,7 @@ export default {
         return {
             username: '',
             password: '',
-            errorsNotice: '',
+            loginFormNotification: '',
             errors: ''
         }
     },
@@ -65,7 +65,7 @@ export default {
                 this.$router.push('chores-list');
             }).catch((error) => {
                 if (error.response) {
-                    this.errorsNotice = {
+                    this.loginFormNotification = {
                         message: error.response.data.message,
                         status: error.response.status
                     };

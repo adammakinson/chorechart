@@ -11,7 +11,7 @@
             <div class="row justify-content-center mb-4">
                 <div class="card" style="width:40em;">
                     <div class="card-header">
-                        <notification v-if="typeof userInfoErrorsNotice === 'object'" v-bind:notice="userInfoErrorsNotice"></notification>
+                        <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
                     </div>
                     <div class="card-body">
                         <form id="editUserForm">
@@ -42,7 +42,7 @@
             <div class="row justify-content-center">
                 <div class="card" style="width:40em;">
                     <div class="card-header">
-                        <notification v-if="typeof userCredsErrorsNotice === 'object'" v-bind:notice="userCredsErrorsNotice"></notification>
+                        <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
                     </div>
                     <div class="card-body">
                         <form id="changeUserCredentialsForm">
@@ -80,8 +80,8 @@ export default {
     data() {
         return {
             userData: {},
-            userInfoErrorsNotice: '',
-            userCredsErrorsNotice: '',
+            userInfoNotification: '',
+            userCredsNotification: '',
             errors: {}
         }
     },
@@ -104,13 +104,13 @@ export default {
                 // hrm... it really isn't an errors notification, really
                 // its a general one. need to fix that naming convention...
 
-                this.userInfoErrorsNotice = {
+                this.userInfoNotification = {
                     message: 'User information successfully updated!',
                     type: 'success'
                 };
             }).catch((error) => {
                 if (error.response) {
-                    this.userInfoErrorsNotice = {
+                    this.userInfoNotification = {
                         message: error.response.data.message,
                         status: error.response.status
                     };
@@ -163,7 +163,7 @@ export default {
             if(this.errors.length == 0) {
                 validPasswords = true;
             } else {
-                this.userCredsErrorsNotice = {
+                this.userCredsNotification = {
                     message: 'The given data was invalid',
                     type: 'error'
                 };
@@ -180,7 +180,7 @@ export default {
                     }
                 }).then((response) => {
                     // rename
-                    this.userCredsErrorsNotice = {
+                    this.userCredsNotification = {
                         message: 'Password updates successfully!',
                         type: 'success'
                     };
@@ -189,7 +189,7 @@ export default {
                     document.querySelector('#confirm_password').value = '';
                 }).catch((error) => {
                     if (error.response) {
-                        this.userCredsErrorsNotice = {
+                        this.userCredsNotification = {
                             message: error.response.data.message,
                             status: error.response.status
                         };
