@@ -6,7 +6,7 @@
                     <h5 class="modal-title">
                         <slot name="header"></slot>
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeModal">
+                    <button type="button" class="close btn btn-danger btn-rounded" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </header>

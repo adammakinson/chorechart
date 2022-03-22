@@ -31,10 +31,9 @@ Notes:
         I.  Nia to create a home screen design.
     e.  add a 404 forbidden error screen for routes the user shouldnt be able to 
         access instead of just booting them from the app.
-    f.  fix modal close button styling
-    g.  On the chores management screen handle cases where the user clicks
+    f.  On the chores management screen handle cases where the user clicks
         the add to all or assign buttons without having done anything else.
-    h.  Add a check to remove the list-group ul IF no list items are in it.
+    g.  Add a check to remove the list-group ul IF no list items are in it.
 
 4.  Items that are done
     a.  Chore creation and management (DONE)
