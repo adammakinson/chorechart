@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-sm p-2 m-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
-                    <button class="btn btn-primary" v-on:click="assignToUser">add to all</button>
+                    <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
                     <button class="btn btn-primary" v-on:click="assignChores">Assign</button>
                 </div>
             </div>
@@ -205,7 +205,9 @@ export default {
             allUsersChores: {},
             generalNotice: '',
             modalNotice: '',
-            modalErrors: []
+            modalErrors: [],
+            userCardsHighlighted: false,
+            choresAreHighlighted: false
         }
     },
 
@@ -400,7 +402,6 @@ export default {
                         authorization: this.$store.getters.getUserAuthToken
                     }
                 }).then((response) => {
-                    console.log(response);
 
                     if(response.status == 200){
                         let choresList = document.querySelectorAll('#chores-list .list-group-item.active');
@@ -437,6 +438,9 @@ export default {
             let userCard = event.target.closest('.card');
 
             userCard.classList.toggle('active');
+
+            this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
+            this.choresAreHighlighted = !!document.querySelectorAll('.list-group-item.active').length;
         },
 
         dragEnter(e) {
@@ -526,8 +530,13 @@ export default {
             e.stopPropagation();
 
             let assignment = e.target.closest('.assignment');
+            let assignmentsList = assignment.parentNode;
 
             assignment.remove();
+
+            if(assignmentsList.querySelectorAll('li').length == 0) {
+                assignmentsList.remove();
+            }
         },
 
         editChore(el) {
