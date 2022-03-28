@@ -2,9 +2,7 @@
     <div class="tabcontent">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm p-2 m-2">
-                    <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
-                </div>
+                <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
             </div>
             <div class="row">
                 <div class="col-sm p-2 m-2">
@@ -423,9 +421,13 @@ export default {
                 });
             } else {
                 this.generalNotice = {
-                    message: 'No chores to assign.',
+                    message: 'You need to add chores to users lists to be able to assign them.',
                     type: 'error'
                 }
+
+                setTimeout(() => {
+                    this.generalNotice = '';
+                }, 2000);
             }
         },
 
