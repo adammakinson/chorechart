@@ -8,7 +8,7 @@
                 <div class="col-sm p-2 m-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
                     <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
-                    <button class="btn btn-primary" v-on:click="assignChores">Assign</button>
+                    <button v-if="assignmentsArePending" class="btn btn-primary" v-on:click="assignChores">Assign</button>
                 </div>
             </div>
             <div class="row">
@@ -209,7 +209,8 @@ export default {
             modalNotice: '',
             modalErrors: [],
             userCardsHighlighted: false,
-            choresAreHighlighted: false
+            choresAreHighlighted: false,
+            assignmentsArePending: false
         }
     },
 
@@ -325,7 +326,6 @@ export default {
 
                 eventBus.$emit('close-modal');
             }).catch((error) => {
-                console.log(error.response);
 
                 this.modalNotice = {
                     message: error.response.data.message,
@@ -372,6 +372,8 @@ export default {
                         choreDiscardButton.addEventListener('click', this.discardAssignment);
                     }
                 });
+
+                this.assignmentsArePending = document.querySelectorAll('.card .assignment').length > 0;
 
                 user.classList.remove('active');
 
@@ -446,7 +448,7 @@ export default {
             userCard.classList.toggle('active');
 
             this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
-            this.choresAreHighlighted = !!document.querySelectorAll('.list-group-item.active').length;
+            this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;
         },
 
         dragEnter(e) {
@@ -474,6 +476,8 @@ export default {
         drop(e) {
             e.stopPropagation();
 
+            console.log(e);
+
             let card = e.toElement.closest('.card');
             let dropTarget = card.querySelector('.list-group');
             let userChoresList;
@@ -498,13 +502,15 @@ export default {
             }
             
             // User shouldn't have duplicate chores
-            if(!this.userListHasChore(userChoresList, userChore)) {
+            if(e.srcElement.className == 'list-group-item' && !this.userListHasChore(userChoresList, userChore)) {
                 userChoresList.appendChild(userChore);
             }
 
             // Create an event listener to handle discarding assignments
             let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
             choreDiscardButton.addEventListener('click', this.discardAssignment);
+
+            this.assignmentsArePending = document.querySelectorAll('.card .assignment').length > 0;
             
             return false;
         },
@@ -539,6 +545,8 @@ export default {
             let assignmentsList = assignment.parentNode;
 
             assignment.remove();
+
+            this.assignmentsArePending = document.querySelectorAll('.card .assignment').length > 0;
 
             if(assignmentsList.querySelectorAll('li').length == 0) {
                 assignmentsList.remove();

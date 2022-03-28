@@ -33,7 +33,6 @@ Notes:
         access instead of just booting them from the app.
     f.  On the chores management screen handle cases where the user clicks
         the add to all or assign buttons without having done anything else.
-    g.  Add a check to remove the list-group ul IF no list items are in it.
 
 4.  Items that are done
     a.  Chore creation and management (DONE)
