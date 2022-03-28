@@ -118,6 +118,10 @@ export default {
             this.fetchChoresCollection();
         });
 
+        eventBus.$on("chore-list-item-clicked", () => {
+            this.choresAreHighlighted = document.querySelectorAll('#chores-list .list-group-item.active').length > 0;
+        });
+
         eventBus.$on('refetch-userchores', () => {
             this.fetchAllIncompletedUserChores().then((response) => {
                 let allUsersChores = response.data;

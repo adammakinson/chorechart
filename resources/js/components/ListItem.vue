@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import eventBus from "../eventBus.js";
+
 export default {
     props: [
         'listItem'
@@ -20,6 +22,8 @@ export default {
             let choreItem = event.target.closest('.list-group-item');
 
             choreItem.classList.toggle('active');
+
+            eventBus.$emit('chore-list-item-clicked');
         },
 
         dragStart(e) {
