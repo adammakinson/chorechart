@@ -81,10 +81,10 @@ class UserChoresController extends Controller
      */
     public function update(Request $request)
     {
-        return $this->updateUserChore($request->assigneeId, $request->choreId);
+        return $this->updateUserChore($request->assigneeId, $request->userChoreId);
     }
 
-    public function updateUserChore($assigneeId, $choreId)
+    public function updateUserChore($assigneeId, $userChoreId)
     {
         $user = auth()->user();
         
@@ -95,7 +95,7 @@ class UserChoresController extends Controller
             }
         }
 
-        $userChore = UserChores::where(['user_id' => $assigneeId, 'chore_id' => $choreId])->first();
+        $userChore = UserChores::where('id', $userChoreId)->first();
 
         $chore = chores::where('id', $userChore->chore_id)->first();
 

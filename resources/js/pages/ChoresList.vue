@@ -12,7 +12,7 @@
                             <span v-if="!choreIsFinished(row)"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
-                                v-bind:data-choreid="row.chore_id">
+                                v-bind:data-choreid="row.id">
                             </span>
                             <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
                         </div>
@@ -118,7 +118,7 @@ export default {
         },
 
         findUserChoreByChoreId(allChores, userId, choreId) {
-            return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
+            return allChores.find(chore => chore.id == choreId && chore.user_id == userId);
         },
 
         handleCheckClick(el) {
@@ -138,7 +138,7 @@ export default {
             if (!choreBeingEdited.points_awarded == '1') {
                 axios({
                     method: 'put',
-                    url: '/api/users/' + choreBeingEdited.user_id + '/chores/' + choreBeingEdited.chore_id,
+                    url: '/api/users/' + choreBeingEdited.user_id + '/chores/' + choreBeingEdited.id,
                     data: choreData,
                     headers: {
                         authorization: this.$store.getters.getUserAuthToken

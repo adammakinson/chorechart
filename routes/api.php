@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->get('/user-chores/{userId}', [UserChoresContr
  * db table - user_chores
  * TODO: refactor this because it is more complicated than it needs to be.
  */
-Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{choreId}', [UserChoresController::class, 'update']);
+Route::middleware('auth:sanctum')->put('/users/{assigneeId}/chores/{userChoreId}', [UserChoresController::class, 'update']);
 
 /**
  * Gets user transactions ordered by creation time
