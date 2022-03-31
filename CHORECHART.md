@@ -33,6 +33,9 @@ Notes:
         access instead of just booting them from the app.
     f.  On the chores management screen handle cases where the user clicks
         the add to all or assign buttons without having done anything else.
+    g.  I need something like a unique constraint across user_id, chore_id, and created_at
+        because a user shouldn't be able to have the same chore assigned to them
+        on the same day.
 
 4.  Items that are done
     a.  Chore creation and management (DONE)
