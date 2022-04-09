@@ -4,7 +4,7 @@
         <div class="container sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <datatable :columns="columns" :data="rows">
+                <datatable :columns="columns" :data="rows" class="w-full">
                     <template slot-scope="{row, columns}">
                         <tr v-bind:id="row.id">
                             <td>{{row.name}}</td>
