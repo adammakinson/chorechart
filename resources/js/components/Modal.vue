@@ -1,12 +1,12 @@
 <template>
     <div v-bind:id="id" @close-modal="closeModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-diaolog-centered" role="document">
-            <div class="modal-content">
-                <header class="modal-header">
-                    <h5 class="modal-title">
+        <div role="document">
+            <div>
+                <header>
+                    <h5>
                         <slot name="header"></slot>
                     </h5>
-                    <button type="button" class="close btn btn-danger btn-rounded" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeModal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click.prevent="closeModal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </header>

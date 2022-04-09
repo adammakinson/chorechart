@@ -1,69 +1,73 @@
 <template>
-    <div class="container-fluid">
-        <appmenu></appmenu>
+    <div>
         <user-status-bar></user-status-bar>
-        <button v-if="userIsAdmin" class="btn btn-primary" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
-        <h1>Rewards</h1>
-        <cardgrid :cardCollectionData="rewards">
-            <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
-                <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
-                <h4 class="text-dark">{{cardData.title}}</h4>
-                <h5><b>cost: </b>{{cardData.cost}}</h5>
-                <div v-if="cardData.actionIcons" class="flex-column m-3">
-                    <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
-                        v-bind:class="actionicon.class" 
-                        v-bind:iconevent="actionicon.event" 
-                        v-bind:data-itemId="cardData.id">
-                    </icon>
-                </div>
-            </card>
-        </cardgrid>
-        <modal id="rewardModal">
-            <template v-slot:header>
-                {{rewardModalTitle}}
-            </template>
-            <div class="modal-body">
-                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                <form id="rewardForm" name="rewardForm" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="chore">Reward: <span class="text-danger text-opacity-50" v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
-                        <input id="reward" name="reward" class="form-control" type="text" v-bind:value="clickedCardData.reward">
-                    </div>
-                    <div class="form-group">
-                        <label for="pointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="clickedCardData.point_value">
-                    </div>
-                    <div class="form-group">
-                        <label for="file-input">Image: <span class="text-danger text-opacity-50" v-if="modalErrors.file">{{modalErrors.file[0]}}</span></label>
-                        <div id="image-wrapper" v-bind:class = "(editingReward)?'image-wrapper':''">
-                            <div v-if="editingReward" id="currentImage">
-                                <img v-bind:src="[clickedCardData.images[0].path + clickedCardData.images[0].filename]" v-bind:alt="clickedCardData.images[0].alt_text">
-                            </div>
-                            <input type="file" name="image" accept="image/*" class="form-control" id="file-input">
+        <div class="container sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+            <appmenu></appmenu>
+            <div class="p-5 w-full">
+                <button v-if="userIsAdmin" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
+                <h1>Rewards</h1>
+                <cardgrid :cardCollectionData="rewards">
+                    <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                        <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
+                        <h4>{{cardData.title}}</h4>
+                        <h5><b>cost: </b>{{cardData.cost}}</h5>
+                        <div v-if="cardData.actionIcons">
+                            <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
+                                v-bind:class="actionicon.class"
+                                v-bind:iconevent="actionicon.event" 
+                                v-bind:data-itemId="cardData.id">
+                            </icon>
                         </div>
+                    </card>
+                </cardgrid>
+                <modal id="rewardModal">
+                    <template v-slot:header>
+                        {{rewardModalTitle}}
+                    </template>
+                    <div class="modal-body">
+                        <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
+                        <form id="rewardForm" name="rewardForm" enctype="multipart/form-data">
+                            <div>
+                                <label for="chore">Reward: <span v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
+                                <input id="reward" name="reward" type="text" v-bind:value="clickedCardData.reward">
+                            </div>
+                            <div>
+                                <label for="pointvalue">Point value: <span v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
+                                <input id="pointvalue" name="pointvalue" type="number" v-bind:value="clickedCardData.point_value">
+                            </div>
+                            <div>
+                                <label for="file-input">Image: <span v-if="modalErrors.file">{{modalErrors.file[0]}}</span></label>
+                                <div id="image-wrapper" v-bind:class = "(editingReward)?'image-wrapper':''">
+                                    <div v-if="editingReward" id="currentImage">
+                                        <img v-bind:src="[clickedCardData.images[0].path + clickedCardData.images[0].filename]" v-bind:alt="clickedCardData.images[0].alt_text">
+                                    </div>
+                                    <input type="file" name="image" accept="image/*" id="file-input">
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                    <template v-slot:footer>
+                        <footer>
+                            <button v-if="!editingReward" type="button" v-on:click.prevent="createReward">{{rewardModalPrimaryButtonLabel}}</button>
+                            <button v-if="editingReward" type="button" v-on:click.prevent="updateReward(clickedCardData)">{{rewardModalPrimaryButtonLabel}}</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
+                        </footer>
+                    </template>
+                </modal>
+                <modal id="rewardConfirmationModal">
+                    <template v-slot:header>
+                        <p v-if="userHasEnoughPoints(clickedCardData)">Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?</p>
+                        <p v-if="!userHasEnoughPoints(clickedCardData)">You don't have enough points for this reward</p>
+                    </template>
+                    <template v-slot:footer>
+                        <footer>
+                            <button v-if="userHasEnoughPoints(clickedCardData)" type="button" v-on:click.prevent="confirmPurchase">Spend points</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
+                        </footer>
+                    </template>
+                </modal>
             </div>
-            <template v-slot:footer>
-                <footer class="modal-footer">
-                    <button v-if="!editingReward" type="button" class="btn btn-primary" v-on:click.prevent="createReward">{{rewardModalPrimaryButtonLabel}}</button>
-                    <button v-if="editingReward" type="button" class="btn btn-primary" v-on:click.prevent="updateReward(clickedCardData)">{{rewardModalPrimaryButtonLabel}}</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
-                </footer>
-            </template>
-        </modal>
-        <modal id="rewardConfirmationModal">
-            <template v-slot:header>
-                <p v-if="userHasEnoughPoints(clickedCardData)">Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?</p>
-                <p v-if="!userHasEnoughPoints(clickedCardData)">You don't have enough points for this reward</p>
-            </template>
-            <template v-slot:footer>
-                <footer class="modal-footer">
-                    <button v-if="userHasEnoughPoints(clickedCardData)" type="button" class="btn btn-primary" v-on:click.prevent="confirmPurchase">Spend points</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
-                </footer>
-            </template>
-        </modal>
+        </div>
     </div>
 </template>
 

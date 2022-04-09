@@ -1,76 +1,79 @@
 <template>
-    <div class="container-fluid">
-        <appmenu></appmenu>
-        <datatable :columns="columns" :data="rows">
-            <template slot-scope="{row, columns}">
-                <tr v-bind:id="row.id">
-                    <td>{{row.name}}</td>
-                    <td>{{row.username}}</td>
-                    <td>{{row.email}}</td>
-                    <td>
-                        <span v-on:click="showChangeCredentialsModal" class="fas fa-key" v-bind:data-userid="row.id"></span>
-                        <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-userid="row.id"></span>
-                        <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-userid="row.id"></span>
-                    </td>
-                </tr>
-            </template>
-        </datatable>
-        <modal id="editUserModal">
-            <template v-slot:header>
-                Edit User
-            </template>
-            <div class="modal-body">
-                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                <form id="editUserForm">
-                    <div class="form-group">
-                        <label for="name">Name: <span class="text-danger text-opacity-50" v-if="modalErrors.name">{{modalErrors.name[0]}}</span></label>
-                        <input id="name" name="name" class="form-control" type="text" v-bind:value="editingUsersNameValue">
+    <div class="w-screen">
+        <user-status-bar></user-status-bar>
+        <div class="container sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
+            <appmenu></appmenu>
+            <div class="p-5 w-full">
+                <datatable :columns="columns" :data="rows">
+                    <template slot-scope="{row, columns}">
+                        <tr v-bind:id="row.id">
+                            <td>{{row.name}}</td>
+                            <td>
+                                <span v-on:click="showChangeCredentialsModal" class="fas fa-key" v-bind:data-userid="row.id"></span>
+                                <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-userid="row.id"></span>
+                                <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-userid="row.id"></span>
+                            </td>
+                        </tr>
+                    </template>
+                </datatable>
+                <modal id="editUserModal">
+                    <template v-slot:header>
+                        Edit User
+                    </template>
+                    <div>
+                        <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
+                        <form id="editUserForm">
+                            <div>
+                                <label for="name">Name: <span v-if="modalErrors.name">{{modalErrors.name[0]}}</span></label>
+                                <input id="name" name="name" type="text" v-bind:value="editingUsersNameValue">
+                            </div>
+                            <div>
+                                <label for="username">Username: <span v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
+                                <input id="username" name="username" type="text" v-bind:value="editingUsernameValue">
+                            </div>
+                            <div>
+                                <label for="email">Email: <span v-if="modalErrors.email">{{modalErrors.email[0]}}</span></label>
+                                <input id="email" name="email" type="text" v-bind:value="editingUserEmailValue">
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Username: <span class="text-danger text-opacity-50" v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
-                        <input id="username" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
+                    <template v-slot:footer>
+                        <footer>
+                            <button type="button" v-on:click.prevent="updateUser">Update user</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                        </footer>
+                    </template>
+                </modal>
+                <modal id="updateUserCredentialsModal">
+                    <template v-slot:header>
+                        Change user credentials
+                    </template>
+                    <div>
+                        <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
+                        <form id="changeUserCredentialsForm">
+                            <div>
+                                <label for="uname">Username: <span v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
+                                <input id="uname" name="username" type="text" v-bind:value="editingUsernameValue">
+                            </div>
+                            <div>
+                                <label for="password">Password: <span v-if="modalErrors.password">{{modalErrors.password[0]}}</span></label>
+                                <input id="password" name="password" type="password" value="">
+                            </div>
+                            <div>
+                                <label for="confirm_password">Confirm password: <span v-if="modalErrors.confirm_password">{{modalErrors.confirm_password[0]}}</span></label>
+                                <input id="confirm_password" name="confirm_password" type="password" value="">
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email: <span class="text-danger text-opacity-50" v-if="modalErrors.email">{{modalErrors.email[0]}}</span></label>
-                        <input id="email" name="email" class="form-control" type="text" v-bind:value="editingUserEmailValue">
-                    </div>
-                </form>
+                    <template v-slot:footer>
+                        <footer>
+                            <button type="button" v-on:click.prevent="changeUserCredentials">Update credentials</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                        </footer>
+                    </template>
+                </modal>
             </div>
-            <template v-slot:footer>
-                <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUser">Update user</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
-                </footer>
-            </template>
-        </modal>
-        <modal id="updateUserCredentialsModal">
-            <template v-slot:header>
-                Change user credentials
-            </template>
-            <div class="modal-body">
-                <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                <form id="changeUserCredentialsForm">
-                    <div class="form-group">
-                        <label for="uname">Username: <span class="text-danger text-opacity-50" v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
-                        <input id="uname" name="username" class="form-control" type="text" v-bind:value="editingUsernameValue">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password: <span class="text-danger text-opacity-50" v-if="modalErrors.password">{{modalErrors.password[0]}}</span></label>
-                        <input id="password" name="password" class="form-control" type="password" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirm_password">Confirm password: <span class="text-danger text-opacity-50" v-if="modalErrors.confirm_password">{{modalErrors.confirm_password[0]}}</span></label>
-                        <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
-                    </div>
-                </form>
-            </div>
-            <template v-slot:footer>
-                <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="changeUserCredentials">Update credentials</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
-                </footer>
-            </template>
-        </modal>
+        </div>
     </div>
 </template>
 
@@ -79,6 +82,7 @@
     import Appmenu from "../components/AppMenu.vue";
     import eventBus from '../eventBus';
     import Notification from '../components/Notification.vue';
+    import UserStatusBar from '../components/UserStatusBar.vue';
     
     export default {
         data() {
@@ -101,7 +105,8 @@
         components: {
             Modal,
             Appmenu,
-            Notification
+            Notification,
+            UserStatusBar
         },
 
         mounted() {
@@ -126,9 +131,7 @@
                         this.users = response.data;
 
                         this.columns = [
-                            {label: 'name', field: 'name'},
-                            {label: 'username', field: 'name'},
-                            {label: 'email', field: 'email'}
+                            {label: 'name', field: 'name'}
                         ];
 
                         this.rows = response.data;

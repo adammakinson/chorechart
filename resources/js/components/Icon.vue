@@ -10,6 +10,7 @@ export default {
     methods: {
         handleIconClick(e) {
             e.stopPropagation();
+            console.log(this);
             eventBus.$emit(this.$attrs.iconevent, this);
         }
     }

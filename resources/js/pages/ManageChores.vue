@@ -1,9 +1,14 @@
 <template>
-    <div class="container-fluid">
-        <appmenu></appmenu>
-        <h1>Manage Chores</h1>
-        <div id="choreManagement">
-            <component :is="mainTabContents"></component>
+    <div>
+        <user-status-bar></user-status-bar>
+        <div class="container sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+            <appmenu></appmenu>
+            <div class="p-5 w-full">
+                <h1>Manage Chores</h1>
+                <div id="choreManagement">
+                    <component :is="mainTabContents"></component>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -14,6 +19,7 @@ import TabComponent from "../components/TabComponent";
 import ManageChoresTabContents from "./ManageChoresTabContents.vue";
 import ViewAssignmentsTabContents from "./ViewAssignmentsTabContents.vue";
 import eventBus from '../eventBus';
+import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
 
@@ -52,7 +58,8 @@ export default {
         TabComponent,
         TabComponent,
         ManageChoresTabContents,
-        ViewAssignmentsTabContents
+        ViewAssignmentsTabContents,
+        UserStatusBar
     }
     
 }

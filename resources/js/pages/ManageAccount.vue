@@ -1,63 +1,66 @@
 <template>
-    <div class="container-fluid">
-        <appmenu></appmenu>
-        <h1>Manage users</h1>
-        <div class="container-fluid">
-            <div class="row justify-content-center mb-4">
-                <div style="width:40em;">
-                    <h1>User information</h1>
-                </div>
-            </div>
-            <div class="row justify-content-center mb-4">
-                <div class="card" style="width:40em;">
-                    <div class="card-header">
-                        <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
-                    </div>
-                    <div class="card-body">
-                        <form id="editUserForm">
-                            <div class="form-group mb-2">
-                                <label for="name">Name: <span class="text-danger text-opacity-50" v-if="errors.name">{{errors.name[0]}}</span></label>
-                                <input id="name" name="name" class="form-control" type="text" v-model="userData.name">
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
-                                <input id="username" name="username" class="form-control" type="text" v-model="userData.username">
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="email">Email: <span class="text-danger text-opacity-50" v-if="errors.email">{{errors.email[0]}}</span></label>
-                                <input id="email" name="email" class="form-control" type="text" v-model="userData.email">
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" v-on:click.prevent="updateUserInfo">Update user</button>
-                            </div>
-                        </form>
+    <div>
+        <user-status-bar></user-status-bar>
+        <div class="container flex w-screen h-screen divide-x divide-solid divide-slate-100">
+            <appmenu></appmenu>
+            <div class="p-5 w-full">
+                <h1>Manage Account</h1>
+                <div>
+                    <div>
+                        <h1>User information</h1>
                     </div>
                 </div>
-            </div>
-            <div class="row justify-content-center mb-4">
-                <div style="width:40em;">
-                    <h1>Credentials</h1>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="card" style="width:40em;">
-                    <div class="card-header">
-                        <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
+                <div>
+                    <div>
+                        <div>
+                            <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
+                        </div>
+                        <div>
+                            <form id="editUserForm">
+                                <div>
+                                    <label for="name">Name: <span class="text-danger text-opacity-50" v-if="errors.name">{{errors.name[0]}}</span></label>
+                                    <input id="name" name="name" class="form-control" type="text" v-model="userData.name">
+                                </div>
+                                <div>
+                                    <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
+                                    <input id="username" name="username" class="form-control" type="text" v-model="userData.username">
+                                </div>
+                                <div>
+                                    <label for="email">Email: <span class="text-danger text-opacity-50" v-if="errors.email">{{errors.email[0]}}</span></label>
+                                    <input id="email" name="email" class="form-control" type="text" v-model="userData.email">
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUserInfo">Update user</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form id="changeUserCredentialsForm">
-                            <div class="form-group mb-2">
-                                <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
-                                <input id="password" name="password" class="form-control" type="password" value="">
-                            </div>
-                            <div class="form-group mb-2">
-                                <label for="confirm_password">Confirm password: <span class="text-danger text-opacity-50" v-if="errors.confirm_password">{{errors.confirm_password[0]}}</span></label>
-                                <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary" v-on:click.prevent="updateCredentials">Update credentials</button>
-                            </div>
-                        </form>
+                </div>
+                <div>
+                    <div>
+                        <h1>Credentials</h1>
+                    </div>
+                </div>
+                <div>
+                    <div class="card">
+                        <div>
+                            <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
+                        </div>
+                        <div>
+                            <form id="changeUserCredentialsForm">
+                                <div>
+                                    <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
+                                    <input id="password" name="password" class="form-control" type="password" value="">
+                                </div>
+                                <div>
+                                    <label for="confirm_password">Confirm password: <span class="text-danger text-opacity-50" v-if="errors.confirm_password">{{errors.confirm_password[0]}}</span></label>
+                                    <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateCredentials">Update credentials</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,12 +72,14 @@
 import Card from '../components/Card.vue';
 import Appmenu from '../components/AppMenu.vue';
 import Notification from '../components/Notification.vue';
+import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
     components: { 
         Card,
         Appmenu,
-        Notification
+        Notification,
+        UserStatusBar
     },
   
     data() {

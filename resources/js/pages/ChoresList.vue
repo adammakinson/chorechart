@@ -1,25 +1,29 @@
 <template>
-    <div class="container-fluid">
-        <appmenu></appmenu>
+    <div>
         <user-status-bar></user-status-bar>
-        <datatable :columns="columns" :data="rows">
-            <template slot-scope="{row, columns}">
-                <tr v-bind:id="row.id">
-                    <td>{{row.chore}}</td>
-                    <td>{{row.pointvalue}}</td>
-                    <td>
-                        <div class="actionsContainer">
-                            <span v-if="!choreIsFinished(row)"
-                                v-on:click="handleCheckClick" 
-                                v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
-                                v-bind:data-choreid="row.id">
-                            </span>
-                            <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
-                        </div>
-                    </td>
-                </tr>
-            </template>
-        </datatable>
+        <div class="container sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+            <appmenu></appmenu>
+            <div class="p-5 w-full">
+                <datatable :columns="columns" :data="rows">
+                    <template slot-scope="{row, columns}">
+                        <tr v-bind:id="row.id">
+                            <td>{{row.chore}}</td>
+                            <td>{{row.pointvalue}}</td>
+                            <td>
+                                <div class="actionsContainer">
+                                    <span v-if="!choreIsFinished(row)"
+                                        v-on:click="handleCheckClick" 
+                                        v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
+                                        v-bind:data-choreid="row.id">
+                                    </span>
+                                    <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </template>
+                </datatable>
+            </div>
+        </div>
     </div>
 </template>
 

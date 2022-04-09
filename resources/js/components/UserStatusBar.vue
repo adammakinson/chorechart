@@ -1,15 +1,48 @@
 <template>
-    <div>
+    <div class="flex justify-between p-4 border-b">
+        <div class="fas fa-bars visible sm:invisible" @click="clickMobileMainMenu"></div>
         <h1>{{usersName}} - {{this.$store.getters.getUserPoints}} points</h1>
+        <dropdown-menu :dropdownData="dropdownData">
+            <icon 
+                v-bind:class='dropdownClass'
+                v-bind:iconevent="dropdownCallback">
+            </icon>
+        </dropdown-menu>
     </div>
 </template>
 
 <script>
+import DropdownMenu from './DropdownMenu.vue';
+import Icon from './Icon.vue';
+import eventBus from '../eventBus';
+
 export default {
+
+    components: {
+        DropdownMenu,
+        Icon
+    },
+
     data() {
         return {
             authenticatedUser: false,
-            usersName: ''
+            usersName: '',
+            dropdownClass: 'fas fa-user',
+            dropdownCallback: 'clickDropdownButton',
+            dropdownData: [
+                {
+                    'id': 'manageAccount',
+                    'href': '/manage-account',
+                    'label': 'Manage Account',
+                    'event': ''
+                },
+                {
+                    'id': 'logout',
+                    'href': '#',
+                    'label': 'Logout',
+                    'event': 'logout'
+                }
+            ]
         };
     },
 
@@ -39,6 +72,10 @@ export default {
 
                 this.$store.commit('setUserTransactions', response.data);
             });
+        },
+
+        clickMobileMainMenu() {
+            eventBus.$emit('mobileMainMenuIconClicked', this);
         }
     }
 }
