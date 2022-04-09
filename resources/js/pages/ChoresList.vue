@@ -16,7 +16,7 @@
                                         v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                         v-bind:data-choreid="row.id">
                                     </span>
-                                    <span v-if="choreIsFinished(row)" class="text-success">Complete</span>
+                                    <span v-if="choreIsFinished(row)" class="text-success">Done</span>
                                 </div>
                             </td>
                         </tr>
