@@ -1,7 +1,7 @@
 <template>
     <div>
         <user-status-bar></user-status-bar>
-        <div class="container flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <h1>Manage Account</h1>

@@ -1,7 +1,7 @@
 <template>
     <div class="w-screen">
         <user-status-bar></user-status-bar>
-        <div class="container sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <datatable :columns="columns" :data="rows" class="w-full">
@@ -39,8 +39,8 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button type="button" v-on:click.prevent="updateUser">Update user</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                            <button type="button" v-on:click.prevent="updateUser" class="border px-4 py-2 shadow-md">Update user</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage" class="border px-4 py-2 shadow-md">Close</button>
                         </footer>
                     </template>
                 </modal>
@@ -67,8 +67,8 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button type="button" v-on:click.prevent="changeUserCredentials">Update credentials</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage">Close</button>
+                            <button type="button" v-on:click.prevent="changeUserCredentials" class="border px-4 py-2 shadow-md">Update credentials</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage" class="border px-4 py-2 shadow-md">Close</button>
                         </footer>
                     </template>
                 </modal>
@@ -158,7 +158,8 @@
                 this.editingUsernameValue = userBeingEdited.username;
                 this.editingUserEmailValue = userBeingEdited.email;
 
-                editUserModal.style.display = 'block';
+                editUserModal.classList.add('visible');
+                editUserModal.classList.remove('invisible');
             },
 
             showChangeCredentialsModal(el) {
@@ -178,7 +179,8 @@
                 this.editingUsersId = userId;
                 this.editingUsernameValue = userBeingEdited.username;
 
-                changeCredentialsModal.style.display = 'block';
+                changeCredentialsModal.classList.add('visible');
+                changeCredentialsModal.classList.remove('invisible');
             },
 
             changeUserCredentials() {

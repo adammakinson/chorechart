@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-center vh-100">
+    <div>
+        <div>
             <div class="col col-md-4">
                 <h1>Register</h1>
                 <div class="card">

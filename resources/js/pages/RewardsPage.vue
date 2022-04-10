@@ -1,7 +1,7 @@
 <template>
     <div>
         <user-status-bar></user-status-bar>
-        <div class="container sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <button v-if="userIsAdmin" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
@@ -48,21 +48,24 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button v-if="!editingReward" type="button" v-on:click.prevent="createReward">{{rewardModalPrimaryButtonLabel}}</button>
-                            <button v-if="editingReward" type="button" v-on:click.prevent="updateReward(clickedCardData)">{{rewardModalPrimaryButtonLabel}}</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
+                            <button v-if="!editingReward" type="button" v-on:click.prevent="createReward" class="border px-4 py-2 shadow-md">{{rewardModalPrimaryButtonLabel}}</button>
+                            <button v-if="editingReward" type="button" v-on:click.prevent="updateReward(clickedCardData)" class="border px-4 py-2 shadow-md">{{rewardModalPrimaryButtonLabel}}</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal" class="border px-4 py-2 shadow-md">Close</button>
                         </footer>
                     </template>
                 </modal>
                 <modal id="rewardConfirmationModal">
                     <template v-slot:header>
+                        Get reward
+                    </template>
+                    <template>
                         <p v-if="userHasEnoughPoints(clickedCardData)">Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?</p>
                         <p v-if="!userHasEnoughPoints(clickedCardData)">You don't have enough points for this reward</p>
                     </template>
                     <template v-slot:footer>
                         <footer>
-                            <button v-if="userHasEnoughPoints(clickedCardData)" type="button" v-on:click.prevent="confirmPurchase">Spend points</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal">Close</button>
+                            <button v-if="userHasEnoughPoints(clickedCardData)" type="button" v-on:click.prevent="confirmPurchase" class="border px-4 py-2 shadow-md">Spend points</button>
+                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal" class="border px-4 py-2 shadow-md">Close</button>
                         </footer>
                     </template>
                 </modal>
@@ -199,7 +202,8 @@ export default {
             this.rewardModalPrimaryButtonLabel = "Create";
             this.editingReward = false;
 
-            RewardModal.style.display = 'block';
+            RewardModal.classList.remove('invisible');
+            RewardModal.classList.add('visible');
         },
 
         showEditRewardModal(reward) {
@@ -216,7 +220,8 @@ export default {
             this.rewardModalPrimaryButtonLabel = "Update";
             this.editingReward = true;
 
-            rewardModal.style.display = 'block';
+            rewardModal.classList.remove('invisible');
+            rewardModal.classList.add('visible');
         },
 
         createReward() {
@@ -334,7 +339,8 @@ export default {
 
             this.clickedCardData = reward;
 
-            modalwindow.style.display = 'block';
+            modalwindow.classList.add('visible');
+            modalwindow.classList.remove('invisible');
         },
 
         confirmPurchase() {

@@ -1,20 +1,20 @@
 <template>
     <div class="tabcontent">
-        <div class="container-fluid">
-            <div class="row">
+        <div>
+            <div>
                 <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
             </div>
-            <div class="row">
+            <div>
                 <div class="col-sm p-2 m-2">
                     <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
                     <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
                     <button v-if="assignmentsArePending" class="btn btn-primary" v-on:click="assignChores">Assign</button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-body">
+            <div>
+                <div>
+                    <div>
+                        <div>
                             <list-group :listId="'chores-list'">
                                 <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData">
                                     {{choreData.chore}} ({{choreData.pointvalue}} pts)
@@ -27,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9">
+                <div>
                     <div>
                         <cardgrid>
                             <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
@@ -37,7 +37,7 @@
                                         {{userChore.chore}}
                                         <template v-slot:actions>
                                             <span v-if="isApprovable(userChore)" class="fas fa-check" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
-                                            <span v-if="isDeletable(userChore)" class="fas fa-trash text-danger" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                            <span v-if="isDeletable(userChore)" class="fas fa-trash" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
                                         </template>
                                     </list-item>
                                 </list-group>
@@ -66,8 +66,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="createChore">Create chore</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent">Close</button>
+                    <button type="button" class="border px-4 py-2 shadow-md" v-on:click.prevent="createChore">Create chore</button>
+                    <button type="button" class="border px-4 py-2 shadow-md" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent">Close</button>
                 </footer>
             </template>
         </modal>
@@ -90,8 +90,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateChore">Update chore</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent">Close</button>
+                    <button type="button" v-on:click.prevent="updateChore" class="border px-4 py-2 shadow-md">Update chore</button>
+                    <button type="button" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent" class="border px-4 py-2 shadow-md">Close</button>
                 </footer>
             </template>
         </modal>
@@ -262,7 +262,8 @@ export default {
             this.pointFieldValue = '';
             this.activeElementId = '';
 
-            modalwindow.style.display = 'block';
+            modalwindow.classList.add('visible');
+            modalwindow.classList.remove('invisible');
         },
 
         fireModalCloseEvent() {
@@ -566,7 +567,8 @@ export default {
 
             eventBus.$emit('chore-edit-click', choreBeingEdited);
 
-            modalwindow.style.display = 'block';
+            modalwindow.classList.add('visible');
+            modalwindow.classList.remove('invisible');
         },
 
         getChoreById(id) {

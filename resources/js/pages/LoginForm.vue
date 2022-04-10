@@ -1,32 +1,32 @@
 <template>
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-center vh-100">
-            <div class="col col-md-4">
+    <div>
+        <div>
+            <div>
                 <h1>Chorechart Login</h1>
-                <div class="card" style="width: 30em;">
-                    <div class="card-header">
+                <div>
+                    <div>
                         <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
                     </div>
-                    <div class="card-body">
+                    <div>
                         <form id="loginForm">
-                            <div class="form-group mb-3">
+                            <div>
                                 <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
                                 <input type="text" name="username" v-model="username" id="username" class="form-control">
                             </div>
-                            <div class="form-group mb-3">
+                            <div>
                                 <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
                                 <input type="password" name="password" v-model="password" id="password" class="form-control">
                             </div>
-                            <!-- <div class="form-group mb-3">
+                            <!-- <div>
                                 <input type="checkbox" id="remember_me" name="remember">
                                 <label for="remember_me">Remember me</label>
                             </div> -->
-                            <div class="form-group mb-3">
+                            <div>
                                 <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
                             </div>
                         </form>
                     </div>
-                    <div class="card-footer">
+                    <div>
                         <p>Dont have an account? <a href="/register">Sign up for one now.</a></p>
                     </div>
                 </div>
