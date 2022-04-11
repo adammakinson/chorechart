@@ -1,35 +1,19 @@
 <template>
-    <div>
+    <div class="flex flex-col justify-center h-screen">
         <div>
-            <div>
-                <h1>Chorechart Login</h1>
-                <div>
-                    <div>
-                        <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
-                    </div>
-                    <div>
-                        <form id="loginForm">
-                            <div>
-                                <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
-                                <input type="text" name="username" v-model="username" id="username" class="form-control">
-                            </div>
-                            <div>
-                                <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
-                                <input type="password" name="password" v-model="password" id="password" class="form-control">
-                            </div>
-                            <!-- <div>
-                                <input type="checkbox" id="remember_me" name="remember">
-                                <label for="remember_me">Remember me</label>
-                            </div> -->
-                            <div>
-                                <button class="btn btn-primary" v-on:click.prevent="handleLogin" type="submit">Login</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div>
-                        <p>Dont have an account? <a href="/register">Sign up for one now.</a></p>
-                    </div>
-                </div>
+            <h1 class="ml-4">Login</h1>
+            <div class="mx-4 mt-4 p-4 border rounded-sm">
+                <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
+                <form id="loginForm">
+                    <label for="username">Username: <span class="block mt-4" v-if="errors.username">{{errors.username[0]}}</span></label>
+                    <input type="text" name="username" v-model="username" id="username" class="block border h-8">
+
+                    <label for="password">Password: <span class="block mt-4" v-if="errors.password">{{errors.password[0]}}</span></label>
+                    <input type="password" name="password" v-model="password" id="password" class="block border h-8">
+
+                    <button class="border rounded-md px-4 py-2 my-4" v-on:click.prevent="handleLogin" type="submit">Login</button>
+                </form>
+                <p>Dont have an account? <a href="/register" class="underline text-blue-400">Sign up for one now.</a></p>
             </div>
         </div>
     </div>
