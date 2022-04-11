@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col justify-center h-screen">
-        <div>
+        <div class="max-w-4xl self-center">
             <h1 class="ml-4">Login</h1>
             <div class="mx-4 mt-4 p-4 border rounded-sm">
                 <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
