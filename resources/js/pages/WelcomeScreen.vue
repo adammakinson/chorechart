@@ -1,17 +1,12 @@
 <template>
-    <div class="d-flex align-items-center justify-content-center" style="height: 100vh">
-        <div class="row" style="--bs-gutter-x:0;">
-
-            <div class="card" style="width: 40em;">
-                <div class="card-header">
-                    <h1>Welcome to the chore chart!</h1>
-                </div>
-                <div class="card-body">
-                    <div style="text-align:center;">
-                    <p>A great way to keep things going around the house!</p>
-                    <a class="btn btn-primary" href="/login">Login</a> <b>or</b> <a class="btn btn-primary" href="/register">register</a>
-                    </div>
-                </div>
+    <div class="flex flex-col justify-center h-screen">
+        <div class="flex flex-col items-center">
+            <h1 class="mx-auto mb-4 text-3xl font-bold">Welcome to the chore chart!</h1>
+            <p class="mx-auto">A great way to keep things going around the house!</p>
+            <div class="mx-auto mt-4">
+                <a href="/login" class="inline-block border px-4 py-2 shadow-md bg-blue-600 hover:bg-blue-400 text-white rounded-lg">Login</a> 
+                <b>or</b> 
+                <a href="/register" class="inline-block border px-4 py-2 shadow-md bg-blue-600 hover:bg-blue-400 text-white rounded-lg">register</a>
             </div>
         </div>
     </div>
