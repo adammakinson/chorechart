@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      spacing: {
+        '112': '30rem'
+      }
     },
   },
   variants: {

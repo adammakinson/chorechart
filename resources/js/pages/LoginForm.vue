@@ -1,19 +1,19 @@
 <template>
     <div class="flex flex-col justify-center h-screen">
-        <div class="max-w-4xl self-center">
+        <div class="w-112 self-center">
             <h1 class="ml-4">Login</h1>
-            <div class="mx-4 mt-4 p-4 border rounded-sm">
+            <div class="mx-4 mt-4 px-4 pb-4 border rounded-sm">
                 <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
                 <form id="loginForm">
-                    <label for="username">Username: <span class="block mt-4" v-if="errors.username">{{errors.username[0]}}</span></label>
-                    <input type="text" name="username" v-model="username" id="username" class="block border h-8">
+                    <label for="username" class="block mt-4">Username: <span v-if="errors.username" class="text-red-600">{{errors.username[0]}}</span></label>
+                    <input type="text" name="username" v-model="username" id="username" class="block border h-8 w-full">
 
-                    <label for="password">Password: <span class="block mt-4" v-if="errors.password">{{errors.password[0]}}</span></label>
-                    <input type="password" name="password" v-model="password" id="password" class="block border h-8">
+                    <label for="password" class="block mt-4">Password: <span v-if="errors.password" class="text-red-600">{{errors.password[0]}}</span></label>
+                    <input type="password" name="password" v-model="password" id="password" class="block border h-8 w-full">
 
                     <button class="border rounded-md px-4 py-2 my-4" v-on:click.prevent="handleLogin" type="submit">Login</button>
                 </form>
-                <p>Dont have an account? <a href="/register" class="underline text-blue-400">Sign up for one now.</a></p>
+                <p>Dont have an account? <Link href="/register">Sign up now!</Link></p>
             </div>
         </div>
     </div>
@@ -21,10 +21,12 @@
 
 <script>
 import Notification from '../components/Notification.vue';
+import Link from '../components/Link.vue';
 
 export default {
     components: {
-        Notification
+        Notification,
+        Link
     },
 
     data() {
@@ -44,7 +46,6 @@ export default {
                 username: this.username,
                 password: this.password
             }).then((response) => {
-                console.log(response);
                 this.$store.commit('setCurrentUser', response.data.user);
                 this.$router.push('chores-list');
             }).catch((error) => {
