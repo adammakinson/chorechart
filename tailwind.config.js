@@ -4,7 +4,13 @@ module.exports = {
     "./resources/js/**/*.vue"
   ],
   theme: {
-    extend: {},
+    extend: {
+    },
+  },
+  variants: {
+    extend: {
+      textColor: ['visited']
+    }
   },
   plugins: [],
 }
