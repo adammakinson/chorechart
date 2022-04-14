@@ -1,5 +1,5 @@
 <template>
-    <div v-if="typeof notice === 'object'" class="alert mt-4" :class="notificationColorClass">{{notice.message}}</div>
+    <div v-if="typeof notice === 'object'" class="mt-4 p-4" :class="notificationColorClass">{{notice.message}}</div>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     
     methods: {
         getNotificationColorClass() {
-            let notificationColorClass = 'alert-info';
+            let notificationColorClass = 'bg-red-200';
             
             // I want to use success, danger, and info primarily
             // If the type is specified, use that.
@@ -33,12 +33,12 @@ export default {
         },
 
         getNotificationColorClassFromType(noticetype) {
-            let notificationColorClass = 'alert-info';
+            let notificationColorClass = 'bg-sky-300';
             
             if(noticetype == 'success'){
-                notificationColorClass = 'alert-success';
+                notificationColorClass = 'bg-lime-200';
             } else if (noticetype == 'error') {
-                notificationColorClass = 'alert-danger';
+                notificationColorClass = 'bg-red-200';
             }
 
             return notificationColorClass;
@@ -46,14 +46,14 @@ export default {
 
         getNotificationColorClassFromStatus(status) {
             let statusNumber = parseInt(status);
-            let notificationColorClass = 'alert-info';
+            let notificationColorClass = 'bg-sky-300';
 
             if(statusNumber > 199 && statusNumber < 300) {
-                notificationColorClass = 'alert-success';
+                notificationColorClass = 'bg-lime-200';
             }
 
             if(statusNumber >= 400) {
-                notificationColorClass = 'alert-danger';
+                notificationColorClass = 'bg-red-200';
             }
 
             return notificationColorClass;
