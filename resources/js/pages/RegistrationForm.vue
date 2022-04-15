@@ -1,41 +1,30 @@
 <template>
-    <div>
-        <div>
-            <div class="col col-md-4">
-                <h1>Register</h1>
-                <div class="card">
-                    <div class="card-header">
-                        <notification v-if="typeof registerFormNotification === 'object'" v-bind:notice="registerFormNotification"></notification> <!-- v-bind:notice="error" -->
+    <div class="flex flex-col justify-center h-screen">
+        <div class="w-112 self-center">
+            <h1 class="ml-4">Register</h1>
+            <div class="mx-4 mt-4 px-4 pb-4 border rounded-sm">
+                <notification v-if="typeof registerFormNotification === 'object'" v-bind:notice="registerFormNotification"></notification>
+                <form id="loginForm">
+                    <label for="name" class="block mt-4">Name: <span class="text-red-600" v-if="errors.name">{{errors.name[0]}}</span></label>
+                    <input type="text" name="name" v-model="name" id="name" class="block border h-8 w-full">
+                    
+                    <label for="username" class="block mt-4">Username: <span class="text-red-600" v-if="errors.username">{{errors.username[0]}}</span></label>
+                    <input type="text" name="username" v-model="username" id="username" class="block border h-8 w-full" required>
+
+                    <label for="email" class="block mt-4">Email: <span class="text-red-600" v-if="errors.email">{{errors.email[0]}}</span></label>
+                    <input type="text" name="email" v-model="email" id="email" class="block border h-8 w-full">
+                    
+                    <label for="password" class="block mt-4">Password: <span class="text-red-600" v-if="errors.password">{{errors.password[0]}}</span></label>
+                    <input type="password" name="password" v-model="password" id="password" class="block border h-8 w-full" required>
+
+                    <label for="passwordconfirm" class="block mt-4">Confirm password: <span class="text-red-600" v-if="errors.confirm_password">{{errors.confirm_password[0]}}</span></label>
+                    <input type="password" name="passwordconfirm" v-model="passwordconfirm" id="passwordconfirm" class="block border h-8 w-full" required>
+
+                    <div class="flex justify-between">
+                        <button class="border rounded-md px-4 py-2 my-4" v-on:click.prevent="handleRegistration" type="submit">Register</button>
+                        <p class="self-center">Already have an account? <Link href="/login">Log in</Link></p>
                     </div>
-                    <div class="card-body">
-                        <form id="loginForm">
-                            <div class="form-group mb-3">
-                                <label for="name">Name: <span class="text-danger text-opacity-50" v-if="errors.name">{{errors.name[0]}}</span></label>
-                                <input type="text" name="name" v-model="name" id="name" class="form-control">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
-                                <input type="text" name="username" v-model="username" id="username" class="form-control" required>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="email">Email: <span class="text-danger text-opacity-50" v-if="errors.email">{{errors.email[0]}}</span></label>
-                                <input type="text" name="email" v-model="email" id="email" class="form-control">
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
-                                <input type="password" name="password" v-model="password" id="password" class="form-control" required>
-                            </div>
-                            <div class="form-group mb-3">
-                                <label for="passwordconfirm">Confirm password: <span class="text-danger text-opacity-50" v-if="errors.confirm_password">{{errors.confirm_password[0]}}</span></label>
-                                <input type="password" name="passwordconfirm" v-model="passwordconfirm" id="passwordconfirm" class="form-control" required>
-                            </div>
-                            <div class="form-group mb-3">
-                                <button class="btn btn-primary" v-on:click.prevent="handleRegistration" type="submit">Register</button>
-                                <!-- <p v-if="error">{{error}}</p> -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -43,10 +32,12 @@
 
 <script>
 import Notification from '../components/Notification.vue';
+import Link from '../components/Link.vue';
 
 export default {
     components: {
-        Notification
+        Notification,
+        Link
     },
 
     data() {
