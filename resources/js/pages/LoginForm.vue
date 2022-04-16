@@ -11,7 +11,7 @@
                     <label for="password" class="block mt-4">Password: <span v-if="errors.password" class="text-red-600">{{errors.password[0]}}</span></label>
                     <input type="password" name="password" v-model="password" id="password" class="block border h-8 w-full">
 
-                    <button class="border rounded-md px-4 py-2 my-4" v-on:click.prevent="handleLogin" type="submit">Login</button>
+                    <Button bgColorClass="bg-blue-600" colorClass="text-white" callback="handleLogin">Login</Button>
                 </form>
                 <p>Dont have an account? <Link href="/register">Sign up now!</Link></p>
             </div>
@@ -22,11 +22,28 @@
 <script>
 import Notification from '../components/Notification.vue';
 import Link from '../components/Link.vue';
+import Button from '../components/Button.vue';
+import eventBus from '../eventBus.js';
 
 export default {
     components: {
         Notification,
-        Link
+        Link,
+        Button,
+        eventBus
+    },
+
+    created() {
+        eventBus.$on('callback', (callback, args) => {
+            var fn = window[callback];
+
+            // 'this' is the VueComponent object
+            if(args){
+                this[callback](args);
+            } else {
+                this[callback]();
+            }
+        });
     },
 
     data() {

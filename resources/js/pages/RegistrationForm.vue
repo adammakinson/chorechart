@@ -21,7 +21,7 @@
                     <input type="password" name="passwordconfirm" v-model="passwordconfirm" id="passwordconfirm" class="block border h-8 w-full" required>
 
                     <div class="flex justify-between">
-                        <button class="border rounded-md px-4 py-2 my-4" v-on:click.prevent="handleRegistration" type="submit">Register</button>
+                        <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="handleRegistration">Register</Button>
                         <p class="self-center">Already have an account? <Link href="/login">Log in</Link></p>
                     </div>
                 </form>
@@ -33,11 +33,28 @@
 <script>
 import Notification from '../components/Notification.vue';
 import Link from '../components/Link.vue';
+import Button from '../components/Button.vue';
+import eventBus from '../eventBus.js';
 
 export default {
     components: {
         Notification,
-        Link
+        Link,
+        Button,
+        eventBus
+    },
+
+    created() {
+        eventBus.$on('callback', (callback, args) => {
+            var fn = window[callback];
+    
+            // 'this' is the VueComponent object
+            if(args){
+                this[callback](args);
+            } else {
+                this[callback]();
+            }
+        });
     },
 
     data() {
@@ -61,7 +78,15 @@ export default {
                 password: this.password,
                 confirm_password: this.passwordconfirm
             }).then((response) => {
-                this.$router.push('login');
+                this.registerFormNotification = {
+                    message: 'Success! Redirecting to Login screen...',
+                    type: 'success'
+                };
+
+                setTimeout(() => {
+                    this.registerFormNotification = '';
+                    this.$router.push('login');
+                }, 1000);
             }).catch((error) => {
                 if (error.response) {
                     this.registerFormNotification = {
