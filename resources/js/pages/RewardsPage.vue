@@ -4,7 +4,7 @@
         <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <button v-if="userIsAdmin" data-toggle="modal" data-target="#rewardModal" v-on:click="showRewardModal">Create a reward</button>
+                <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <h1>Rewards</h1>
                 <cardgrid :cardCollectionData="rewards">
                     <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
@@ -48,9 +48,9 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button v-if="!editingReward" type="button" v-on:click.prevent="createReward" class="border px-4 py-2 shadow-md">{{rewardModalPrimaryButtonLabel}}</button>
-                            <button v-if="editingReward" type="button" v-on:click.prevent="updateReward(clickedCardData)" class="border px-4 py-2 shadow-md">{{rewardModalPrimaryButtonLabel}}</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal" class="border px-4 py-2 shadow-md">Close</button>
+                            <Button v-if="!editingReward" callback="createReward" colorClass="text-white" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
+                            <Button v-if="editingReward" callback="updateReward" :args="clickedCardData" colorClass="text-white" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
+                            <Button data-dismiss="modal" callback="closeModal" colorClass="text-white" bgColorClass="bg-red-600">Close</button>
                         </footer>
                     </template>
                 </modal>
@@ -64,8 +64,8 @@
                     </template>
                     <template v-slot:footer>
                         <footer>
-                            <button v-if="userHasEnoughPoints(clickedCardData)" type="button" v-on:click.prevent="confirmPurchase" class="border px-4 py-2 shadow-md">Spend points</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="closeModal" class="border px-4 py-2 shadow-md">Close</button>
+                            <Button v-if="userHasEnoughPoints(clickedCardData)" callback="confirmPurchase" colorClass="text-white" bgColorClass="bg-blue-600">Spend points</Button>
+                            <Button type="button" data-dismiss="modal" callback="closeModal" colorClass="text-white" bgColorClass="bg-red-600">Close</Button>
                         </footer>
                     </template>
                 </modal>
@@ -83,6 +83,7 @@ import eventBus from '../eventBus';
 import Modal from '../components/Modal.vue';
 import icon from '../components/Icon';
 import Notification from '../components/Notification.vue';
+import Button from '../components/Button.vue';
 
 export default {
     data() {
@@ -118,6 +119,17 @@ export default {
 
             this.deleteReward(rewardId);
         });
+
+        eventBus.$on('callback', (callback, args) => {
+            var fn = window[callback];
+    
+            // 'this' is the VueComponent object
+            if(args){
+                this[callback](args);
+            } else {
+                this[callback]();
+            }
+        });
     },
 
     mounted() {
@@ -138,7 +150,8 @@ export default {
         UserStatusBar,
         Modal,
         icon,
-        Notification
+        Notification,
+        Button
     },
 
     methods: {
@@ -277,9 +290,6 @@ export default {
                 if(filesInput.files) {
                     rewardData.append('file', filesInput.files[0]);
                 }
-
-                console.log(rewardData.get('reward'));
-                console.log(rewardData.get('pointvalue'));
 
                 axios({
                     method: 'post',
