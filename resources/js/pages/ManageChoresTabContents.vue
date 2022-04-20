@@ -1,50 +1,36 @@
 <template>
     <div class="tabcontent">
         <div>
-            <div>
-                <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
+            <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
+            <div class="col-sm p-2 m-2">
+                <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</button>
+                <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
+                <button v-if="assignmentsArePending" class="btn btn-primary" v-on:click="assignChores">Assign</button>
             </div>
             <div>
-                <div class="col-sm p-2 m-2">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#createChoreModal" v-on:click="showAddChoreModal">Add chore</button>
-                    <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
-                    <button v-if="assignmentsArePending" class="btn btn-primary" v-on:click="assignChores">Assign</button>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <div>
-                        <div>
-                            <list-group :listId="'chores-list'">
-                                <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData">
-                                    {{choreData.chore}} ({{choreData.pointvalue}} pts)
-                                    <template v-slot:actions>
-                                        <span class="fas fa-edit text-info" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
-                                        <span class="fas fa-trash text-danger" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
-                                    </template>
-                                </list-item>
-                            </list-group>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <cardgrid>
-                            <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
-                                <h4>{{cardData.name}}</h4>
-                                <list-group v-if="cardData.chores">
-                                    <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
-                                        {{userChore.chore}}
-                                        <template v-slot:actions>
-                                            <span v-if="isApprovable(userChore)" class="fas fa-check" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
-                                            <span v-if="isDeletable(userChore)" class="fas fa-trash" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
-                                        </template>
-                                    </list-item>
-                                </list-group>
-                            </card>
-                        </cardgrid>
-                    </div>
-                </div>
+                <list-group :listId="'chores-list'">
+                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData">
+                        {{choreData.chore}} ({{choreData.pointvalue}} pts)
+                        <template v-slot:actions>
+                            <span class="fas fa-edit text-info" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
+                            <span class="fas fa-trash text-danger" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
+                        </template>
+                    </list-item>
+                </list-group>
+                <cardgrid>
+                    <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
+                        <h4>{{cardData.name}}</h4>
+                        <list-group v-if="cardData.chores">
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
+                                {{userChore.chore}}
+                                <template v-slot:actions>
+                                    <span v-if="isApprovable(userChore)" class="fas fa-check" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
+                                    <span v-if="isDeletable(userChore)" class="fas fa-trash" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                </template>
+                            </list-item>
+                        </list-group>
+                    </card>
+                </cardgrid>
             </div>
         </div>
         <modal id="createChoreModal" v-if="userIsAdmin">
@@ -107,6 +93,7 @@ import ListItem from "../components/ListItem.vue";
 import eventBus from "../eventBus.js";
 import Modal from "../components/Modal";
 import Notification from "../components/Notification.vue";
+import Button from '../components/Button.vue';
 
 export default {
     created() {
@@ -116,6 +103,17 @@ export default {
 
         eventBus.$on('refetch-chores', () => {
             this.fetchChoresCollection();
+        });
+
+        eventBus.$on('callback', (callback, args) => {
+            var fn = window[callback];
+    
+            // 'this' is the VueComponent object
+            if(args){
+                this[callback](args);
+            } else {
+                this[callback]();
+            }
         });
 
         eventBus.$on("chore-list-item-clicked", () => {
@@ -221,7 +219,8 @@ export default {
         Cardgrid,
         Card,
         Modal,
-        Notification
+        Notification,
+        Button
     },
 
     mounted() {
