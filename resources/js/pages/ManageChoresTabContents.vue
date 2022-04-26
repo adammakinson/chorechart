@@ -2,30 +2,28 @@
     <div class="tabcontent">
         <div>
             <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
-            <div class="col-sm p-2 m-2">
-                <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</button>
-                <button v-if="userCardsHighlighted && choresAreHighlighted" class="btn btn-primary" v-on:click="assignToUser">add to all</button>
-                <button v-if="assignmentsArePending" class="btn btn-primary" v-on:click="assignChores">Assign</button>
-            </div>
+            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</Button>
+            <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser">add to all</Button>
+            <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
                 <list-group :listId="'chores-list'">
-                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData">
+                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="p-2 border border-slate-400">
                         {{choreData.chore}} ({{choreData.pointvalue}} pts)
                         <template v-slot:actions>
-                            <span class="fas fa-edit text-info" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
-                            <span class="fas fa-trash text-danger" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
+                            <span class="fas fa-edit text-blue-600" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
+                            <span class="fas fa-trash text-red-600" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
                         </template>
                     </list-item>
                 </list-group>
-                <cardgrid>
+                <cardgrid class="pt-4 w-100 sm:w-full">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                         <h4>{{cardData.name}}</h4>
                         <list-group v-if="cardData.chores">
-                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id">
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="p-2 border border-slate-400">
                                 {{userChore.chore}}
                                 <template v-slot:actions>
-                                    <span v-if="isApprovable(userChore)" class="fas fa-check" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
-                                    <span v-if="isDeletable(userChore)" class="fas fa-trash" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                    <span v-if="isApprovable(userChore)" class="fas fa-check text-green-600" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
+                                    <span v-if="isDeletable(userChore)" class="fas fa-trash text-red-600" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
                                 </template>
                             </list-item>
                         </list-group>
@@ -364,7 +362,7 @@ export default {
                         userChore.classList.add('assignment');
                         userChore.classList.add('list-group-item');
                         userChore.dataset.itemid = choreId;
-                        userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-minus text-danger discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                        userChore.innerHTML = `<div class="p-2 border border-slate-400" style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-minus text-red-600 discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
                     
                         recipientsListUl.append(userChore);
                 

@@ -7,16 +7,18 @@
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <h1>Rewards</h1>
                 <cardgrid :cardCollectionData="rewards">
-                    <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
-                        <img v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
-                        <h4>{{cardData.title}}</h4>
-                        <h5><b>cost: </b>{{cardData.cost}}</h5>
-                        <div v-if="cardData.actionIcons">
-                            <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
-                                v-bind:class="actionicon.class"
-                                v-bind:iconevent="actionicon.event" 
-                                v-bind:data-itemId="cardData.id">
-                            </icon>
+                    <card class="flex sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                        <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
+                        <div>
+                            <h4>{{cardData.title}}</h4>
+                            <h5><b>cost: </b>{{cardData.cost}}</h5>
+                            <div v-if="cardData.actionIcons">
+                                <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
+                                    v-bind:class="actionicon.class"
+                                    v-bind:iconevent="actionicon.event" 
+                                    v-bind:data-itemId="cardData.id">
+                                </icon>
+                            </div>
                         </div>
                     </card>
                 </cardgrid>
