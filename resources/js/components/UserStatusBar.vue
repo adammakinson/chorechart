@@ -1,8 +1,9 @@
 <template>
     <div class="flex justify-between p-4 border-b">
         <div class="fas fa-bars visible sm:invisible" @click="clickMobileMainMenu"></div>
-        <h1>{{usersName}} - {{this.$store.getters.getUserPoints}} points</h1>
-        <dropdown-menu :dropdownData="dropdownData">
+        <slot></slot>
+        <dropdown-menu :dropdownData="dropdownData" class="flex">
+            <p>{{this.$store.getters.getUserPoints}}</p>
             <icon 
                 v-bind:class='dropdownClass'
                 v-bind:iconevent="dropdownCallback">

@@ -1,12 +1,13 @@
 <template>
     <div>
-        <user-status-bar></user-status-bar>
+        <user-status-bar>
+            <h1>Rewards</h1>
+        </user-status-bar>
         <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
-                <h1>Rewards</h1>
-                <cardgrid :cardCollectionData="rewards">
+                <cardgrid :cardCollectionData="rewards" class="mt-4">
                     <card class="flex sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
                         <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
                         <div>

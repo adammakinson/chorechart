@@ -6,7 +6,7 @@
             <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser">add to all</Button>
             <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
-                <list-group :listId="'chores-list'">
+                <list-group :listId="'chores-list'" class="mt-4">
                     <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="p-2 border border-slate-400">
                         {{choreData.chore}} ({{choreData.pointvalue}} pts)
                         <template v-slot:actions>
@@ -50,8 +50,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" class="border px-4 py-2 shadow-md" v-on:click.prevent="createChore">Create chore</button>
-                    <button type="button" class="border px-4 py-2 shadow-md" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent">Close</button>
+                    <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="createChore">Create chore</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-red-600" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
                 </footer>
             </template>
         </modal>
@@ -74,8 +74,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <button type="button" v-on:click.prevent="updateChore" class="border px-4 py-2 shadow-md">Update chore</button>
-                    <button type="button" data-dismiss="modal" v-on:click.prevent="fireModalCloseEvent" class="border px-4 py-2 shadow-md">Close</button>
+                    <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateChore">Update chore</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-red-600" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
                 </footer>
             </template>
         </modal>
@@ -444,6 +444,7 @@ export default {
             let userCard = event.target.closest('.card');
 
             userCard.classList.toggle('active');
+            userCard.classList.toggle('bg-blue-400');
 
             this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
             this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;

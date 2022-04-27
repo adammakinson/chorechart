@@ -22,6 +22,7 @@ export default {
             let choreItem = event.target.closest('.list-group-item');
 
             choreItem.classList.toggle('active');
+            choreItem.classList.toggle('bg-blue-400')
 
             eventBus.$emit('chore-list-item-clicked');
         },

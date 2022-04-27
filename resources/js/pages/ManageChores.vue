@@ -1,10 +1,11 @@
 <template>
     <div>
-        <user-status-bar></user-status-bar>
+        <user-status-bar>
+            <h1>Manage Chores</h1>
+        </user-status-bar>
         <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <h1>Manage Chores</h1>
                 <div id="choreManagement">
                     <component :is="mainTabContents"></component>
                 </div>

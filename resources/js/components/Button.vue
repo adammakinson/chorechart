@@ -1,5 +1,5 @@
 <template>
-    <button class="border rounded-md px-4 py-2 my-4"
+    <button class="border rounded-md px-4 py-2"
             :class="[colorClass, bgColorClass]"
             v-on:click.prevent="handleClick" 
             type="submit">
