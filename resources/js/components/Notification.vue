@@ -1,5 +1,5 @@
 <template>
-    <div v-if="typeof notice === 'object'" class="mt-4 p-4" :class="notificationColorClass">{{notice.message}}</div>
+    <div v-if="typeof notice === 'object'" class="p-4" :class="notificationColorClass">{{notice.message}}</div>
 </template>
 
 <script>

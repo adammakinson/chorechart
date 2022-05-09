@@ -2,48 +2,17 @@
     <div class="flex flex-col justify-center h-screen">
         <div class="w-112 self-center">
             <h1 class="ml-4">Register</h1>
-            <div class="m-4 p-4 border rounded-sm">
+            <div class="flex flex-col flex-rows-2 gap-y-4 m-4 p-4 border rounded-sm">
                 <notification v-if="typeof registerFormNotification === 'object'" v-bind:notice="registerFormNotification"></notification>
                 <form id="loginForm" class="flex flex-col flex-rows-6 gap-y-4">
-                    <FormInput 
-                        :identifier="nameField.identifier" 
-                        :type="nameField.type" 
-                        :elementLabel="nameField.label" 
-                        :errors="errors.name" 
-                        :value="nameField.value" 
-                        :callback="nameField.callback"
-                    ></FormInput>
-                    <FormInput 
-                        :identifier="userNameField.identifier" 
-                        :type="userNameField.type" 
-                        :elementLabel="userNameField.label" 
-                        :errors="errors.username" 
-                        :value="userNameField.value" 
-                        :callback="userNameField.callback"
-                    ></FormInput>
-                    <FormInput 
-                        :identifier="emailField.identifier" 
-                        :type="emailField.type" 
-                        :elementLabel="emailField.label" 
-                        :errors="errors.email" 
-                        :value="emailField.value" 
-                        :callback="emailField.callback"
-                    ></FormInput>
-                    <FormInput 
-                        :identifier="passwordField.identifier" 
-                        :type="passwordField.type" 
-                        :elementLabel="passwordField.label" 
-                        :errors="errors.password" 
-                        :value="passwordField.value" 
-                        :callback="passwordField.callback"
-                    ></FormInput>
-                    <FormInput 
-                        :identifier="confirmPasswordField.identifier" 
-                        :type="confirmPasswordField.type" 
-                        :elementLabel="confirmPasswordField.label" 
-                        :errors="errors.confirm_password"
-                        :value="confirmPasswordField.value" 
-                        :callback="confirmPasswordField.callback"
+
+                    <FormInput v-for="formField in registerFormData" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        :callback="formField.callback"
                     ></FormInput>
 
                     <div class="flex justify-between">
@@ -88,54 +57,59 @@ export default {
     data() {
         return {
             registerFormNotification: '',
-            errors: '',
-
-            nameField: {
-                identifier: 'name',
-                label: 'Name',
-                type: 'text',
-                value: '',
-                callback: 'updateNameFieldValue'
-            },
-            userNameField: {
-                identifier: 'username',
-                label: 'Username',
-                type: 'text',
-                value: '',
-                callback: 'updateUserNameFieldValue'
-            },
-            emailField: {
-                identifier: 'email',
-                label: 'Email',
-                type: 'text',
-                value: '',
-                callback: 'updateEmailFieldValue'
-            },
-            passwordField: {
-                identifier: 'password',
-                label: 'Password',
-                type: 'password',
-                value: '',
-                callback: 'updatePasswordFieldValue'
-            },
-            confirmPasswordField: {
-                identifier: 'passwordconfirm',
-                label: 'Confirm Password',
-                type: 'password',
-                value: '',
-                callback: 'updateConfirmPasswordFieldValue'
-            },
+            registerFormData: {
+                name: {
+                    identifier: 'name',
+                    label: 'Name',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateNameFieldValue'
+                },
+                username: {
+                    identifier: 'username',
+                    label: 'Username',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateUserNameFieldValue'
+                },
+                email: {
+                    identifier: 'email',
+                    label: 'Email',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateEmailFieldValue'
+                }, 
+                password: {
+                    identifier: 'password',
+                    label: 'Password',
+                    type: 'password',
+                    errors: '',
+                    value: '',
+                    callback: 'updatePasswordFieldValue'
+                },
+                confirm_password: {
+                    identifier: 'passwordconfirm',
+                    label: 'Confirm Password',
+                    type: 'password',
+                    errors: '',
+                    value: '',
+                    callback: 'updateConfirmPasswordFieldValue'
+                }
+            }
         };
     },
 
     methods: {
         handleRegistration() {
             axios.post('/api/register', {
-                name: this.nameField.value,
-                username: this.userNameField.value,
-                email: this.emailField.value,
-                password: this.passwordField.value,
-                confirm_password: this.confirmPasswordField.value
+                name: this.registerFormData.name.value,
+                username: this.registerFormData.username.value,
+                email: this.registerFormData.email.value,
+                password: this.registerFormData.password.value,
+                confirm_password: this.registerFormData.confirm_password.value
             }).then((response) => {
                 this.registerFormNotification = {
                     message: 'Success! Redirecting to Login screen...',
@@ -154,28 +128,36 @@ export default {
                     };
 
                     this.errors = error.response.data.errors;
+
+                    for (const property in error.response.data.errors) {
+                        if (property === 'message') {
+                            continue;
+                        }
+
+                        this.registerFormData[property].errors = error.response.data.errors[property];
+                    }
                 }
             });
         },
 
         updateNameFieldValue(elValue) {
-            this.nameField.value = elValue;
+            this.registerFormData.name.value = elValue;
         },
 
         updateUserNameFieldValue(elValue) {
-            this.userNameField.value = elValue;
+            this.registerFormData.username.value = elValue;
         },
         
         updateEmailFieldValue(elValue) {
-            this.emailField.value = elValue;
+            this.registerFormData.email.value = elValue;
         },
 
         updatePasswordFieldValue(elValue) {
-            this.passwordField.value = elValue;
+            this.registerFormData.password.value = elValue;
         },
 
         updateConfirmPasswordFieldValue(elValue) {
-            this.confirmPasswordField.value = elValue;
+            this.registerFormData.confirm_password.value = elValue;
         }
     }
 }
