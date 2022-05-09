@@ -27,11 +27,11 @@
                     <template v-slot:header>
                         {{rewardModalTitle}}
                     </template>
-                    <div class="modal-body">
+                    <div class="modal-body flex flex-col gap-y-4">
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                        <form id="rewardForm" name="rewardForm" enctype="multipart/form-data">
+                        <form id="rewardForm" name="rewardForm" enctype="multipart/form-data" class="flex flex-col gap-y-4">
                             <div>
-                                <label for="chore">Reward: <span v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
+                                <label for="reward">Reward: <span v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
                                 <input id="reward" name="reward" type="text" v-bind:value="clickedCardData.reward">
                             </div>
                             <div>
@@ -87,6 +87,7 @@ import Modal from '../components/Modal.vue';
 import icon from '../components/Icon';
 import Notification from '../components/Notification.vue';
 import Button from '../components/Button.vue';
+import FormInput from '../components/FormInput.vue';
 
 export default {
     data() {
@@ -154,7 +155,8 @@ export default {
         Modal,
         icon,
         Notification,
-        Button
+        Button,
+        FormInput
     },
 
     methods: {
