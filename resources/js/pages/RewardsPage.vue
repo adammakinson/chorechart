@@ -30,14 +30,14 @@
                     <div class="modal-body flex flex-col gap-y-4">
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                         <form id="rewardForm" name="rewardForm" enctype="multipart/form-data" class="flex flex-col gap-y-4">
-                            <div>
-                                <label for="reward">Reward: <span v-if="modalErrors.reward">{{modalErrors.reward[0]}}</span></label>
-                                <input id="reward" name="reward" type="text" v-bind:value="clickedCardData.reward">
-                            </div>
-                            <div>
-                                <label for="pointvalue">Point value: <span v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
-                                <input id="pointvalue" name="pointvalue" type="number" v-bind:value="clickedCardData.point_value">
-                            </div>
+                            <FormInput v-for="formField in rewardModalFormData" :key="formField.identifier"
+                                :identifier="formField.identifier"
+                                :type="formField.type"
+                                :elementLabel="formField.label"
+                                :errors="formField.errors"
+                                :value="formField.value"
+                                :callback="formField.callback"
+                            ></FormInput>
                             <div>
                                 <label for="file-input">Image: <span v-if="modalErrors.file">{{modalErrors.file[0]}}</span></label>
                                 <div id="image-wrapper" v-bind:class = "(editingReward)?'image-wrapper':''">
@@ -101,7 +101,25 @@ export default {
             rewardModalPrimaryButtonAction: "createReward",
             rewardModalPrimaryButtonLabel: "Create",
             modalNotice: '',
-            modalErrors: []
+            modalErrors: [],
+            rewardModalFormData: {
+                reward: {
+                    identifier: 'reward',
+                    label: 'Reward',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateRewardFieldValue'
+                },
+                pointvalue: {
+                    identifier: 'pointvalue',
+                    label: 'Point value',
+                    type: 'number',
+                    errors: '',
+                    value: '',
+                    callback: 'updatePointvalueFieldValue'
+                }
+            }
         };
     },
 
@@ -214,7 +232,16 @@ export default {
             let RewardModal = document.getElementById("rewardModal");
 
             this.clickedCardData = [];
+            this.modalNotice = '';
+            this.rewardModalFormData.reward.errors = '';
+            this.rewardModalFormData.pointvalue.errors = '';
             
+            // hack, not the way to do it...
+            document.getElementById('reward').value = '';
+            document.getElementById('pointvalue').value = '';
+            this.rewardModalFormData.reward.value = '';
+            this.rewardModalFormData.pointvalue.value = '';
+
             this.rewardModalTitle = "Create Reward";
             this.rewardModalPrimaryButtonAction = "createReward";
             this.rewardModalPrimaryButtonLabel = "Create";
@@ -228,6 +255,13 @@ export default {
             let rewardModal = document.getElementById("rewardModal");
 
             this.clickedCardData = reward;
+            console.log(reward);
+
+            // Pretty hacky way to do this. See if I can figure out better way
+            document.getElementById('reward').value = reward.reward;
+            document.getElementById('pointvalue').value = reward.cost;
+            this.rewardModalFormData.reward.value = reward.reward;
+            this.rewardModalFormData.pointvalue.value = reward.cost;
 
             this.modalNotice = '';
             this.modalErrors = [];
@@ -272,6 +306,14 @@ export default {
                 this.clickedCardData.point_value = rewardData['pointvalue'];
 
                 this.modalErrors = error.response.data.errors;
+
+                for (const property in error.response.data.errors) {
+                    if (property === 'message') {
+                        continue;
+                    }
+
+                    this.rewardModalFormData[property].errors = error.response.data.errors[property];
+                }
             });
         },
 
@@ -378,6 +420,14 @@ export default {
 
         closeModal() {
             eventBus.$emit('close-modal');
+        },
+
+        updateRewardFieldValue(elValue) {
+            this.rewardModalFormData.reward.value = elValue;
+        },
+
+        updatePointvalueFieldValue(elValue) {
+            this.rewardModalFormData.pointvalue.value = elValue;
         }
     }
 }
