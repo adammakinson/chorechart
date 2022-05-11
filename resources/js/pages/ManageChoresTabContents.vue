@@ -38,14 +38,14 @@
             <div class="modal-body">
                 <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="createChoreForm">
-                    <div class="form-group">
-                        <label for="chore">Chore: <span class="text-danger text-opacity-50" v-if="modalErrors.chore">{{modalErrors.chore[0]}}</span></label>
-                        <input id="chore" name="chore" class="form-control" type="text" v-bind:value="choreFieldValue">
-                    </div>
-                    <div class="form-group">
-                        <label for="pointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
-                        <input id="pointvalue" name="pointvalue" class="form-control" type="number" v-bind:value="pointFieldValue">
-                    </div>
+                    <FormInput v-for="formField in createChoreModalData" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        :callback="formField.callback"
+                    ></FormInput>
                 </form>
             </div>
             <template v-slot:footer>
@@ -62,14 +62,14 @@
             <div class="modal-body">
                 <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="editChoreForm">
-                    <div class="form-group">
-                        <label for="editchore">Chore: <span class="text-danger text-opacity-50" v-if="modalErrors.chore">{{modalErrors.chore[0]}}</span></label>
-                        <input id="editchore" class="form-control" type="text" name="chore" v-bind:value="choreBeingEdited.chore">
-                    </div>
-                    <div class="form-group">
-                        <label for="editpointvalue">Point value: <span class="text-danger text-opacity-50" v-if="modalErrors.pointvalue">{{modalErrors.pointvalue[0]}}</span></label>
-                        <input id="editpointvalue" class="form-control" type="number" name="pointvalue" v-bind:value="choreBeingEdited.pointvalue">
-                    </div>
+                    <FormInput v-for="formField in editChoreModalData" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        :callback="formField.callback"
+                    ></FormInput>
                 </form>
             </div>
             <template v-slot:footer>
@@ -92,6 +92,7 @@ import eventBus from "../eventBus.js";
 import Modal from "../components/Modal";
 import Notification from "../components/Notification.vue";
 import Button from '../components/Button.vue';
+import FormInput from '../components/FormInput.vue';
 
 export default {
     created() {
@@ -196,8 +197,6 @@ export default {
             users: [],
             assignmentTabContentData: this.users,
             userIsAdmin: false,
-            pointFieldValue: '',
-            choreFieldValue: '',
             activeElementId: '',
             choreBeingEdited: [],
             allUsersChores: {},
@@ -206,7 +205,43 @@ export default {
             modalErrors: [],
             userCardsHighlighted: false,
             choresAreHighlighted: false,
-            assignmentsArePending: false
+            assignmentsArePending: false,
+            createChoreModalData: {
+                chore: {
+                    identifier: 'chore',
+                    label: 'Core',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateChoreFieldValue'
+                },
+                pointvalue: {
+                    identifier: 'pointvalue',
+                    label: 'Point value',
+                    type: 'number',
+                    errors: '',
+                    value: '',
+                    callback: 'updatePointvalueValue'
+                }
+            },
+            editChoreModalData: {
+                chore: {
+                    identifier: 'chore',
+                    label: 'Core',
+                    type: 'text',
+                    errors: '',
+                    value: '',
+                    callback: 'updateChoreFieldValue'
+                },
+                pointvalue: {
+                    identifier: 'pointvalue',
+                    label: 'Point value',
+                    type: 'number',
+                    errors: '',
+                    value: '',
+                    callback: 'updatePointvalueValue'
+                }
+            }
         }
     },
 
@@ -218,7 +253,8 @@ export default {
         Card,
         Modal,
         Notification,
-        Button
+        Button,
+        FormInput
     },
 
     mounted() {
@@ -234,6 +270,16 @@ export default {
             }).then((response) => {
                 this.choresList = response.data;
             });
+        },
+
+        updateChoreFieldValue(elValue) {
+            this.createChoreModalData.chore.value = elValue;
+            this.editChoreModalData.chore.value = elValue;
+        },
+
+        updatePointvalueValue(elValue) {
+            this.createChoreModalData.pointvalue.value = elValue;
+            this.editChoreModalData.pointvalue.value = elValue;
         },
 
         fetchAllIncompletedUserChores(users) {
@@ -255,8 +301,9 @@ export default {
         showAddChoreModal() {
             let modalwindow = document.getElementById("createChoreModal");
 
-            this.choreFieldValue = '';
-            this.pointFieldValue = '';
+            this.createChoreModalData.chore.value = '';
+            this.createChoreModalData.pointvalue.value = '';
+
             this.activeElementId = '';
 
             modalwindow.classList.add('visible');
@@ -553,14 +600,17 @@ export default {
         },
 
         editChore(el) {
-            console.log(el);
-
             let modalwindow = document.getElementById("editChoreModal");
             let choreId = el.target.dataset.itemid;
             let choreBeingEdited = this.getChoreById(choreId);
 
-            this.choreFieldValue = choreBeingEdited.chore;
-            this.pointFieldValue = choreBeingEdited.pointvalue;
+            // doing it this way is pretty hacky. TODO - find a better way.
+            document.querySelector('#editChoreForm input[name=chore]').value = choreBeingEdited.chore;
+            document.querySelector('#editChoreForm input[name=pointvalue]').value = choreBeingEdited.pointvalue;
+
+            this.editChoreModalData.chore.value = choreBeingEdited.chore;
+            this.editChoreModalData.pointvalue.value = choreBeingEdited.pointvalue;
+
             this.activeElementId = choreId;
 
             eventBus.$emit('chore-edit-click', choreBeingEdited);
