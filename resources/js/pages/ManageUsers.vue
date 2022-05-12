@@ -47,25 +47,20 @@
                     </template>
                     <div>
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                        <form id="changeUserCredentialsForm">
-                            <div>
-                                <label for="uname">Username: <span v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
-                                <input id="uname" name="username" type="text" v-bind:value="editingUsernameValue">
-                            </div>
-                            <div>
-                                <label for="password">Password: <span v-if="modalErrors.password">{{modalErrors.password[0]}}</span></label>
-                                <input id="password" name="password" type="password" value="">
-                            </div>
-                            <div>
-                                <label for="confirm_password">Confirm password: <span v-if="modalErrors.confirm_password">{{modalErrors.confirm_password[0]}}</span></label>
-                                <input id="confirm_password" name="confirm_password" type="password" value="">
-                            </div>
+                        <form id="changeUserCredentialsForm" :key="updateCredentialsFormKey">
+                            <FormInput v-for="formField in updateCredentialsModalForm" :key="formField.identifier"
+                                :identifier="formField.identifier"
+                                :type="formField.type"
+                                :elementLabel="formField.label"
+                                :errors="formField.errors"
+                                :value="formField.value"
+                            ></FormInput>
                         </form>
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button type="button" v-on:click.prevent="changeUserCredentials" class="border px-4 py-2 shadow-md">Update credentials</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage" class="border px-4 py-2 shadow-md">Close</button>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="changeUserCredentials">Update credentials</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" callback="closeModal">Close</Button>
                         </footer>
                     </template>
                 </modal>
@@ -134,7 +129,31 @@
                         value: ''
                     }
                 },
-                editUserFormKey: 0
+                editUserFormKey: 0,
+                updateCredentialsModalForm: {
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    password: {
+                        identifier: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        errors: '',
+                        value: ''
+                    },
+                    confirm_password: {
+                        identifier: 'confirm_password',
+                        label: 'Confirm password',
+                        type: 'password',
+                        errors: '',
+                        value: ''
+                    }
+                },
+                updateCredentialsFormKey: 0
             }
         },
 
@@ -221,16 +240,22 @@
                 });
 
                 this.editingUsersId = userId;
-                this.editingUsernameValue = userBeingEdited.username;
+
+                this.updateCredentialsModalForm.username.value = userBeingEdited.username;
+                this.updateCredentialsModalForm.username.errors = '';
+                this.updateCredentialsModalForm.password.errors = '';
+                this.updateCredentialsModalForm.confirm_password.errors = '';
 
                 changeCredentialsModal.classList.add('visible');
                 changeCredentialsModal.classList.remove('invisible');
+
+                this.updateCredentialsFormKey += 1;
             },
 
             changeUserCredentials() {
-                let formEls = document.querySelectorAll('#updateUserCredentialsModal .form-control');
+                let formEls = document.querySelectorAll('#updateUserCredentialsModal input');
                 let userData = {};
-                let formErrors = {};
+                let numFormErrors = 0;
                 let validPasswords = false;
 
                 formEls.forEach((el) => {
@@ -239,22 +264,21 @@
 
                 // TODO validate passwords on the fly with an onchange event.
                 if (userData.password.length < 8) {
-                    formErrors.password = ['You must have at least eight characters'];
+                    this.updateCredentialsModalForm.password.errors = ['You must have at least eight characters'];
+                    numFormErrors++;
                 }
                 
                 if (userData.confirm_password.length < 8) {
-                    formErrors.confirm_password = ['You must have at least eight characters'];
+                    this.updateCredentialsModalForm.confirm_password.errors = ['You must have at least eight characters'];
+                    numFormErrors++;
                 }
                 
                 if (userData.password != userData.confirm_password) {
-                    if(formErrors.password) {
-                        formErrors.password.push('Your passwords do not match');
-                    } else {
-                        formErrors.password = ['Your passwords do not match'];
-                    }
+                    this.updateCredentialsModalForm.password.errors = ['Your passwords do not match'];
+                    numFormErrors++;
                 }
 
-                if(Object.keys(formErrors).length == 0) {
+                if(numFormErrors == 0) {
                     validPasswords = true;
                 } else {
                     this.modalNotice = {
@@ -262,11 +286,10 @@
                         type: 'error'
                     };
 
-                    this.modalErrors = formErrors;
+                    this.updateCredentialsFormKey += 1;
                 }
 
                 if(validPasswords) {
-                    console.log('we have valid passwords');
                     axios({
                         method: 'put',
                         url: '/api/update-credentials/' + this.editingUsersId, // TODO rework this. its not restful
@@ -285,7 +308,16 @@
                             status: error.response.status
                         };
 
-                        this.modalErrors = error.response.data.errors;
+                        // This will get replaced too...
+                        for (let prop in error.response.data.errors) {
+                            this.updateCredentialsModalForm[prop].errors = error.response.data.errors[prop];
+                        }
+
+                        this.updateCredentialsModalForm.username.value = userData.username;
+                        this.updateCredentialsModalForm.password.value = userData.password;
+                        this.updateCredentialsModalForm.confirm_password.value = userData.confirm_password;
+
+                        this.updateCredentialsFormKey += 1;
                     });
                 }
             },
@@ -316,8 +348,6 @@
                         message: error.response.data.message,
                         status: error.response.status
                     };
-                    
-                    this.modalErrors = error.response.data.errors;
 
                     for (let prop in error.response.data.errors) {
                         this.editUserModalForm[prop].errors = error.response.data.errors[prop];
