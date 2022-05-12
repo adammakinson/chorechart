@@ -24,25 +24,20 @@
                     </template>
                     <div>
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                        <form id="editUserForm">
-                            <div>
-                                <label for="name">Name: <span v-if="modalErrors.name">{{modalErrors.name[0]}}</span></label>
-                                <input id="name" name="name" type="text" v-bind:value="editingUsersNameValue">
-                            </div>
-                            <div>
-                                <label for="username">Username: <span v-if="modalErrors.username">{{modalErrors.username[0]}}</span></label>
-                                <input id="username" name="username" type="text" v-bind:value="editingUsernameValue">
-                            </div>
-                            <div>
-                                <label for="email">Email: <span v-if="modalErrors.email">{{modalErrors.email[0]}}</span></label>
-                                <input id="email" name="email" type="text" v-bind:value="editingUserEmailValue">
-                            </div>
+                        <form id="editUserForm" :key="editUserFormKey">
+                            <FormInput v-for="formField in editUserModalForm" :key="formField.identifier"
+                                :identifier="formField.identifier"
+                                :type="formField.type"
+                                :elementLabel="formField.label"
+                                :errors="formField.errors"
+                                :value="formField.value"
+                            ></FormInput>
                         </form>
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <button type="button" v-on:click.prevent="updateUser" class="border px-4 py-2 shadow-md">Update user</button>
-                            <button type="button" data-dismiss="modal" v-on:click.prevent="sendEventBusMessage" class="border px-4 py-2 shadow-md">Close</button>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUser">Update user</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" callback="closeModal">Close</Button>
                         </footer>
                     </template>
                 </modal>
@@ -83,10 +78,25 @@
     import Modal from "../components/Modal";
     import Appmenu from "../components/AppMenu.vue";
     import eventBus from '../eventBus';
+    import Button from '../components/Button.vue';
     import Notification from '../components/Notification.vue';
     import UserStatusBar from '../components/UserStatusBar.vue';
+    import FormInput from '../components/FormInput.vue';
     
     export default {
+        created() {
+            eventBus.$on('callback', (callback, args) => {
+                var fn = window[callback];
+        
+                // 'this' is the VueComponent object
+                if(args){
+                    this[callback](args);
+                } else {
+                    this[callback]();
+                }
+            });
+        },
+
         data() {
             return {
                 users: null,
@@ -100,7 +110,31 @@
                 editingUserEmailValue: '',
                 errorMessages: [],
                 modalNotice: '',
-                modalErrors: {}
+                modalErrors: {},
+                editUserModalForm: {
+                    name: {
+                        identifier: 'name',
+                        label: 'Name',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    email: {
+                        identifier: 'email',
+                        label: 'Email',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    }
+                },
+                editUserFormKey: 0
             }
         },
 
@@ -108,7 +142,9 @@
             Modal,
             Appmenu,
             Notification,
-            UserStatusBar
+            UserStatusBar,
+            Button,
+            FormInput
         },
 
         mounted() {
@@ -156,12 +192,18 @@
                 });
 
                 this.editingUsersId = userId;
-                this.editingUsersNameValue = userBeingEdited.name;
-                this.editingUsernameValue = userBeingEdited.username;
-                this.editingUserEmailValue = userBeingEdited.email;
+
+                this.editUserModalForm.name.value = userBeingEdited.name;
+                this.editUserModalForm.username.value = userBeingEdited.username;
+                this.editUserModalForm.email.value = userBeingEdited.email;
+                this.editUserModalForm.name.errors = '';
+                this.editUserModalForm.username.errors = '';
+                this.editUserModalForm.email.errors = '';
 
                 editUserModal.classList.add('visible');
                 editUserModal.classList.remove('invisible');
+
+                this.editUserFormKey += 1;
             },
 
             showChangeCredentialsModal(el) {
@@ -249,7 +291,7 @@
             },
 
             updateUser() {
-                let formEls = document.querySelectorAll('#editUserForm .form-control');
+                let formEls = document.querySelectorAll('#editUserForm input');
                 let userData = {};
 
                 formEls.forEach((el) => {
@@ -277,10 +319,14 @@
                     
                     this.modalErrors = error.response.data.errors;
 
-                    this.editingUsersNameValue = userData.name;
-                    this.editingUsernameValue = userData.username;
-                    this.editingUserEmailValue = userData.email;
+                    for (let prop in error.response.data.errors) {
+                        this.editUserModalForm[prop].errors = error.response.data.errors[prop];
+                    }
 
+                    this.editUserModalForm.name.value = userData.name;
+                    this.editUserModalForm.username.value = userData.username;
+                    this.editUserModalForm.email.value = userData.email;
+                    this.editUserFormKey += 1;
                 });
             },
 
@@ -304,7 +350,7 @@
                 eventBus.$emit('close-modal');
             },
             
-            sendEventBusMessage() {
+            closeModal() {
                 eventBus.$emit('close-modal');
             }
         }
