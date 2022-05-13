@@ -3,67 +3,41 @@
         <user-status-bar>
             <h1>Manage Account</h1>
         </user-status-bar>
-        <div class="flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
-            <div class="p-5 w-full">
-                <div>
+            <div class="flex flex-row w-full justify-center">
+                <div class="flex flex-col flex-rows-5 gap-y-4 w-112 p-4 justify-center">
                     <h1>User information</h1>
-                </div>
-                <div>
-                    <div>
-                        <div>
-                            <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
-                        </div>
-                        <div>
-                            <form id="editUserForm">
-                                <div>
-                                    <label for="name">Name: <span class="text-danger text-opacity-50" v-if="errors.name">{{errors.name[0]}}</span></label>
-                                    <input id="name" name="name" class="form-control" type="text" v-model="userData.name">
-                                </div>
-                                <div>
-                                    <label for="username">Username: <span class="text-danger text-opacity-50" v-if="errors.username">{{errors.username[0]}}</span></label>
-                                    <input id="username" name="username" class="form-control" type="text" v-model="userData.username">
-                                </div>
-                                <div>
-                                    <label for="email">Email: <span class="text-danger text-opacity-50" v-if="errors.email">{{errors.email[0]}}</span></label>
-                                    <input id="email" name="email" class="form-control" type="text" v-model="userData.email">
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateUserInfo">Update user</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <h1>Credentials</h1>
-                    </div>
-                </div>
-                <div>
+                    <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
+                    <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
+                        <FormInput v-for="formField in editUserForm" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        ></FormInput>
+                        <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUserInfo">Update user</Button>
+                    </form>
+                    <h1>Credentials</h1>
                     <div class="card">
-                        <div>
-                            <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
-                        </div>
-                        <div>
-                            <form id="changeUserCredentialsForm">
-                                <div>
-                                    <label for="password">Password: <span class="text-danger text-opacity-50" v-if="errors.password">{{errors.password[0]}}</span></label>
-                                    <input id="password" name="password" class="form-control" type="password" value="">
-                                </div>
-                                <div>
-                                    <label for="confirm_password">Confirm password: <span class="text-danger text-opacity-50" v-if="errors.confirm_password">{{errors.confirm_password[0]}}</span></label>
-                                    <input id="confirm_password" name="confirm_password" class="form-control" type="password" value="">
-                                </div>
-                                <div>
-                                    <button type="button" class="btn btn-primary" v-on:click.prevent="updateCredentials">Update credentials</button>
-                                </div>
-                            </form>
-                        </div>
+                        <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
+                        <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">
+                            <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier"
+                            :identifier="formField.identifier"
+                            :type="formField.type"
+                            :elementLabel="formField.label"
+                            :errors="formField.errors"
+                            :value="formField.value"
+                            ></FormInput>
+                            <div>
+                                <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateCredentials">Update credentials</Button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
     </div>
 </template>
 
@@ -72,13 +46,18 @@ import Card from '../components/Card.vue';
 import Appmenu from '../components/AppMenu.vue';
 import Notification from '../components/Notification.vue';
 import UserStatusBar from '../components/UserStatusBar.vue';
+import Button from '../components/Button.vue';
+import FormInput from '../components/FormInput.vue';
+import eventBus from '../eventBus';
 
 export default {
     components: { 
         Card,
         Appmenu,
         Notification,
-        UserStatusBar
+        UserStatusBar,
+        Button,
+        FormInput
     },
   
     data() {
@@ -86,12 +65,76 @@ export default {
             userData: {},
             userInfoNotification: '',
             userCredsNotification: '',
-            errors: {}
+            errors: {},
+
+            editUserForm: {
+                    name: {
+                        identifier: 'name',
+                        label: 'Name',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    email: {
+                        identifier: 'email',
+                        label: 'Email',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    }
+                },
+                editUserFormKey: 0,
+                updateCredentialsForm: {
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: [],
+                        value: ''
+                    },
+                    password: {
+                        identifier: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        errors: [],
+                        value: ''
+                    },
+                    confirm_password: {
+                        identifier: 'confirm_password',
+                        label: 'Confirm password',
+                        type: 'password',
+                        errors: [],
+                        value: ''
+                    }
+                },
+                updateCredentialsFormKey: 0
         }
     },
 
     created() {
-      this.userData = this.$store.getters.getUser;
+        this.userData = this.$store.getters.getUser;
+
+        this.editUserForm.name.value = this.userData.name;
+        this.editUserForm.username.value = this.userData.username;
+        this.editUserForm.email.value = this.userData.email;
+
+        eventBus.$on('callback', (callback, args) => {
+            var fn = window[callback];
+    
+            // 'this' is the VueComponent object
+            if(args){
+                this[callback](args);
+            } else {
+                this[callback]();
+            }
+        });
     },
 
     methods: {
@@ -105,8 +148,6 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                // hrm... it really isn't an errors notification, really
-                // its a general one. need to fix that naming convention...
 
                 this.userInfoNotification = {
                     message: 'User information successfully updated!',
@@ -119,7 +160,13 @@ export default {
                         status: error.response.status
                     };
 
-                    this.errors = error.response.data.errors;
+                    for (const property in error.response.data.errors) {
+                        if (property === 'message') {
+                            continue;
+                        }
+
+                        this.editUserForm[property].errors = error.response.data.errors[property];
+                    }
                 }
             });
         },
@@ -127,6 +174,7 @@ export default {
         updateCredentials() {
             let userData = {};
             let validPasswords = false;
+            let numErrors = 0;
             let inputPassword = document.querySelector('#password').value;
             let inputPasswordConfirm = document.querySelector('#confirm_password').value;
 
@@ -136,35 +184,41 @@ export default {
 
             // TODO validate passwords on the fly with an onchange event.
             if (userData['password'].length < 8) {
-                if(!Array.isArray(this.errors.password)) {
-                    this.errors.password = [];
+                if(!Array.isArray(this.updateCredentialsForm.password.errors)) {
+                    this.updateCredentialsForm.password.errors = [];
                 }
 
-                this.errors.password.push('You must have at least eight characters');
+                this.updateCredentialsForm.password.errors.push('You must have at least eight characters');
+
+                numErrors += 1;
             }
             
             if (userData['confirm_password'].length < 8) {
-                if(!Array.isArray(this.errors.confirm_password)) {
-                    this.errors.confirm_password = [];
+                if(!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
+                    this.updateCredentialsForm.confirm_password.errors = [];
                 }
                 
-                this.errors.confirm_password.push('You must have at least eight characters');
+                this.updateCredentialsForm.confirm_password.errors.push('You must have at least eight characters');
+
+                numErrors += 1;
             }
             
             if (userData['password'] != userData['confirm_password']) {
-                if(!Array.isArray(this.errors.password)) {
-                    this.errors.password = [];
+                if(!Array.isArray(this.updateCredentialsForm.password.errors)) {
+                    this.updateCredentialsForm.password.errors = [];
                 }
 
-                if(!Array.isArray(this.errors.confirm_password)) {
-                    this.errors.confirm_password = [];
+                if(!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
+                    this.updateCredentialsForm.confirm_password.errors = [];
                 }
                 
-                this.errors.password.push('Your passwords do not match');
-                this.errors.confirm_password.push('Your passwords do not match');
+                this.updateCredentialsForm.password.errors.push('Your passwords do not match');
+                this.updateCredentialsForm.confirm_password.errors.push('Your passwords do not match');
+
+                numErrors += 2;
             }
 
-            if(this.errors.length == 0) {
+            if(numErrors == 0) {
                 validPasswords = true;
             } else {
                 this.userCredsNotification = {
@@ -198,7 +252,13 @@ export default {
                             status: error.response.status
                         };
 
-                        this.errors = error.response.data.errors;
+                        for (const property in error.response.data.errors) {
+                            if (property === 'message') {
+                                continue;
+                            }
+
+                            this.updateCredentialsForm[property].errors = error.response.data.errors[property];
+                        }
                     }
                 });
             }
