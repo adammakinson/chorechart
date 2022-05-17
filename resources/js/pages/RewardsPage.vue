@@ -3,7 +3,7 @@
         <user-status-bar>
             <h1>Rewards</h1>
         </user-status-bar>
-        <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-full divide-x divide-solid divide-slate-100 mr-8">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
@@ -201,14 +201,14 @@ export default {
                         reward.actionIcons = [
                             {
                                 "event": "editReward",
-                                "class": "fas fa-edit text-info",
+                                "class": "fas fa-edit text-blue-600",
                                 "visibleTo": [
                                     "admins"
                                 ]
                             },
                             {
                                 "event": "deleteReward",
-                                "class": "fas fa-trash text-danger",
+                                "class": "fas fa-trash text-red-600",
                                 "visibleTo": [
                                     "admins"
                                 ]
