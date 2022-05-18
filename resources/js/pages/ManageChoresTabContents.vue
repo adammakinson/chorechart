@@ -17,7 +17,7 @@
                 </list-group>
                 <cardgrid class="pt-4 w-100 sm:w-full">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
-                        <h4>{{cardData.name}}</h4>
+                        <h4 class="mb-4">{{cardData.name}}</h4>
                         <list-group v-if="cardData.chores">
                             <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="p-2 border border-slate-400">
                                 {{userChore.chore}}

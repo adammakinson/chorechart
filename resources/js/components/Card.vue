@@ -1,5 +1,5 @@
 <template>
-    <div v-on="cardData['eventsObject']" class="card p-1 border rounded bg-light max-w" v-bind:data-itemId="cardData.id" v-bind:data-eventToFire="cardData.eventToFire">
+    <div v-on="cardData['eventsObject']" class="card p-4 border rounded bg-light max-w" v-bind:data-itemId="cardData.id" v-bind:data-eventToFire="cardData.eventToFire">
         <slot></slot>
     </div>
 </template>
