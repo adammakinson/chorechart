@@ -6,9 +6,9 @@
         <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <datatable :columns="columns" :data="rows" class="w-full">
+                <datatable :columns="columns" :data="rows" class="w-full table-auto">
                     <template slot-scope="{row, columns}">
-                        <tr v-bind:id="row.id">
+                        <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
                             <td>{{row.chore}}</td>
                             <td>{{row.pointvalue}}</td>
                             <td>
@@ -18,7 +18,7 @@
                                         v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
                                         v-bind:data-choreid="row.id">
                                     </span>
-                                    <span v-if="choreIsFinished(row)" class="text-success">Done</span>
+                                    <span v-if="choreIsFinished(row)" class="text-green-600">Done</span>
                                 </div>
                             </td>
                         </tr>
@@ -96,14 +96,14 @@ export default {
         },
 
         getChoreRowCheckboxColorClass(row) {
-            var colorClass = 'text-secondary';
+            var colorClass = 'text-stone-400';
 
             if (row.pending) {
-                colorClass = 'text-warning';
+                colorClass = 'text-orange-500';
             }
 
             if (row.inspection_passed) {
-                colorClass = 'text-success';
+                colorClass = 'text-green-600';
             }
 
             return colorClass;
