@@ -502,7 +502,8 @@ export default {
 
             let userCard = e.toElement.closest('.card');
 
-            userCard.classList.add('border-success');
+            userCard.classList.add('border-2');
+            userCard.classList.add('border-green-600');
         },
 
         dragOver(e) {
@@ -510,33 +511,37 @@ export default {
 
             let userCard = e.toElement.closest('.card');
 
-            userCard.classList.add('border-success');
+            userCard.classList.add('border-2');
+            userCard.classList.add('border-green-600');
         },
 
         dragLeave(e) {
             let userCard = e.toElement;
 
-            userCard.classList.remove('border-success');
+            userCard.classList.remove('border-2');
+            userCard.classList.remove('border-green-600');
         },
 
-        drop(e) {
-            e.stopPropagation();
+        drop(dragEvent) {
+            dragEvent.stopPropagation();
 
-            console.log(e);
-
-            let card = e.toElement.closest('.card');
+            let card = dragEvent.toElement.closest('.card');
             let dropTarget = card.querySelector('.list-group');
             let userChoresList;
             let userChore;
-            let droppedChoreName = e.dataTransfer.getData('text/html'); 
-            let droppedChoreId = e.dataTransfer.getData('text/choreId');
+            let droppedChoreName = dragEvent.dataTransfer.getData('text/html'); 
+            let droppedChoreId = dragEvent.dataTransfer.getData('text/choreId');
             
-            card.classList.remove('border-success');
+            card.classList.remove('border-2');
+            card.classList.remove('border-green-600');
 
             userChore = document.createElement('li');
             userChore.classList.add('assignment');
             userChore.classList.add('list-group-item');
-            userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${droppedChoreName}</div><div><span class="fas fa-minus text-danger discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
+            userChore.classList.add('p-2');
+            userChore.classList.add('border');
+            userChore.classList.add('border-slate-400');
+            userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${droppedChoreName}</div><div><span class="fas fa-minus text-red-600 discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
             userChore.dataset.itemid = droppedChoreId;
 
             if (!this.assignmentsStarted(dropTarget)) {
@@ -547,8 +552,7 @@ export default {
                 userChoresList = dropTarget;
             }
             
-            // User shouldn't have duplicate chores
-            if(e.srcElement.className == 'list-group-item' && !this.userListHasChore(userChoresList, userChore)) {
+            if(!this.userListHasChore(userChoresList, userChore)) {
                 userChoresList.appendChild(userChore);
             }
 
@@ -561,6 +565,11 @@ export default {
             return false;
         },
 
+        /**
+         * Determine whether or not a chores list has been started on a user card
+         * 
+         * @param {*} dropTarget 
+         */
         assignmentsStarted(dropTarget) {
             if(!dropTarget) {
                 return false;
