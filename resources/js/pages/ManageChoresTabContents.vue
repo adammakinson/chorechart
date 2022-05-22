@@ -7,11 +7,14 @@
             <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
                 <list-group :listId="'chores-list'" class="mt-4">
-                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="p-2 border border-slate-400">
-                        {{choreData.chore}} ({{choreData.pointvalue}} pts)
+                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="border border-slate-400">
+                        <div class="flex">
+                            <div class="w-8 h-8 p-1.5 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
+                            <div class="h-8 p-1.5">{{choreData.chore}}</div>
+                        </div>
                         <template v-slot:actions>
-                            <span class="fas fa-edit text-blue-600" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
-                            <span class="fas fa-trash text-red-600" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
+                            <span class="inline-block fas fa-edit bg-blue-600 text-white w-8 h-8 p-2" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
+                            <span class="inline-block fas fa-trash bg-red-600 text-white w-8 h-8 p-2" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
                         </template>
                     </list-item>
                 </list-group>
