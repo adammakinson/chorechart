@@ -1,6 +1,5 @@
 <template>
-    <button class="border rounded-md"
-            :class="[colorClass, bgColorClass, widthClass, padding]"
+    <button :class="[colorClass, bgColorClass, widthClass, padding]"
             v-on:click.stop.prevent="handleClick" 
             type="submit">
             <slot></slot>
@@ -29,12 +28,14 @@ export default {
         'colorClass',
         'bgColorClass',
         'widthClass',
-        'paddingClass'
+        'paddingClass',
+        'rounded'
     ],
 
     data() {
         return {
-            padding: this.paddingClass ? this.paddingClass : 'px-4 py-2'
+            padding: this.paddingClass ? this.paddingClass : 'px-4 py-2',
+            rounded: this.rounded ? 'rounded-md' : ''
         };
     },
 
