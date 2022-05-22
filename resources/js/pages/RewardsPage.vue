@@ -8,18 +8,19 @@
             <div class="p-5 w-full">
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <cardgrid :cardCollectionData="rewards" class="mt-4">
-                    <card class="flex sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                    <card class="flex  sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
                         <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
-                        <div>
+                        <div class="grow w-full">
                             <h4>{{cardData.title}}</h4>
                             <h5><b>cost: </b>{{cardData.cost}}</h5>
-                            <div v-if="cardData.actionIcons">
-                                <icon v-for="actionicon in cardData.actionIcons" :key="actionicon.event" 
-                                    v-bind:class="actionicon.class"
-                                    v-bind:iconevent="actionicon.event" 
-                                    v-bind:data-itemId="cardData.id">
-                                </icon>
-                            </div>
+                        </div>
+                        <div v-if="userIsAdmin" class="flex flex-col sm:flex-row">
+                            <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" widthClass="sm:w-1/2" callback="editReward" :args="cardData.id">
+                                <icon class="fas fa-edit"></icon>
+                            </Button>
+                            <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-red-600" widthClass="sm:w-1/2" callback="deleteReward" :args="cardData.id">
+                                <icon class="fas fa-trash"></icon>
+                            </Button>
                         </div>
                     </card>
                 </cardgrid>
@@ -129,19 +130,6 @@ export default {
             this.showRewardConfirmationModal();
         });
 
-        eventBus.$on("editReward", (iconCmp) => {
-            let rewardId = iconCmp.$parent.$el.dataset.itemid;
-            let reward = this.rewards.filter((reward) => reward.id == rewardId)[0];
-
-            this.showEditRewardModal(reward);
-        });
-        
-        eventBus.$on("deleteReward", (iconCmp) => {
-            let rewardId = iconCmp.$parent.$el.dataset.itemid;
-
-            this.deleteReward(rewardId);
-        });
-
         eventBus.$on('callback', (callback, args) => {
             var fn = window[callback];
     
@@ -195,26 +183,7 @@ export default {
                         click: this.showRewardConfirmationModal
                     };
 
-                    reward.contentItems = [];
-                    
-                    if (this.userIsAdmin) {
-                        reward.actionIcons = [
-                            {
-                                "event": "editReward",
-                                "class": "fas fa-edit text-blue-600",
-                                "visibleTo": [
-                                    "admins"
-                                ]
-                            },
-                            {
-                                "event": "deleteReward",
-                                "class": "fas fa-trash text-red-600",
-                                "visibleTo": [
-                                    "admins"
-                                ]
-                            }
-                        ];
-                    }
+                    // reward.contentItems = [];
                 });
 
                 // TODO - store rewards in vuex on fetch, update single record on update, remove on delete.
@@ -226,6 +195,12 @@ export default {
 
         userHasEnoughPoints(clickedCardData) {
             return this.$store.getters.getUserPoints >= clickedCardData.point_value;
+        },
+
+        editReward(rewardId) {
+            let reward = this.rewards.filter((reward) => reward.id == rewardId)[0];
+
+            this.showEditRewardModal(reward);
         },
 
         showRewardModal() {

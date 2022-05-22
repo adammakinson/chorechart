@@ -1,7 +1,7 @@
 <template>
     <button class="border rounded-md px-4 py-2"
-            :class="[colorClass, bgColorClass]"
-            v-on:click.prevent="handleClick" 
+            :class="[colorClass, bgColorClass, widthClass]"
+            v-on:click.stop.prevent="handleClick" 
             type="submit">
             <slot></slot>
     </button>
@@ -27,7 +27,8 @@ export default {
         'args',
         'callback',
         'colorClass',
-        'bgColorClass'
+        'bgColorClass',
+        'widthClass'
     ],
 
     methods: {
