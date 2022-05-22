@@ -1,7 +1,7 @@
 <template>
     <div>
         <slot></slot>
-        <div class="absolute bg-white border border-solid border-slate-200 p-4 right-4" :class="{visible: isOpen, invisible: !isOpen}">
+        <div class="absolute bg-white border border-solid border-slate-200 p-4 top-14 right-4" :class="{visible: isOpen, invisible: !isOpen}">
             <list-group>
                 <list-item v-for="item in dropdownData" :key="item.href" :listItem="item">
                     <a v-if="!item.event" :href="item.href">{{item.label}}</a>

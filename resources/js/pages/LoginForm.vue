@@ -53,10 +53,12 @@ export default {
         // here.
         eventBus.$on('callback', (callback, args) => {
             // 'this' is the VueComponent object
-            if(args){
-                this[callback](args);
-            } else {
-                this[callback]();
+                if(this[callback]){
+                if(args){
+                    this[callback](args);
+                } else {
+                    this[callback]();
+                }
             }
         });
     },

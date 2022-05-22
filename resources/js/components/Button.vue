@@ -1,6 +1,6 @@
 <template>
-    <button class="border rounded-md px-4 py-2"
-            :class="[colorClass, bgColorClass, widthClass]"
+    <button class="border rounded-md"
+            :class="[colorClass, bgColorClass, widthClass, padding]"
             v-on:click.stop.prevent="handleClick" 
             type="submit">
             <slot></slot>
@@ -28,8 +28,15 @@ export default {
         'callback',
         'colorClass',
         'bgColorClass',
-        'widthClass'
+        'widthClass',
+        'paddingClass'
     ],
+
+    data() {
+        return {
+            padding: this.paddingClass ? this.paddingClass : 'px-4 py-2'
+        };
+    },
 
     methods: {
         handleClick() {

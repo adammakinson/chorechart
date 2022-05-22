@@ -1,13 +1,12 @@
 <template>
     <div class="flex justify-between p-4 border-b">
-        <div class="fas fa-bars visible sm:invisible" @click="clickMobileMainMenu"></div>
+        <div class="fas fa-bars visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
         <slot></slot>
         <dropdown-menu :dropdownData="dropdownData" class="flex">
-            <p>{{this.$store.getters.getUserPoints}}</p>
-            <icon 
-                v-bind:class='dropdownClass'
-                v-bind:iconevent="dropdownCallback">
-            </icon>
+            <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
+            <Button bgColorClass="bg-white" colorClass="text-black" widthClass="w-10" paddingClass="p-1" :callback="dropdownCallback">
+                <icon v-bind:class='dropdownClass'></icon>
+            </Button>
         </dropdown-menu>
     </div>
 </template>
@@ -15,12 +14,14 @@
 <script>
 import DropdownMenu from './DropdownMenu.vue';
 import Icon from './Icon.vue';
+import Button from './Button.vue';
 import eventBus from '../eventBus';
 
 export default {
 
     components: {
         DropdownMenu,
+        Button,
         Icon
     },
 
@@ -45,6 +46,19 @@ export default {
                 }
             ]
         };
+    },
+
+    created() {
+        eventBus.$on('callback', (callback, args) => {    
+            // 'this' is the VueComponent object
+            if(this[callback]){
+                if(args){
+                    this[callback](args);
+                } else {
+                    this[callback]();
+                }
+            }
+        });
     },
 
     mounted() {
@@ -77,6 +91,11 @@ export default {
 
         clickMobileMainMenu() {
             eventBus.$emit('mobileMainMenuIconClicked', this);
+        },
+
+        clickDropdownButton() {
+            console.log('firing eventbus clickDropdownButton event!');
+            eventBus.$emit('clickDropdownButton', this);
         }
     }
 }

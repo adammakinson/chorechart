@@ -43,13 +43,14 @@ export default {
 
     created() {
         eventBus.$on('callback', (callback, args) => {
-            var fn = window[callback];
     
             // 'this' is the VueComponent object
-            if(args){
-                this[callback](args);
-            } else {
-                this[callback]();
+            if(this[callback]){
+                if(args){
+                    this[callback](args);
+                } else {
+                    this[callback]();
+                }
             }
         });
     },
