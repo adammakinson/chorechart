@@ -1,5 +1,5 @@
 <template>
-    <li :id="listItem.id" class="list-group-item" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick" v-on:dragstart="dragStart" draggable="true" style="display:flex; justify-content: space-between">
+    <li :id="listItem.id" class="list-group-item flex justify-between items-center" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick" v-on:dragstart="dragStart" draggable="true">
         <slot></slot>
         <div>
             <slot name="actions"></slot>

@@ -9,12 +9,16 @@
                 <list-group :listId="'chores-list'" class="mt-4">
                     <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="border border-slate-400">
                         <div class="flex">
-                            <div class="w-8 h-8 p-1.5 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
+                            <div class="w-10 h-10 p-2 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
                             <div class="h-8 p-1.5">{{choreData.chore}}</div>
                         </div>
                         <template v-slot:actions>
-                            <span class="inline-block fas fa-edit bg-blue-600 text-white w-8 h-8 p-2" v-bind:data-itemId="choreData.id" v-on:click.stop="editChore"></span>
-                            <span class="inline-block fas fa-trash bg-red-600 text-white w-8 h-8 p-2" v-bind:data-itemId="choreData.id" v-on:click.stop="deleteChore"></span>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="editChore" :args="choreData.id">
+                                <Icon class="fas fa-edit"></Icon>
+                            </Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteChore" :args="choreData.id">
+                                <Icon class="fas fa-trash"></Icon>
+                            </Button>
                         </template>
                     </list-item>
                 </list-group>
@@ -22,11 +26,15 @@
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                         <h4 class="mb-4">{{cardData.name}}</h4>
                         <list-group v-if="cardData.chores">
-                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="p-2 border border-slate-400">
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3">
                                 {{userChore.chore}}
                                 <template v-slot:actions>
-                                    <span v-if="isApprovable(userChore)" class="fas fa-check text-green-600" v-on:click.stop="approveUsersAssignment"></span><!-- chore approval if chore has been submitted -->
-                                    <span v-if="isDeletable(userChore)" class="fas fa-trash text-red-600" v-bind:data-itemId="userChore.chore_id" v-on:click.stop="deleteUserAssignment"></span>
+                                    <Button v-if="isApprovable(userChore)" colorClass="text-white" bgColorClass="bg-green-600" widthClass="w-10" paddingClass="px-0 py-2" callback="approveUsersAssignment">
+                                        <Icon class="fas fa-check"></Icon>
+                                    </Button>
+                                    <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">
+                                        <Icon class="fas fa-trash"></Icon>
+                                    </Button>
                                 </template>
                             </list-item>
                         </list-group>
@@ -96,6 +104,7 @@ import Modal from "../components/Modal";
 import Notification from "../components/Notification.vue";
 import Button from '../components/Button.vue';
 import FormInput from '../components/FormInput.vue';
+import Icon from "../components/Icon.vue";
 
 export default {
     created() {
@@ -250,16 +259,17 @@ export default {
     },
 
     components: {
-        GroupsSubView,
-        ListGroup,
-        ListItem,
-        Cardgrid,
-        Card,
-        Modal,
-        Notification,
-        Button,
-        FormInput
-    },
+    GroupsSubView,
+    ListGroup,
+    ListItem,
+    Cardgrid,
+    Card,
+    Modal,
+    Notification,
+    Button,
+    FormInput,
+    Icon
+},
 
     mounted() {
         this.userIsAdmin = this.$store.getters.userIsAdmin;
@@ -413,7 +423,7 @@ export default {
                         userChore.classList.add('assignment');
                         userChore.classList.add('list-group-item');
                         userChore.dataset.itemid = choreId;
-                        userChore.innerHTML = `<div class="p-2 border border-slate-400" style="display: flex; justify-content: space-between;"><div>${choreName}</div><div><span class="fas fa-minus text-red-600 discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                        userChore.innerHTML = `<div class="border border-slate-400" style="display: flex; justify-content: space-between;"><div>${choreName}</div><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
                     
                         recipientsListUl.append(userChore);
                 
@@ -542,10 +552,9 @@ export default {
             userChore = document.createElement('li');
             userChore.classList.add('assignment');
             userChore.classList.add('list-group-item');
-            userChore.classList.add('p-2');
             userChore.classList.add('border');
             userChore.classList.add('border-slate-400');
-            userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div>${droppedChoreName}</div><div><span class="fas fa-minus text-red-600 discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
+            userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div class="pl-2 py-2">${droppedChoreName}</div><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
             userChore.dataset.itemid = droppedChoreId;
 
             if (!this.assignmentsStarted(dropTarget)) {
@@ -612,9 +621,9 @@ export default {
             }
         },
 
-        editChore(el) {
+        editChore(choreId) {
             let modalwindow = document.getElementById("editChoreModal");
-            let choreId = el.target.dataset.itemid;
+            // let choreId = el.target.dataset.itemid;
             let choreBeingEdited = this.getChoreById(choreId);
 
             // doing it this way is pretty hacky. TODO - find a better way.
@@ -638,9 +647,7 @@ export default {
             })[0];
         },
 
-        deleteChore(el) {
-            let choreId = el.target.dataset.itemid;
-
+        deleteChore(choreId) {
             axios.delete('/api/chores/' + choreId, {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
