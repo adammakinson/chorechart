@@ -29,7 +29,7 @@
                             <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3">
                                 {{userChore.chore}}
                                 <template v-slot:actions>
-                                    <Button v-if="isApprovable(userChore)" colorClass="text-white" bgColorClass="bg-green-600" widthClass="w-10" paddingClass="px-0 py-2" callback="approveUsersAssignment">
+                                    <Button v-if="isApprovable(userChore)" colorClass="text-white" bgColorClass="bg-green-600" widthClass="w-10" paddingClass="px-0 py-2" callback="approveUsersAssignment" :args="userChore">
                                         <Icon class="fas fa-check"></Icon>
                                     </Button>
                                     <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">
@@ -687,15 +687,11 @@ export default {
         /**
          * Approves user assignment
          */
-        approveUsersAssignment(e) {
-            let assignment = e.target.closest('.list-group-item');
-            let userCard = e.target.closest('.card');
-            let choreId = assignment.dataset.itemid;
-            let userId = userCard.dataset.userid;
+        approveUsersAssignment(userChore) {
 
             axios({
                 method: 'put',
-                url: '/api/users/' + userId + '/chores/' + choreId,
+                url: '/api/users/' + userChore.user_id + '/chores/' + userChore.id,
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
                 }
