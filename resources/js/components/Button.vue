@@ -1,5 +1,5 @@
 <template>
-    <button :class="[colorClass, bgColorClass, widthClass, padding]"
+    <button :class="[colorClass, bgColorClass, widthClass, padding, roundedBtn]"
             v-on:click.stop.prevent="handleClick" 
             type="submit">
             <slot></slot>
@@ -35,7 +35,7 @@ export default {
     data() {
         return {
             padding: this.paddingClass ? this.paddingClass : 'px-4 py-2',
-            rounded: this.rounded ? 'rounded-md' : ''
+            roundedBtn: this.rounded ? 'rounded-md' : ''
         };
     },
 
