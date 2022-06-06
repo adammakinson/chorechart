@@ -6,14 +6,16 @@
         <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <datatable :columns="columns" :data="rows" class="w-full">
+                <datatable :columns="columns" :data="rows" class="w-full table-auto">
                     <template slot-scope="{row, columns}">
-                        <tr v-bind:id="row.id">
+                        <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
                             <td>{{row.name}}</td>
                             <td>
-                                <span v-on:click="showChangeCredentialsModal" class="fas fa-key" v-bind:data-userid="row.id"></span>
-                                <span v-on:click="showEditUserModal" class="fas fa-edit" v-bind:data-userid="row.id"></span>
-                                <span v-on:click="removeUser" class="fas fa-trash" v-bind:data-userid="row.id"></span>
+                                <div class="flex justify-end">
+                                    <span v-on:click="showChangeCredentialsModal" class="fas fa-key p-0.5" v-bind:data-userid="row.id"></span>
+                                    <span v-on:click="showEditUserModal" class="fas fa-edit p-0.5" v-bind:data-userid="row.id"></span>
+                                    <span v-on:click="removeUser" class="fas fa-trash p-0.5" v-bind:data-userid="row.id"></span>
+                                </div>
                             </td>
                         </tr>
                     </template>
