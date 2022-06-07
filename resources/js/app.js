@@ -47,7 +47,8 @@ const router = new VueRouter({
 const store = new Vuex.Store({
     state: {
         user: {},
-        userTransactions: []
+        userTransactions: [],
+        windowWidth: window.innerWidth
     },
     mutations: {
         setCurrentUser (state, data) {
@@ -66,6 +67,10 @@ const store = new Vuex.Store({
 
         setUserTransactions (state, transactions) {
             state.userTransactions = transactions;
+        },
+
+        setWindowWidth (state, windowWidth) {
+            state.windowWidth = windowWidth;
         }
     },
     getters: {
@@ -142,6 +147,10 @@ const store = new Vuex.Store({
             } else {
                 return [];
             }
+        },
+
+        getWindowWidth: state => {
+            return state.windowWidth;
         }
     }
 });
