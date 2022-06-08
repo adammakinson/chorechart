@@ -206,6 +206,7 @@ export default {
 
         showRewardModal() {
             let RewardModal = document.getElementById("rewardModal");
+            let RewardModalUnderlay = RewardModal.parentNode;
 
             this.clickedCardData = [];
             this.modalNotice = '';
@@ -225,10 +226,13 @@ export default {
 
             RewardModal.classList.remove('invisible');
             RewardModal.classList.add('visible');
+            RewardModalUnderlay.classList.remove('invisible');
+            RewardModalUnderlay.classList.add('visible');
         },
 
         showEditRewardModal(reward) {
-            let rewardModal = document.getElementById("rewardModal");
+            let RewardModal = document.getElementById("rewardModal");
+            let RewardModalUnderlay = RewardModal.parentNode;
 
             this.clickedCardData = reward;
             console.log(reward);
@@ -250,6 +254,8 @@ export default {
 
             rewardModal.classList.remove('invisible');
             rewardModal.classList.add('visible');
+            RewardModalUnderlay.classList.remove('invisible');
+            RewardModalUnderlay.classList.add('visible');
         },
 
         createReward() {
@@ -358,6 +364,7 @@ export default {
 
         showRewardConfirmationModal(e) {
             let modalwindow = document.getElementById("rewardConfirmationModal");
+            let modalUnderlay = modalwindow.parentNode;
             let card = e.target.closest('.card');
             let rewardId = card.dataset.itemid;
             let reward;
@@ -374,6 +381,8 @@ export default {
 
             modalwindow.classList.add('visible');
             modalwindow.classList.remove('invisible');
+            modalUnderlay.classList.add('visible');
+            modalUnderlay.classList.remove('invisible');
         },
 
         confirmPurchase() {

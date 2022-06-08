@@ -201,8 +201,11 @@
 
             showEditUserModal(el) {
                 let editUserModal = document.getElementById('editUserModal');
+                let editUserModalUnderlay = editUserModal.parentNode;
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
+
+                console.log(editUserModal);
 
                 this.modalNotice = '';
                 this.modalErrors = {};
@@ -224,12 +227,15 @@
 
                 editUserModal.classList.add('visible');
                 editUserModal.classList.remove('invisible');
+                editUserModalUnderlay.classList.add('visible');
+                editUserModalUnderlay.classList.remove('invisible');
 
                 this.editUserFormKey += 1;
             },
 
             showChangeCredentialsModal(el) {
                 let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
+                let changeCredentialsModalUnderlay = changeCredentialsModal.parentNode;
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
@@ -251,6 +257,8 @@
 
                 changeCredentialsModal.classList.add('visible');
                 changeCredentialsModal.classList.remove('invisible');
+                changeCredentialsModalUnderlay.classList.add('visible');
+                changeCredentialsModalUnderlay.classList.remove('invisible');
 
                 this.updateCredentialsFormKey += 1;
             },

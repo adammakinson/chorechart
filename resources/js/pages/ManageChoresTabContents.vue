@@ -314,6 +314,7 @@ export default {
 
         showAddChoreModal() {
             let modalwindow = document.getElementById("createChoreModal");
+            let modalWindowUnderlay = modalwindow.parentNode;
 
             this.createChoreModalData.chore.value = '';
             this.createChoreModalData.pointvalue.value = '';
@@ -322,6 +323,8 @@ export default {
 
             modalwindow.classList.add('visible');
             modalwindow.classList.remove('invisible');
+            modalWindowUnderlay.classList.add('visible');
+            modalWindowUnderlay.classList.remove('invisible');
         },
 
         fireModalCloseEvent() {
@@ -623,7 +626,7 @@ export default {
 
         editChore(choreId) {
             let modalwindow = document.getElementById("editChoreModal");
-            // let choreId = el.target.dataset.itemid;
+            let modalwindowUnderlay = modalwindow.parentNode;
             let choreBeingEdited = this.getChoreById(choreId);
 
             // doing it this way is pretty hacky. TODO - find a better way.
@@ -639,6 +642,8 @@ export default {
 
             modalwindow.classList.add('visible');
             modalwindow.classList.remove('invisible');
+            modalwindowUnderlay.classList.add('visible');
+            modalwindowUnderlay.classList.remove('invisible');
         },
 
         getChoreById(id) {
