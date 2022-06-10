@@ -3,7 +3,7 @@
         <user-status-bar>
             <h1>Rewards</h1>
         </user-status-bar>
-        <div class="sm:flex w-full divide-x divide-solid divide-slate-100 mr-8">
+        <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100 mr-8">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>

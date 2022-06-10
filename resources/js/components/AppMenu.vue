@@ -2,7 +2,7 @@
     <Transition>
         <div v-if="mainMenuIsOpen">
             <div v-if="mainMenuIsOpen" class="underlay bg-gray-800 bg-opacity-50 transition ease-in-out sm:invisible absolute w-full h-full"></div>
-            <nav v-if="authenticatedUser" class="opacity-100 sm:w-64">
+            <nav v-if="authenticatedUser" class="opacity-100 sm:w-48">
                 <ul id="navbarSupportedContent" class="mainmenu absolute w-48 -translate-x-48 transition-transform ease-in-out h-full sm:block border sm:border-none bg-white sm:visible">
                     <li class="nav-item p-2 border-b">
                         <a href="/chores-list" class="nav-link block w-full h-full">Chores</a>
