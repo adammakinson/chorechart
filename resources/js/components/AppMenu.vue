@@ -10,11 +10,11 @@
                     <li class="nav-item p-2 border-b">
                         <a href="/rewards" class="nav-link block w-full h-full">Rewards</a>
                     </li>
-                    <li class="nav-item p-2 border-b">
-                        <a v-if="userIsAdmin" href="/manage-chores" class="nav-link block w-full h-full">Manage Chores</a>
+                    <li v-if="userIsAdmin" class="nav-item p-2 border-b">
+                        <a href="/manage-chores" class="nav-link block w-full h-full">Manage Chores</a>
                     </li>
-                    <li class="nav-item p-2 border-b">
-                        <a v-if="userIsAdmin" class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
+                    <li v-if="userIsAdmin" class="nav-item p-2 border-b">
+                        <a class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
                     </li>
                 </ul>
             </nav>
