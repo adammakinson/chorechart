@@ -24,18 +24,17 @@ Notes:
     f. Users accumiulate points and are able to spend them on prizes
 
 3.  TODOS
-    a.  User profile dashboard (TODO)
-    b.  App onboarding (TODO)
-    c.  Maybe I really should look into soft deletes... (Added soft deletes for users)
-    d.  Creation of a home screen (SORT OF THERE)
+    a.  App onboarding (TODO)
+    b.  Maybe I really should look into soft deletes... (Added soft deletes for users)
+    c.  Creation of a home screen (SORT OF THERE)
         I.  Nia to create a home screen design.
-    e.  add a 404 forbidden error screen for routes the user shouldnt be able to 
+    d.  add a 404 forbidden error screen for routes the user shouldnt be able to 
         access instead of just booting them from the app.
-    f.  On the chores management screen handle cases where the user clicks
-        the add to all or assign buttons without having done anything else.
-    g.  I need something like a unique constraint across user_id, chore_id, and created_at
+    e.  I need something like a unique constraint across user_id, chore_id, and created_at
         because a user shouldn't be able to have the same chore assigned to them
         on the same day.
+        
+    f.  BUGFIX - need to look into why the close modal is firing four times.
 
 4.  Items that are done
     a.  Chore creation and management (DONE)
@@ -59,6 +58,9 @@ Notes:
             table because it makes sense that a chore can only be assined by
             one person. I think with that, everything is there for the remaining
             functionality.
+    i.  User profile dashboard (DONE)
+    j.  On the chores management screen handle cases where the user clicks
+        the add to all or assign buttons without having done anything else.
 
 
 4.  I fiddled around with the app onboarding concept a bit earlier.
