@@ -37,10 +37,53 @@ class AppHealthCheck extends Controller
      */
     public function index()
     {
-        // return App::environment();
+        $appLoadable = true;
+        $databaseIsConfigured = true;
+        $initialUserIsSet = true;
+        
+        $envDbConfig = [
+            'DB_CONNECTION',
+            'DB_DATABASE',
+            'DB_HOST',
+            'DB_USERNAME',
+            'DB_PASSWORD',
+            'DB_PORT',
+            'FORSWARD_DB_PORT'
+        ];
 
-        $config = $_ENV;
+        $initialAppUserConfig = [
+            'INITIAL_USER',
+            'INITIAL_USERNAME',
+            'INITIAL_USER_PASS'
+        ];
 
-        return $config;
+        // Really, this check needs to occur after
+        // a check for the existence of the correct
+        // database schema.
+        foreach ($envDbConfig as $dbConfig) {
+            if (!env($dbConfig, false)) {
+                $databaseIsConfigured = false;
+            }
+        }
+        
+        // It's not this simple. I also need to check
+        // if a user exists in the database.
+        foreach ($initialAppUserConfig as $userConfig) {
+            if (!env($userConfig, false)) {
+                $initialUserIsSet = false;
+            }
+        }
+
+        $message = 'App is not loadable';
+        $appLoadable = $databaseIsConfigured && $initialUserIsSet;
+
+        // $config = $_ENV;
+        // $config = config('app.password_timeout');
+
+        if ($appLoadable) {
+            $message = 'App is loadable';
+        }
+
+        return $message;
     }
 }
