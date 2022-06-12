@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\ChoresController;
+use App\Http\Controllers\AppHealthCheck;
 use App\Http\Controllers\RewardController;
 use App\Http\Controllers\UserChoresController;
 use App\Http\Controllers\TransactionsController;
@@ -19,6 +20,9 @@ use App\Http\Controllers\TransactionsController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+Route::get('/healthcheck', [AppHealthCheck::class, 'index']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
