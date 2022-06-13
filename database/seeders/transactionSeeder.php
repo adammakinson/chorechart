@@ -16,7 +16,7 @@ class transactionSeeder extends Seeder
     {
         DB::table('transactions')->insert([
             [
-            'user_id' => '2',
+            'user_id' => '1',
             'event' => 'completed a chore',
             'user_points' => '10',
             'occurred_at' => now(),
