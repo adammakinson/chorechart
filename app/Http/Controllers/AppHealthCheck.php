@@ -49,7 +49,7 @@ class AppHealthCheck extends Controller
         
         $databaseIsConfigured = $this->databaseIsConfigured();
         if (!$databaseIsConfigured) {
-            $message = 'Looks like you haven\'t configured the database. Check your .env file';
+            $message = 'Looks like you haven\'t configured the database. Check your .env file to ensure your database connection is correct.';
             return $message;
         }
 
