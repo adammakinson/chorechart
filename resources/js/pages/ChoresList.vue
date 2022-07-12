@@ -8,7 +8,8 @@
             <div class="p-5 w-full">
                 <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 h-96">
-                        <h2 class="text-5xl">You don't have any chores assigned to you. Check back later.</h2>
+                        <h2 v-if="!userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Check back later.</h2>
+                        <h2 v-if="userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
                 <datatable v-if="chores.length > 0" :columns="columns" :data="rows" class="w-full table-auto">
@@ -63,6 +64,8 @@ export default {
     mounted() {
 
         if (this.$store.getters.getUserAuthToken) {
+            this.userIsAdmin = this.$store.getters.userIsAdmin;
+
             this.fetchChoresCollection();
 
             this.fetchUsersTransactions();

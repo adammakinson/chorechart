@@ -6,12 +6,13 @@
         <div class="sm:flex w-screen max-w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
+                <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <div v-if="!rewards || rewards.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 h-96">
-                        <h2 class="text-5xl">No rewards have been created. Ask an admin to create one!</h2>
+                        <h2 v-if="!userIsAdmin" class="text-5xl">No rewards have been created. Ask an admin to create one!</h2>
+                        <h2 v-if="userIsAdmin" class="text-5xl">No rewards have been created. Create one now!</h2>
                     </div>
                 </div>
-                <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <cardgrid :cardCollectionData="rewards" class="mt-4">
                     <card class="flex  sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
                         <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
