@@ -1,11 +1,16 @@
 <template>
-    <div>
+    <div class="w-screen max-w-full h-screen">
         <user-status-bar>
             <h1>Rewards</h1>
         </user-status-bar>
-        <div class="sm:flex w-full divide-x divide-solid divide-slate-100 mr-8">
+        <div class="sm:flex w-screen max-w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
+                <div v-if="!rewards || rewards.length == 0" class="grid h-screen justify-center items-center">
+                    <div class="w-96 h-96">
+                        <h2 class="text-5xl">No rewards have been created. Ask an admin to create one!</h2>
+                    </div>
+                </div>
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
                 <cardgrid :cardCollectionData="rewards" class="mt-4">
                     <card class="flex  sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">

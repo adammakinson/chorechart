@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class="w-screen max-w-full h-screen max-h-full">
         <router-view></router-view>
     </main>
 </template>
