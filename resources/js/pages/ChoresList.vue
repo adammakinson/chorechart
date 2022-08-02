@@ -1,7 +1,7 @@
 <template>
     <div class="w-full max-w-full h-screen">
         <user-status-bar>
-            <h1>Chores list</h1>
+            <h1 class="h-10">Chores list</h1>
         </user-status-bar>
         <div class="sm:flex divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>

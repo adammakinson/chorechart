@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-between py-2 border-b">
-        <div class="fas fa-bars visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
+        <div class="fas fa-bars text-2xl h-10 ml-1.5 visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
         <slot></slot>
         <dropdown-menu :dropdownData="dropdownData" class="flex">
             <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
@@ -29,7 +29,7 @@ export default {
         return {
             authenticatedUser: false,
             usersName: '',
-            dropdownClass: 'fas fa-user',
+            dropdownClass: 'fas fa-user text-2xl h-10 mr-1.5',
             dropdownCallback: 'clickDropdownButton',
             dropdownData: [
                 {
