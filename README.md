@@ -60,3 +60,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Deployment notes
+
+You can follow the general instructions at https://community.synology.com/enu/forum/1/post/133463. Note, you will have to create the mariadb users from the
+command line (SSH into environment).
+
+One thing to note on synology is that since it uses php versioning, you'll
+have to note the php version used by the web service app and run the artisan
+commands according to that, for example php80 artisan... for php 8.0

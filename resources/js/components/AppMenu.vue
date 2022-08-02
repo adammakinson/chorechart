@@ -2,18 +2,18 @@
     <Transition>
         <div v-if="mainMenuIsOpen">
             <div v-if="mainMenuIsOpen" class="underlay bg-gray-800 bg-opacity-50 transition ease-in-out sm:invisible absolute w-full h-full"></div>
-            <nav v-if="authenticatedUser" class="opacity-100 sm:w-48">
+            <nav v-if="authenticatedUser" class="opacity-100 w-48">
                 <ul id="navbarSupportedContent" class="mainmenu absolute w-48 -translate-x-48 transition-transform ease-in-out h-full sm:block border sm:border-none bg-white sm:visible">
-                    <li class="nav-item p-2 border-b">
+                    <li class="nav-item p-2 border-b w-full">
                         <a href="/chores-list" class="nav-link block w-full h-full">Chores</a>
                     </li>
-                    <li class="nav-item p-2 border-b">
+                    <li class="nav-item p-2 border-b w-full">
                         <a href="/rewards" class="nav-link block w-full h-full">Rewards</a>
                     </li>
-                    <li v-if="userIsAdmin" class="nav-item p-2 border-b">
+                    <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
                         <a href="/manage-chores" class="nav-link block w-full h-full">Manage Chores</a>
                     </li>
-                    <li v-if="userIsAdmin" class="nav-item p-2 border-b">
+                    <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
                         <a class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
                     </li>
                 </ul>

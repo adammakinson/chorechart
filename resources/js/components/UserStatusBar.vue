@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-between p-4 border-b">
+    <div class="flex justify-between py-2 border-b">
         <div class="fas fa-bars visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
         <slot></slot>
         <dropdown-menu :dropdownData="dropdownData" class="flex">

@@ -1,12 +1,18 @@
 <template>
-    <div>
+    <div class="w-full max-w-full h-screen">
         <user-status-bar>
             <h1>Chores list</h1>
         </user-status-bar>
-        <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <datatable :columns="columns" :data="rows" class="w-full table-auto">
+                <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
+                    <div class="w-96 h-96">
+                        <h2 v-if="!userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Check back later.</h2>
+                        <h2 v-if="userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Assign one now!</h2>
+                    </div>
+                </div>
+                <datatable v-if="chores.length > 0" :columns="columns" :data="rows" class="w-full table-auto">
                     <template slot-scope="{row, columns}">
                         <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
                             <td>{{row.chore}}</td>
@@ -58,6 +64,8 @@ export default {
     mounted() {
 
         if (this.$store.getters.getUserAuthToken) {
+            this.userIsAdmin = this.$store.getters.userIsAdmin;
+
             this.fetchChoresCollection();
 
             this.fetchUsersTransactions();
