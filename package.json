@@ -14,22 +14,22 @@
         "cross-env": "^7.0",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.21",
-        "resolve-url-loader": "^3.1.0",
+        "resolve-url-loader": "^3.1.4",
         "sass-loader": "^8.0.2",
-        "vue-template-compiler": "^2.6.12"
+        "vue-template-compiler": "^2.7.8"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
-        "@popperjs/core": "^2.10.2",
+        "@popperjs/core": "^2.11.5",
         "@tailwindcss/postcss7-compat": "^2.2.17",
         "autoprefixer": "^9.8.8",
         "es6-promise": "^4.2.8",
         "postcss": "^7.0.39",
-        "sass": "^1.43.4",
+        "sass": "^1.54.3",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
-        "vue": "^2.6.12",
-        "vue-router": "^3.4.9",
+        "vue": "^2.7.8",
+        "vue-router": "^3.5.4",
         "vuejs-datatable": "^2.0.0-alpha.7",
-        "vuex": "^3.6.0"
+        "vuex": "^3.6.2"
     }
 }
