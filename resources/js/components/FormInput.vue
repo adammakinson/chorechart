@@ -30,9 +30,7 @@ export default {
     methods: {
         handleChangeEvent(e) {
 
-            console.log(e);
-
-            eventBus.$emit('callback', this.elementCallback, this.elementValue);
+            eventBus.emit('callback', {"callback": this.elementCallback, "args": this.elementValue});
         }
     }
 }

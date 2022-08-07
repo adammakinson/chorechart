@@ -41,7 +41,8 @@ export default {
 
     methods: {
         handleClick() {
-            eventBus.$emit('callback', this.callback, this.args);
+
+            eventBus.emit('callback', {"callback": this.callback, "args": this.args});
         }
     }
 }

@@ -139,11 +139,11 @@ export default {
         eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
-            if(this[callback]){
-                if(args){
-                    this[callback](args);
+            if(this[eventData.callback]){
+                if(eventData.args){
+                    this[eventData.callback](eventData.args);
                 } else {
-                    this[callback]();
+                    this[eventData.callback]();
                 }
             }
         });
