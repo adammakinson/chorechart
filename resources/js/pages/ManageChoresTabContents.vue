@@ -332,7 +332,7 @@ export default {
         },
 
         createChore(){
-            let formEls = document.querySelectorAll('#createChoreModal .form-control');
+            let formEls = document.querySelectorAll('#createChoreModal input');
             let choreData = {};
 
             formEls.forEach((el) => {
