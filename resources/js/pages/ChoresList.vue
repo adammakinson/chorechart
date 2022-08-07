@@ -1,15 +1,15 @@
 <template>
     <div class="w-full max-w-full h-screen">
         <user-status-bar>
-            <h1>Chores list</h1>
+            <h1 class="h-10">Chores list</h1>
         </user-status-bar>
         <div class="sm:flex divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
-                    <div class="w-96 h-96">
-                        <h2 v-if="!userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Check back later.</h2>
-                        <h2 v-if="userIsAdmin" class="text-5xl">You don't have any chores assigned to you. Assign one now!</h2>
+                    <div class="w-96 p-4 h-96">
+                        <h2 v-if="!userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Check back later.</h2>
+                        <h2 v-if="userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
                 <datatable v-if="chores.length > 0" :columns="columns" :data="rows" class="w-full table-auto">
