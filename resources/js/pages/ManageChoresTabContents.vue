@@ -13,7 +13,7 @@
                             <div class="h-8 p-1.5">{{choreData.chore}}</div>
                         </div>
                         <template v-slot:actions>
-                            <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="editChore" :args="choreData.id">
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="editChore" v-bind:args="choreData.id">
                                 <Icon class="fas fa-edit"></Icon>
                             </Button>
                             <Button colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteChore" :args="choreData.id">
@@ -601,7 +601,6 @@ export default {
             userChoresList.childNodes.forEach((assignment) => {
                 if(assignment.dataset.itemid === userChore.dataset.itemid) {
                     hasChore = true;
-                    console.log(hasChore);
                 }
             });
 

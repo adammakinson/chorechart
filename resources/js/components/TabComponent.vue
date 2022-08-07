@@ -30,8 +30,6 @@ export default {
             let clickedNavLink = event.target;
             let allNavLinks = clickedNavLink.closest('.nav-tabs').querySelectorAll('.nav-link');
 
-            console.log("loadTab function being run");
-
             allNavLinks.forEach((link) => {
                 link.className = 'nav-link';
                 link.removeAttribute('aria-current');

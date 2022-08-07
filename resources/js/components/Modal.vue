@@ -29,9 +29,6 @@ export default {
     methods: {
         closeModal() {
 
-            console.log('click!');
-            console.log(this);
-
             this.$el.classList.remove('visible');
             this.$el.classList.add('invisible');
 

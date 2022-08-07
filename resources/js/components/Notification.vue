@@ -18,13 +18,10 @@ export default {
     methods: {
         getNotificationColorClass() {
             let notificationColorClass = 'bg-red-200';
-
-            console.log(this.notice);
             
             // I want to use success, danger, and info primarily
             // If the type is specified, use that.
             if (this.notice.type) {
-                console.log('getting color class from type');
 
                 notificationColorClass = this.getNotificationColorClassFromType(this.notice.type);
             }
@@ -40,7 +37,6 @@ export default {
             let notificationColorClass = 'bg-blue-300';
             
             if(noticetype == 'success'){
-                console.log('setting it to green');
                 notificationColorClass = 'bg-green-200';
             } else if (noticetype == 'error') {
                 notificationColorClass = 'bg-red-200';

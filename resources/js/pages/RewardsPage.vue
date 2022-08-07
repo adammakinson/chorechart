@@ -241,7 +241,6 @@ export default {
             let RewardModalUnderlay = RewardModal.parentNode;
 
             this.clickedCardData = reward;
-            console.log(reward);
 
             // Pretty hacky way to do this. See if I can figure out better way
             document.getElementById('reward').value = reward.reward;
@@ -361,7 +360,6 @@ export default {
                     }
                 }).then((response) => {
                     // TODO -  this should return a 200 OK or an 403 Forbidden
-                    console.log(response);
                     this.fetchAllRewards();
                     this.closeModal();
                 });
@@ -376,8 +374,6 @@ export default {
             let reward;
 
             this.cardCollectionData.forEach((card) => {
-                console.log(card);
-
                 if(card.id == rewardId){
                     reward = card;
                 }

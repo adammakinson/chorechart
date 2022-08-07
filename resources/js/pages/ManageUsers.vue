@@ -205,8 +205,6 @@
                 let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
-                console.log(editUserModal);
-
                 this.modalNotice = '';
                 this.modalErrors = {};
 
