@@ -26,7 +26,7 @@ import eventBus from '../eventBus';
 
 export default {
     created() {
-        eventBus.$on("mobileMainMenuIconClicked", () => {
+        eventBus.on("mobileMainMenuIconClicked", () => {
             if(this.windowWidth < 640) {
                 this.mainMenuIsOpen = !this.mainMenuIsOpen;
             } else {
@@ -78,7 +78,7 @@ export default {
 
             this.userIsAdmin = this.$store.getters.userIsAdmin;
         } else {
-            eventBus.$emit('logout', this);
+            eventBus.emit('logout', this);
         }
     }
 }

@@ -131,12 +131,12 @@ export default {
     },
 
     created() {
-        eventBus.$on("reward-card-click", (cardData) => {
+        eventBus.on("reward-card-click", (cardData) => {
             this.clickedCardData = cardData;
             this.showRewardConfirmationModal();
         });
 
-        eventBus.$on('callback', (callback, args) => {
+        eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
             if(this[callback]){
@@ -410,7 +410,7 @@ export default {
         },
 
         closeModal() {
-            eventBus.$emit('close-modal');
+            eventBus.emit('close-modal');
         },
 
         updateRewardFieldValue(elValue) {

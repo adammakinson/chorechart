@@ -3,11 +3,6 @@
  */
 import mitt from 'mitt';
 
-let emitter = mitt();
-
-emitter.$on = emitter.on;
-emitter.$emit = emitter.emit;
-
-const eventBus = emitter;
+let eventBus = mitt();
 
 export default eventBus;

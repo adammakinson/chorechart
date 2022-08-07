@@ -50,7 +50,7 @@ export default {
              * to feed both sub-components into the TabComponent and have the TabComponent
              * do the switching internally, that would be a lot cleaner.
              */
-            eventBus.$emit(clickedNavLink.getAttribute('data-firesevent'), clickedNavLink.getAttribute('data-loadscontent'));
+            eventBus.emit(clickedNavLink.getAttribute('data-firesevent'), clickedNavLink.getAttribute('data-loadscontent'));
         }
     }
 }

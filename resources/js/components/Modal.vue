@@ -47,11 +47,11 @@ export default {
     created() {
 
         // Is this thing needed???
-        eventBus.$on("close-modal", () => {
+        eventBus.on("close-modal", () => {
             this.closeModal();
         });
 
-        eventBus.$on('callback', (callback, args) => {
+        eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
             if(this[callback]){

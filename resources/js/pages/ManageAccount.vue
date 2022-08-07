@@ -125,7 +125,7 @@ export default {
         this.editUserForm.username.value = this.userData.username;
         this.editUserForm.email.value = this.userData.email;
 
-        eventBus.$on('callback', (callback, args) => {
+        eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
             if(this[callback]){

@@ -49,7 +49,7 @@ export default {
     },
 
     created() {
-        eventBus.$on('callback', (callback, args) => {    
+        eventBus.on('callback', (eventData) => {
             // 'this' is the VueComponent object
             if(this[callback]){
                 if(args){
@@ -90,12 +90,11 @@ export default {
         },
 
         clickMobileMainMenu() {
-            eventBus.$emit('mobileMainMenuIconClicked', this);
+            eventBus.emit('mobileMainMenuIconClicked', this);
         },
 
         clickDropdownButton() {
-            console.log('firing eventbus clickDropdownButton event!');
-            eventBus.$emit('clickDropdownButton', this);
+            eventBus.emit('clickDropdownButton', this);
         }
     }
 }

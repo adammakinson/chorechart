@@ -25,11 +25,11 @@ import UserStatusBar from '../components/UserStatusBar.vue';
 export default {
 
     created() {
-        eventBus.$on("manage-chores-tab-click", (contents) => {
+        eventBus.on("manage-chores-tab-click", (contents) => {
             this.mainTabContents = contents;
         });
         
-        eventBus.$on("view-assignments-tab-click", (contents) => {
+        eventBus.on("view-assignments-tab-click", (contents) => {
             this.mainTabContents = contents;
         });
     },

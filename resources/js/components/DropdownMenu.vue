@@ -20,11 +20,11 @@ import eventBus from '../eventBus';
 export default {
 
     created() {
-        eventBus.$on("clickDropdownButton", () => {
+        eventBus.on("clickDropdownButton", () => {
             this.handleIconClick();
         });
 
-        eventBus.$on("logout", () => {
+        eventBus.on("logout", () => {
             this.logout();
         });
     },
@@ -51,7 +51,7 @@ export default {
 
         handleAnchorClick(anchorEvent) {
 
-            eventBus.$emit(anchorEvent, this);
+            eventBus.emit(anchorEvent, this);
         },
 
         logout() {

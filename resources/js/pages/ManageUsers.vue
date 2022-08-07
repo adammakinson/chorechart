@@ -82,7 +82,7 @@
     
     export default {
         created() {
-            eventBus.$on('callback', (callback, args) => {
+            eventBus.on('callback', (eventData) => {
         
                 // 'this' is the VueComponent object
                 if(this[callback]){
@@ -312,7 +312,7 @@
                         // Close the modal
                         this.modalNotice = '';
                         this.modalErrors = {};
-                        eventBus.$emit('close-modal');
+                        eventBus.emit('close-modal');
                     }).catch((error) => {
                         this.modalNotice = {
                             message: error.response.data.message,
@@ -353,7 +353,7 @@
                     this.rows = response.data;
                     
                     // Close the modal
-                    eventBus.$emit('close-modal');
+                    eventBus.emit('close-modal');
                 }).catch((error) => {
                     this.modalNotice = {
                         message: error.response.data.message,
@@ -388,11 +388,11 @@
                 })
 
                 // Close the modal
-                eventBus.$emit('close-modal');
+                eventBus.emit('close-modal');
             },
             
             closeModal() {
-                eventBus.$emit('close-modal');
+                eventBus.emit('close-modal');
             }
         }
     }

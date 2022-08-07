@@ -42,7 +42,7 @@ export default {
     },
 
     created() {
-        eventBus.$on('callback', (callback, args) => {
+        eventBus.on('callback', (callback, args) => {
     
             // 'this' is the VueComponent object
             if(this[callback]){

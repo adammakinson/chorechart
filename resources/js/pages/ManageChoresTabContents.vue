@@ -108,15 +108,15 @@ import Icon from "../components/Icon.vue";
 
 export default {
     created() {
-        eventBus.$on("chore-edit-click", (chore) => {
+        eventBus.on("chore-edit-click", (chore) => {
             this.choreBeingEdited = chore
         });
 
-        eventBus.$on('refetch-chores', () => {
+        eventBus.on('refetch-chores', () => {
             this.fetchChoresCollection();
         });
 
-        eventBus.$on('callback', (callback, args) => {
+        eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
             if(this[callback]){
@@ -128,11 +128,11 @@ export default {
             }
         });
 
-        eventBus.$on("chore-list-item-clicked", () => {
+        eventBus.on("chore-list-item-clicked", () => {
             this.choresAreHighlighted = document.querySelectorAll('#chores-list .list-group-item.active').length > 0;
         });
 
-        eventBus.$on('refetch-userchores', () => {
+        eventBus.on('refetch-userchores', () => {
             this.fetchAllIncompletedUserChores().then((response) => {
                 let allUsersChores = response.data;
                 let users = this.users;
@@ -328,7 +328,7 @@ export default {
         },
 
         fireModalCloseEvent() {
-            eventBus.$emit('close-modal');
+            eventBus.emit('close-modal');
         },
 
         createChore(){
@@ -349,9 +349,8 @@ export default {
             }).then(() => {
                 this.fetchChoresCollection();
                 
-                eventBus.$emit('close-modal');
+                eventBus.emit('close-modal');
             }).catch((error) => {
-                console.log(error.response);
 
                 this.modalNotice = {
                     message: error.response.data.message,
@@ -386,7 +385,7 @@ export default {
 
                 this.fetchChoresCollection();
 
-                eventBus.$emit('close-modal');
+                eventBus.emit('close-modal');
             }).catch((error) => {
 
                 this.modalNotice = {
@@ -638,7 +637,7 @@ export default {
 
             this.activeElementId = choreId;
 
-            eventBus.$emit('chore-edit-click', choreBeingEdited);
+            eventBus.emit('chore-edit-click', choreBeingEdited);
 
             modalwindow.classList.add('visible');
             modalwindow.classList.remove('invisible');
@@ -658,7 +657,7 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                eventBus.$emit('refetch-chores');
+                eventBus.emit('refetch-chores');
             });
         },
 
@@ -685,7 +684,7 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                eventBus.$emit('refetch-userchores');
+                eventBus.emit('refetch-userchores');
             });
         },
 
@@ -718,7 +717,7 @@ export default {
                         });
                     }
             }).then((response) => {
-                eventBus.$emit('refetch-userchores');
+                eventBus.emit('refetch-userchores');
             });
         }
     }
