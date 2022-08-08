@@ -11,9 +11,13 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.alias({
+    vue: 'node_modules/@vue/compat'
+});
+
 mix.js('resources/js/app.js', 'public/js')
     .postCss("resources/css/app.css", "public/css", [require("tailwindcss")])
-    .vue();
+    .vue({ version: 3 });
 
 
     // mix.sass('resources/sass/app.scss', 'public/css')
