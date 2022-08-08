@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "preinstall": "npx npm-force-resolutions",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -27,6 +28,7 @@
         "browserslist": "4.21.0",
         "es6-promise": "^4.2.8",
         "mitt": "^3.0.0",
+        "npm-force-resolutions": "0.0.10",
         "postcss": "^8.3.11",
         "sass": "^1.54.3",
         "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
@@ -34,5 +36,8 @@
         "vue-router": "^3.5.4",
         "vuejs-datatable": "^2.0.0-alpha.7",
         "vuex": "^3.6.2"
+    },
+    "resolutions": {
+        "postcss": "^8.3.11"
     }
 }
