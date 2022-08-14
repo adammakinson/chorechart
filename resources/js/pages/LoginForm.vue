@@ -51,14 +51,11 @@ export default {
         // This is used with the button component. We pass the callback to the
         // button component which fires off an event and the callback gets executed
         // here.
-        eventBus.on('callback', (callback, args) => {
-            // 'this' is the VueComponent object
-                if(this[callback]){
-                if(args){
-                    this[callback](args);
-                } else {
-                    this[callback]();
-                }
+        eventBus.on('callback', (eventData) => {
+            if(eventData.args){
+                this[eventData.callback](eventData.args);
+            } else {
+                this[eventData.callback]();
             }
         });
     },
