@@ -7,7 +7,7 @@
             <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
                 <list-group :listId="'chores-list'" class="mt-4">
-                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" class="border border-slate-400">
+                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" :draggable="true" :selectable="true" class="border border-slate-400">
                         <div class="flex">
                             <div class="w-10 h-10 p-2 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
                             <div class="h-8 p-1.5">{{choreData.chore}}</div>

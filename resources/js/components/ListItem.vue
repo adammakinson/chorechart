@@ -1,5 +1,5 @@
 <template>
-    <li :id="listItem.id" class="list-group-item flex justify-between items-center" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick" v-on:dragstart="dragStart" draggable="true">
+    <li :id="listItem.id" class="list-group-item flex justify-between items-center" v-bind:data-itemId="listItem.id" v-on:click="handleChoreClick" v-on:dragstart="dragStart" draggable="draggable">
         <slot></slot>
         <div>
             <slot name="actions"></slot>
@@ -12,19 +12,23 @@ import eventBus from "../eventBus.js";
 
 export default {
     props: [
-        'listItem'
+        'listItem',
+        'draggable',
+        'selectable'
     ],
 
     methods: {
         handleChoreClick(event) {
             event.stopPropagation();
 
-            let choreItem = event.target.closest('.list-group-item');
-
-            choreItem.classList.toggle('active');
-            choreItem.classList.toggle('bg-blue-400')
-
-            eventBus.emit('chore-list-item-clicked');
+            if (this.selectable) {
+                let choreItem = event.target.closest('.list-group-item');
+    
+                choreItem.classList.toggle('active');
+                choreItem.classList.toggle('bg-blue-400')
+    
+                eventBus.emit('chore-list-item-clicked');
+            }
         },
 
         dragStart(e) {
