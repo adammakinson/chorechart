@@ -12,24 +12,22 @@
                         <h2 v-if="userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
-                <datatable v-if="chores.length > 0" :columns="columns" :data="rows" class="w-full table-auto">
-                    <template slot-scope="{row, columns}">
-                        <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
-                            <td>{{row.chore}}</td>
-                            <td>{{row.pointvalue}}</td>
-                            <td>
-                                <div class="actionsContainer">
-                                    <span v-if="!choreIsFinished(row)"
-                                        v-on:click="handleCheckClick" 
-                                        v-bind:class="[ getChoreRowCheckboxColorClass(row), 'fas fa-check']" 
-                                        v-bind:data-choreid="row.id">
-                                    </span>
-                                    <span v-if="choreIsFinished(row)" class="text-green-600">Done</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </template>
-                </datatable>
+                <ListGroup v-if="chores.length > 0" :listId="'my-chores-list'" class="mt-4">
+                    <list-item v-for="choreData in chores" :key="choreData.id" :listItem="choreData" class="border border-slate-400">
+                        <div class="flex">
+                            <div class="w-10 h-10 p-2 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
+                            <div class="h-8 p-1.5">{{choreData.chore}}</div>
+                        </div>
+                        <template v-slot:actions>
+                            <span v-if="!choreIsFinished(choreData)"
+                                v-on:click="handleCheckClick" 
+                                v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check']" 
+                                v-bind:data-choreid="choreData.id">
+                            </span>
+                            <span v-if="choreIsFinished(choreData)" class="text-green-600">Done</span>
+                        </template>
+                    </list-item>
+                </ListGroup>
             </div>
         </div>
     </div>
@@ -37,6 +35,8 @@
 
 <script>
 import Appmenu from '../components/AppMenu.vue';
+import ListItem from "../components/ListItem.vue";
+import ListGroup from "../components/ListGroup.vue";
 import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
@@ -44,8 +44,7 @@ export default {
 
     data() {
         return {
-            chores: null,
-            columns: [],
+            chores: [],
             rows: [],
             choreFieldValue: '',
             pointFieldValue: '',
@@ -58,12 +57,15 @@ export default {
 
     components: {
         UserStatusBar,
-        Appmenu
+        Appmenu,
+        ListItem,
+        ListGroup
     },
 
     mounted() {
 
         if (this.$store.getters.getUserAuthToken) {
+
             this.userIsAdmin = this.$store.getters.userIsAdmin;
 
             this.fetchChoresCollection();
@@ -86,8 +88,6 @@ export default {
             }).then((response) => {
                 
                 this.chores = response.data;
-                
-                this.setupTableData(this.chores);
             });
         },
 
@@ -119,16 +119,6 @@ export default {
 
         choreIsFinished(row) {
             return !!row.inspection_passed;
-        },
-
-        setupTableData(data) {
-            
-            this.columns = [
-                {label: 'chore', field: 'chore', headerAlign: 'Left'}
-            ];
-            this.columns.push({label: 'points', field: 'pointvalue', headerAlign: 'Left'});
-
-            this.rows = data;
         },
 
         findUserChoreByChoreId(allChores, userId, choreId) {
@@ -184,7 +174,6 @@ export default {
         updateUserTransactions(transactions) {
             this.$store.commit('setUserTransactions', transactions);
         },
-
     }
 };
 </script>
