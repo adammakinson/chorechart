@@ -6,7 +6,7 @@
         <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <datatable :columns="columns" :data="rows" class="w-full table-auto">
+                <!-- <datatable :columns="columns" :data="rows" class="w-full table-auto">
                     <template slot-scope="{row, columns}">
                         <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
                             <td>{{row.name}}</td>
@@ -19,7 +19,7 @@
                             </td>
                         </tr>
                     </template>
-                </datatable>
+                </datatable> -->
                 <modal id="editUserModal">
                     <template v-slot:header>
                         Edit User
@@ -99,7 +99,7 @@
             return {
                 users: null,
                 currentUser: null,
-                columns: [],
+                // columns: [],
                 rows: [],
                 userIsAdmin: false,
                 editingUsersId: '',
@@ -190,11 +190,11 @@
                     (response) => {
                         this.users = response.data;
 
-                        this.columns = [
-                            {label: 'name', field: 'name'}
-                        ];
+                        // this.columns = [
+                        //     {label: 'name', field: 'name'}
+                        // ];
 
-                        this.rows = response.data;
+                        // this.rows = response.data;
                     }
                 );
             },
