@@ -6,7 +6,7 @@ import 'es6-promise/auto';
 import VueRouter from "vue-router";
 
 import App from "./components/App";
-import { VuejsDatatableFactory } from 'vuejs-datatable';
+// import { VuejsDatatableFactory } from 'vuejs-datatable';
 
 import RegistrationForm from "./pages/RegistrationForm";
 import LoginForm from "./pages/LoginForm";
@@ -17,16 +17,14 @@ import ManageUsers from "./pages/ManageUsers";
 import RewardsPage from "./pages/RewardsPage";
 import ManageAccount from "./pages/ManageAccount";
 
-VuejsDatatableFactory.useDefaultType( false )
-    .registerTableType( 'datatable', tableType => tableType.mergeSettings({
-        table: {
-            class: 'table table-striped'
-        }
-    }));
+// VuejsDatatableFactory.useDefaultType( false )
+//     .registerTableType( 'datatable', tableType => tableType.mergeSettings({
+//         table: {
+//             class: 'table table-striped'
+//         }
+//     }));
 
-Vue.use(VuejsDatatableFactory);
-Vue.use(VueRouter);
-Vue.use(Vuex);
+// Vue.use(VuejsDatatableFactory);
 
 const routes = [
     {path: '/', name: 'welcome-screen', component: WelcomeScreen},
