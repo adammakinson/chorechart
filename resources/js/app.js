@@ -1,9 +1,9 @@
 require('./bootstrap');
 
-import Vue from "vue";
-import Vuex from 'vuex';
+import { createApp } from 'vue';
+import { createStore } from 'vuex';
 import 'es6-promise/auto';
-import VueRouter from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 
 import App from "./components/App";
 // import { VuejsDatatableFactory } from 'vuejs-datatable';
@@ -37,12 +37,12 @@ const routes = [
     {path: '/manage-account', name: 'manage-account', component: ManageAccount}
 ];
 
-const router = new VueRouter({
-    mode: 'history',
-    routes
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
 });
 
-const store = new Vuex.Store({
+const store = new createStore({
     state: {
         user: {},
         userTransactions: [],
@@ -153,16 +153,7 @@ const store = new Vuex.Store({
     }
 });
 
-// const app = new Vue({
-//     router,
-//     components: {
-//         App
-//     }
-// }).$mount('#app');
-
-const app = new Vue({
-    el: '#app',
-    router,
-    store,
-    render: (h) => h(App)
-});
+const app = createApp(App)
+.use(router)
+.use(store)
+.mount('#app');
