@@ -22,9 +22,10 @@
                             <span v-if="!choreIsFinished(choreData)"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check']" 
-                                v-bind:data-choreid="choreData.id">
+                                v-bind:data-choreid="choreData.id"
+                                class="pr-2">
                             </span>
-                            <span v-if="choreIsFinished(choreData)" class="text-green-600">Done</span>
+                            <span v-if="choreIsFinished(choreData)" class="text-green-600 pr-2">Done</span>
                         </template>
                     </list-item>
                 </ListGroup>
