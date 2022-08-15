@@ -6,20 +6,6 @@
         <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <!-- <datatable :columns="columns" :data="rows" class="w-full table-auto">
-                    <template slot-scope="{row, columns}">
-                        <tr v-bind:id="row.id" class="border-b border-t border-slate-300 leading-10">
-                            <td>{{row.name}}</td>
-                            <td>
-                                <div class="flex justify-end">
-                                    <span v-on:click="showChangeCredentialsModal" class="fas fa-key p-0.5" v-bind:data-userid="row.id"></span>
-                                    <span v-on:click="showEditUserModal" class="fas fa-edit p-0.5" v-bind:data-userid="row.id"></span>
-                                    <span v-on:click="removeUser" class="fas fa-trash p-0.5" v-bind:data-userid="row.id"></span>
-                                </div>
-                            </td>
-                        </tr>
-                    </template>
-                </datatable> -->
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
                     <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="border border-slate-400">
                         <div class="flex">
@@ -113,8 +99,6 @@
             return {
                 users: [],
                 currentUser: null,
-                // columns: [],
-                // rows: [],
                 userIsAdmin: false,
                 editingUsersId: '',
                 editingUsersNameValue: '',
@@ -205,12 +189,6 @@
                 }).then(
                     (response) => {
                         this.users = response.data;
-
-                        // this.columns = [
-                        //     {label: 'name', field: 'name'}
-                        // ];
-
-                        // this.rows = response.data;
                     }
                 );
             },
@@ -396,7 +374,6 @@
                     }
                 }).then((response) => {
                     this.users = response.data;
-                    // this.rows = response.data;
                 }).catch((error) => {
                     console.log(error);
                 })
