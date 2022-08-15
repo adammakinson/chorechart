@@ -1,13 +1,13 @@
 <template>
-    <div class="w-screen max-w-full h-screen">
+    <div class="w-screen max-w-full">
         <user-status-bar>
             <h1>Rewards</h1>
         </user-status-bar>
-        <div class="sm:flex w-screen max-w-full h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-screen max-w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
-                <div v-if="!rewards || rewards.length == 0" class="grid h-screen justify-center items-center">
+                <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
                         <h2 v-if="!userIsAdmin" class="text-5xl">No rewards have been created. Ask an admin to create one!</h2>
                         <h2 v-if="userIsAdmin" class="text-5xl">No rewards have been created. Create one now!</h2>
