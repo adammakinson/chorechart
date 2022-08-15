@@ -20,6 +20,18 @@
                         </tr>
                     </template>
                 </datatable> -->
+                <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
+                    <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="border border-slate-400">
+                        <div class="flex">
+                            <span class="h-8 p-1">{{userData.name}}</span>
+                        </div>
+                        <template v-slot:actions>
+                            <span v-on:click="showChangeCredentialsModal" class="fas fa-key px-1 py-2" v-bind:data-userid="userData.id"></span>
+                            <span v-on:click="showEditUserModal" class="fas fa-edit px-1 py-2" v-bind:data-userid="userData.id"></span>
+                            <span v-on:click="removeUser" class="fas fa-trash px-1 py-2" v-bind:data-userid="userData.id"></span>
+                        </template>
+                    </list-item>
+                </ListGroup>
                 <modal id="editUserModal">
                     <template v-slot:header>
                         Edit User
@@ -72,13 +84,15 @@
 </template>
 
 <script>
-    import Modal from "../components/Modal";
-    import Appmenu from "../components/AppMenu.vue";
     import eventBus from '../eventBus';
+    import Modal from "../components/Modal";
     import Button from '../components/Button.vue';
+    import Appmenu from "../components/AppMenu.vue";
+    import ListItem from "../components/ListItem.vue";
+    import FormInput from '../components/FormInput.vue';
+    import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
     import UserStatusBar from '../components/UserStatusBar.vue';
-    import FormInput from '../components/FormInput.vue';
     
     export default {
         created() {
@@ -97,10 +111,10 @@
 
         data() {
             return {
-                users: null,
+                users: [],
                 currentUser: null,
                 // columns: [],
-                rows: [],
+                // rows: [],
                 userIsAdmin: false,
                 editingUsersId: '',
                 editingUsersNameValue: '',
@@ -166,7 +180,9 @@
             Notification,
             UserStatusBar,
             Button,
-            FormInput
+            FormInput,
+            ListItem,
+            ListGroup
         },
 
         mounted() {
@@ -348,7 +364,7 @@
                     }
                 }).then((response) => {
                     this.users = response.data;
-                    this.rows = response.data;
+                    // this.rows = response.data;
                     
                     // Close the modal
                     eventBus.emit('close-modal');
@@ -380,7 +396,7 @@
                     }
                 }).then((response) => {
                     this.users = response.data;
-                    this.rows = response.data;
+                    // this.rows = response.data;
                 }).catch((error) => {
                     console.log(error);
                 })
