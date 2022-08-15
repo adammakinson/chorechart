@@ -3,7 +3,7 @@
         <user-status-bar>
             <h1>Manage Users</h1>
         </user-status-bar>
-        <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
