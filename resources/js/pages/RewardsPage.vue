@@ -1,7 +1,7 @@
 <template>
     <div class="w-screen max-w-full">
         <user-status-bar>
-            <h1>Rewards</h1>
+            <h1 class="self-center">Rewards</h1>
         </user-status-bar>
         <div class="sm:flex w-screen max-w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>

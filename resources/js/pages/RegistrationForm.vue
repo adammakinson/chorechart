@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col justify-center h-screen">
         <div class="w-full sm:w-112 self-center">
-            <h1 class="ml-4">Register</h1>
+            <h1 class="ml-4 self-center">Register</h1>
             <div class="flex flex-col flex-rows-2 gap-y-4 m-4 p-4 border rounded-sm">
                 <notification v-if="typeof registerFormNotification === 'object'" v-bind:notice="registerFormNotification"></notification>
                 <form id="loginForm" class="flex flex-col flex-rows-6 gap-y-4">

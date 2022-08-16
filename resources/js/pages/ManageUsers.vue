@@ -1,7 +1,7 @@
 <template>
     <div class="w-screen">
         <user-status-bar>
-            <h1>Manage Users</h1>
+            <h1 class="self-center">Manage Users</h1>
         </user-status-bar>
         <div class="sm:flex w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
