@@ -14,11 +14,12 @@
                     </div>
                 </div>
                 <cardgrid :cardCollectionData="rewards" class="mt-4">
-                    <card class="flex  sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
-                        <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
-                        <div class="grow w-full">
-                            <h4>{{cardData.title}}</h4>
-                            <h5><b>cost: </b>{{cardData.cost}}</h5>
+                    <card class="flex sm:flex-col sm:justify-items-end" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                        <div class=" w-40 sm:w-full sm:grow aspect-square overflow-hidden">
+                            <img class="w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
+                        </div>
+                        <div class="p-2 w-full">
+                            <h4>{{cardData.title}} - {{cardData.cost}}P</h4>
                         </div>
                         <div v-if="userIsAdmin" class="flex flex-col sm:flex-row">
                             <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" widthClass="sm:w-1/2" callback="editReward" :args="cardData.id">
