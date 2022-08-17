@@ -61,8 +61,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="createChore">Create chore</Button>
-                    <Button colorClass="text-white" bgColorClass="bg-red-600" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="createChore">Create chore</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
                 </footer>
             </template>
         </modal>
@@ -85,8 +85,8 @@
             </div>
             <template v-slot:footer>
                 <footer class="modal-footer">
-                    <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateChore">Update chore</Button>
-                    <Button colorClass="text-white" bgColorClass="bg-red-600" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="updateChore">Update chore</Button>
+                    <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" data-dismiss="modal" callback="fireModalCloseEvent">Close</Button>
                 </footer>
             </template>
         </modal>
