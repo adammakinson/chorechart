@@ -222,7 +222,7 @@ export default {
             createChoreModalData: {
                 chore: {
                     identifier: 'chore',
-                    label: 'Core',
+                    label: 'Chore',
                     type: 'text',
                     errors: '',
                     value: '',
@@ -240,7 +240,7 @@ export default {
             editChoreModalData: {
                 chore: {
                     identifier: 'chore',
-                    label: 'Core',
+                    label: 'Chore',
                     type: 'text',
                     errors: '',
                     value: '',
