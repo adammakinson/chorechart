@@ -184,6 +184,7 @@ class AppHealthCheck extends Controller
     {
         $initialUserRoles = DB::table('users')
                                 ->join('role_user', 'users.id', '=', 'role_user.user_id')
+                                ->join('roles', 'role_user.role_id', '=', 'roles.id')
                                 ->where('users.username', $_ENV['INITIAL_USER_USERNAME'])
                                 ->select('roles.role')
                                 ->get();
