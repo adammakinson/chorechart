@@ -79,7 +79,9 @@ class AppHealthCheck extends Controller
             $message = 'App is loadable';
         }
 
-        return $message;
+        return [
+            'message' => $message
+        ];
     }
 
     private function databaseIsConfigured()
