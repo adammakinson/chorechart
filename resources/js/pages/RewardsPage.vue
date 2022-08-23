@@ -1,7 +1,7 @@
 <template>
     <div class="w-screen max-w-full">
         <user-status-bar>
-            <h1>Rewards</h1>
+            <h1 class="self-center">Rewards</h1>
         </user-status-bar>
         <div class="sm:flex w-screen max-w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
@@ -14,13 +14,14 @@
                     </div>
                 </div>
                 <cardgrid :cardCollectionData="rewards" class="mt-4">
-                    <card class="flex  sm:block" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
-                        <img class="w-20 sm:w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
-                        <div class="grow w-full">
-                            <h4>{{cardData.title}}</h4>
-                            <h5><b>cost: </b>{{cardData.cost}}</h5>
+                    <card class="flex sm:flex-col sm:justify-items-end" v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
+                        <div class=" w-40 sm:w-full sm:grow aspect-square overflow-hidden">
+                            <img class="w-full" v-for="image in cardData.images" :key="image.id" :src="image.path+image.filename" :alt="cardData.imgalt">
                         </div>
-                        <div v-if="userIsAdmin" class="flex flex-col sm:flex-row">
+                        <div class="p-2 w-full">
+                            <h4>{{cardData.title}} - {{cardData.cost}}P</h4>
+                        </div>
+                        <div v-if="userIsAdmin" class="flex flex-col sm:flex-row sm:items-stretch gap-4">
                             <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" widthClass="sm:w-1/2" callback="editReward" :args="cardData.id">
                                 <icon class="fas fa-edit"></icon>
                             </Button>
@@ -58,9 +59,9 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <Button v-if="!editingReward" callback="createReward" colorClass="text-white" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
-                            <Button v-if="editingReward" callback="updateReward" :args="clickedCardData" colorClass="text-white" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
-                            <Button data-dismiss="modal" callback="closeModal" colorClass="text-white" bgColorClass="bg-red-600">Close</button>
+                            <Button v-if="!editingReward" callback="createReward" colorClass="text-white" marginClass="mr-4" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
+                            <Button v-if="editingReward" callback="updateReward" :args="clickedCardData" colorClass="text-white" marginClass="mr-4" bgColorClass="bg-blue-600">{{rewardModalPrimaryButtonLabel}}</button>
+                            <Button data-dismiss="modal" callback="closeModal" colorClass="text-white" marginClass="mr-4" bgColorClass="bg-red-600">Close</button>
                         </footer>
                     </template>
                 </modal>
@@ -68,14 +69,14 @@
                     <template v-slot:header>
                         Get reward
                     </template>
-                    <template>
+                    <div>
                         <p v-if="userHasEnoughPoints(clickedCardData)">Are you sure you want to spend {{clickedCardData.point_value}} points on {{clickedCardData.title}}?</p>
                         <p v-if="!userHasEnoughPoints(clickedCardData)">You don't have enough points for this reward</p>
-                    </template>
+                    </div>
                     <template v-slot:footer>
                         <footer>
-                            <Button v-if="userHasEnoughPoints(clickedCardData)" callback="confirmPurchase" colorClass="text-white" bgColorClass="bg-blue-600">Spend points</Button>
-                            <Button type="button" data-dismiss="modal" callback="closeModal" colorClass="text-white" bgColorClass="bg-red-600">Close</Button>
+                            <Button v-if="userHasEnoughPoints(clickedCardData)" callback="confirmPurchase" colorClass="text-white" marginClass="mr-4" bgColorClass="bg-blue-600">Spend points</Button>
+                            <Button type="button" data-dismiss="modal" callback="closeModal" colorClass="text-white" marginClass="mr-4" bgColorClass="bg-red-600">Close</Button>
                         </footer>
                     </template>
                 </modal>
@@ -201,6 +202,8 @@ export default {
         },
 
         userHasEnoughPoints(clickedCardData) {
+            console.log(this.$store.getters.getUserPoints >= clickedCardData.point_value);
+
             return this.$store.getters.getUserPoints >= clickedCardData.point_value;
         },
 

@@ -1,7 +1,7 @@
 <template>
     <div class="w-screen">
         <user-status-bar>
-            <h1>Manage Users</h1>
+            <h1 class="self-center">Manage Users</h1>
         </user-status-bar>
         <div class="sm:flex w-full divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
@@ -36,8 +36,8 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUser">Update user</Button>
-                            <Button colorClass="text-white" bgColorClass="bg-red-600" callback="closeModal">Close</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="updateUser">Update user</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" callback="closeModal">Close</Button>
                         </footer>
                     </template>
                 </modal>
@@ -59,8 +59,8 @@
                     </div>
                     <template v-slot:footer>
                         <footer>
-                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="changeUserCredentials">Update credentials</Button>
-                            <Button colorClass="text-white" bgColorClass="bg-red-600" callback="closeModal">Close</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="changeUserCredentials">Update credentials</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" callback="closeModal">Close</Button>
                         </footer>
                     </template>
                 </modal>

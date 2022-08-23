@@ -1,13 +1,13 @@
 <template>
     <div>
         <user-status-bar>
-            <h1>Manage Account</h1>
+            <h1 class="self-center">Manage Account</h1>
         </user-status-bar>
         <div class="sm:flex w-full h-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="flex flex-row w-full justify-center">
                 <div class="flex flex-col flex-rows-5 gap-y-4 w-112 p-4 justify-center">
-                    <h1>User information</h1>
+                    <h2>User information</h2>
                     <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
                     <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
                         <FormInput v-for="formField in editUserForm" :key="formField.identifier"
@@ -19,7 +19,7 @@
                         ></FormInput>
                         <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUserInfo">Update user</Button>
                     </form>
-                    <h1>Credentials</h1>
+                    <h2>Credentials</h2>
                     <div class="card">
                         <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
                         <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">

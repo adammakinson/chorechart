@@ -5,7 +5,7 @@
             <p class="mx-auto text-center">A great way to keep things going around the house!</p>
             <div class="mx-auto mt-4">
                 <Link href="/login">Login</Link>
-                <b>or</b>
+                <b class="mx-2">or</b>
                 <Link href="/register">Register</Link>
             </div>
         </div>

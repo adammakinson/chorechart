@@ -1,5 +1,5 @@
 <template>
-    <div class="modalWrapper invisible max-w-full max-h-full w-screen h-screen absolute bg-gray-800 bg-opacity-50 top-0 left-0 flex justify-center content-center">
+    <div class="modalWrapper invisible w-full max-w-full max-h-full h-full overscroll-none absolute bg-gray-800 bg-opacity-50 top-0 left-0 flex justify-center content-center">
         <div v-bind:id="id" @close-modal="closeModal" class="modal invisible absolute top-36 bg-white w-auto mr-5 sm:w-96 border rounded-md shadow-md" tabindex="-1" role="dialog">
             <header class="flex justify-between border-b border-slate-200 p-4">
                 <h5>

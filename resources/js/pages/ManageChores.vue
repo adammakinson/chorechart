@@ -1,9 +1,9 @@
 <template>
     <div>
         <user-status-bar>
-            <h1>Manage Chores</h1>
+            <h1 class="self-center">Manage Chores</h1>
         </user-status-bar>
-        <div class="sm:flex w-screen h-screen divide-x divide-solid divide-slate-100">
+        <div class="sm:flex w-screen divide-x divide-solid divide-slate-100">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div id="choreManagement">
