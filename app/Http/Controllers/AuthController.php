@@ -88,62 +88,47 @@ class AuthController extends Controller
             'password' => 'required|same:confirm_password',
             'confirm_password' => 'required'
         ]);
-            
+
+        $errors = [];
+        
+        /**
+         * get all users including Soft deleted ones with a username matching the
+         * one passed into the registration route.
+         * 
+         * NOTE: withTrashed() seems to be a static method specified by the SoftDeletes trait,
+         * but I'm not finding where that method is actually defined. I'm betting it's called with the __call()
+         * method somewhere. Need to read through the builder class... 
+         */
+        $userExistsWithUsername = User::withTrashed()->where('username', $request->username)->first();
+        
+        if ($userExistsWithUsername != null) {
+            // $errorMessage = 'The given data was invalid';
+            $errors['username'] = ["$request->username already exists. Choose another user name."];
+        }
+        
         if (isset($request->email) && $request->email != "") {
             $request->validate(['email' => 'email']);
+
+            /**
+             * Get all users including soft deleted ones having an email matching the
+             * one passed into the registration route.
+             */
+            $userExistsWithEmail = User::withTrashed()->where('email', $request->email)->first();
+                
+            if ($userExistsWithEmail) {
+                $errors['email'] = ["$request->email already exists. Have you registered here before?"];
+            }
         }
-        
-        $userExistsWithUsername = User::withTrashed()->where('username', $request->username)->first();
-        $userExistsWithEmail = User::withTrashed()->where('email', $request->email)->first();
 
-        if($userExistsWithUsername != null && $userExistsWithUsername->trashed()) {
-
+        if (count($errors) > 0) {
             $errorMessage = [
                 "message" => "The given data was invalid.",
-                "errors" => [
-                    "username" => ["$request->username was removed. Contact an admin about it."]
-                ]
-            ];
-
-            return response($errorMessage, 403);
-        }
-        
-        if($userExistsWithEmail != null && $userExistsWithEmail->trashed()) {
-
-            $errorMessage = [
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "username" => ["$request->email was removed. Contact an admin about it."]
-                ]
+                "errors" => $errors
             ];
 
             return response($errorMessage, 403);
         }
 
-        if ($userExistsWithUsername) {
-
-            $errorMessage = [
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "username" => ["$request->username already exists. Choose another user name."]
-                ]
-            ];
-
-            return response($errorMessage, 403);
-        }
-        
-        if ($userExistsWithEmail) {
-
-            $errorMessage = [
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "email" => ["$request->email already exists. Have you registered here before?"]
-                ]
-            ];
-
-            return response($errorMessage, 403);
-        }
-        
         try {
             // Create a new instance of the User model passing in the values
             $user = new User();
@@ -166,7 +151,7 @@ class AuthController extends Controller
                 'message' => 'Registration successful'
             ]);
 
-        } catch(Exception $error) {
+        } catch (\Exception $error) {
             $errorMessage = [
                 "message" => "Error registering.",
                 "errors" => [
