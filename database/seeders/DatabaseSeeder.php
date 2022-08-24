@@ -13,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        /**
+         * Seed the database with the bare minimum required data
+         */
+        $this->call([
+            UsersTableSeeder::class,
+            RolesSeeder::class,
+            RoleUserSeeder::class,
+
+        ]);
     }
 }
