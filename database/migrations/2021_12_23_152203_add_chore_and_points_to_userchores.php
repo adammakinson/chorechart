@@ -26,7 +26,7 @@ class AddChoreAndPointsToUserchores extends Migration
      */
     public function down()
     {
-        Schema::table('userchores', function (Blueprint $table) {
+        Schema::table('user_chores', function (Blueprint $table) {
             $table->dropColumn('chore');
             $table->dropColumn('pointvalue');
         });
