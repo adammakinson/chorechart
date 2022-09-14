@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Models\User;
+use Database\Seeders\ChoresSeeder;
 use Tests\TestCase;
 
 class ChoresControllerTest extends TestCase
@@ -37,5 +38,24 @@ class ChoresControllerTest extends TestCase
         $response = $this->actingAs($user)->postJson('/api/chores', $choreData);
 
         $response->assertStatus(201);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_chores_can_be_fetched()
+    {
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(ChoresSeeder::class);
+
+        $user = User::find(1);
+
+        $response = $this->actingAs($user)->getJson('/api/chores');
+
+        $response->assertStatus(200);
+
+        $response->assertJsonCount(5);        
     }
 }
