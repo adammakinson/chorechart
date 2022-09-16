@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Models\User;
+use App\Models\chores;
 use Database\Seeders\ChoresSeeder;
 use Tests\TestCase;
 
@@ -57,5 +58,45 @@ class ChoresControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJsonCount(5);        
+    }
+
+    /**
+     * @return void
+     */
+    public function test_a_chore_can_be_updated()
+    {        
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(ChoresSeeder::class);
+
+        $user = User::find(1);
+
+        $chore = Chores::find(1);
+        $chore->chore = $chore->chore . "Updated";
+        $chore->pointvalue = 15;
+
+        $response = $this->actingAs($user)->putJson('/api/chores/'.$chore->id, $chore->toArray());
+
+        $response->assertStatus(200);
+    }
+    
+    /**
+     * @return void
+     */
+    public function test_a_chore_can_be_deleted()
+    {        
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(ChoresSeeder::class);
+
+        $user = User::find(1);
+
+        $chore = Chores::find(1);
+
+        $response = $this->actingAs($user)->deleteJson('/api/chores/'.$chore->id);
+
+        $response->assertStatus(200);
     }
 }
