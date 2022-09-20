@@ -83,14 +83,33 @@ class RewardController extends Controller
                 
                 $storedImage = ImageModel::where('reward_id', $rewardId)->first();
 
-                Storage::delete($storedImage->filename);
-                
-                $extension = $request->file->getClientOriginalExtension();
-                $request->file->store('public/images');
+                if ($storedImage) {
+                    Storage::delete($storedImage->filename);
+                    
+                    $extension = $request->file->getClientOriginalExtension();
 
-                $storedImage->filename = $request->file->hashName();
-                $storedImage->file_extension = $extension;
-                $storedImage->save();
+                    $storageLocation = env('FILESYSTEM_DRIVER', 'public') . '/images';
+
+                    $request->file->store($storageLocation);
+    
+                    $storedImage->filename = $request->file->hashName();
+                    $storedImage->file_extension = $extension;
+                    $storedImage->save();
+                } else {
+                    $storageLocation = env('FILESYSTEM_DRIVER', 'public') . '/images';
+
+                    $request->file->store($storageLocation);
+                    
+                    $extension = $request->file->getClientOriginalExtension();
+
+                    $image = new ImageModel;
+                    $image->reward_id = $reward->id;
+                    $image->path = '/testImages/';
+                    $image->filename = $request->file->hashName();
+                    $image->file_extension = $extension;
+                    $image->alt_text = "test image";
+                    $image->save();
+                }
 
                 return response('OK', 200)->header('Content-Type', 'application/json');
             }
