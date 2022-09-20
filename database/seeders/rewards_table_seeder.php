@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\DB;
 class rewards_table_seeder extends Seeder
 {
     /**
+     * TODO - There is a problem with this seeder. It doesn't
+     * take into account the images attached to the rewards...
+     */
+    
+    /**
      * Run the database seeds.
      *
      * @return void
