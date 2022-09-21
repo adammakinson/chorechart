@@ -89,4 +89,32 @@ class RewardControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_a_reward_can_be_deleted()
+    {
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(rewards_table_seeder::class);
+
+        $user = User::find(1);
+
+        $preDeleteFetchResponse = $this->actingAs($user)->getJson('/api/rewards');
+
+        $preDeleteFetchResponse->assertStatus(200);
+
+        $preDeleteFetchResponse->assertJsonCount(2);
+
+        $reward = Reward::find(1);
+
+        $deleteResponse = $this->actingAs($user)->deleteJson('/api/rewards/' . $reward->id);
+
+        $deleteResponse->assertStatus(200);
+
+        $postDeleteFetchResponse = $this->actingAs($user)->getJson('/api/rewards');
+
+        $postDeleteFetchResponse->assertStatus(200);
+
+        $postDeleteFetchResponse->assertJsonCount(1);
+    }
 }
