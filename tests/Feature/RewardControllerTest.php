@@ -49,6 +49,22 @@ class RewardControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_rewards_collection_can_be_fetched()
+    {
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(rewards_table_seeder::class);
+
+        $user = User::find(1);
+
+        $response = $this->actingAs($user)->getJson('/api/rewards');
+
+        $response->assertStatus(200);
+
+        $response->assertJsonCount(2);
+    }
+
     public function test_reward_can_be_updated()
     {
         $this->seed(UsersTableSeeder::class);
