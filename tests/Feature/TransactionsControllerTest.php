@@ -40,4 +40,28 @@ class TransactionsControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * @depends test_user_transactions_ordered_by_creation_time_can_be_fetched
+     */
+    public function test_transaction_store()
+    {
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(transactionSeeder::class);
+
+        $user = User::find(1);
+
+        $jsonData = [
+            'user_id' => 10,
+            'event' => 'spend',
+            'user_points' => 25,
+            'occurred_at' => Date('Y-m-d H:i:s', strtotime('now'))
+        ];
+        
+        $route = "/api/users/$user->id/transactions";
+
+        $response = $this->actingAs($user)->postJson($route, $jsonData);
+
+        $response->assertStatus(200);
+    }
 }
