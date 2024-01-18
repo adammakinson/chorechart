@@ -64,7 +64,10 @@ export default {
     },
 
     mounted() {
-
+        /**
+         * When the component is mounted, if the user is logged in, set the
+         * user type, fetch the chores collection and fetch the users transactions
+         */
         if (this.$store.getters.getUserAuthToken) {
 
             this.userIsAdmin = this.$store.getters.userIsAdmin;
@@ -79,6 +82,11 @@ export default {
     },
 
     methods: {
+
+        /**
+         * Fetch chores associated with a user from the /api/user-chores route
+         * and store them in data.
+         */
         fetchChoresCollection() {
             let user = this.$store.getters.getUser;
 
@@ -92,6 +100,10 @@ export default {
             });
         },
 
+        /**
+         * Fetch user transactions from the backend. Upon successful
+         * response, call updateUserTransactions passing in the transactions data
+         */
         fetchUsersTransactions() {
             let user = this.$store.getters.getUser;
 
@@ -104,6 +116,11 @@ export default {
             });
         },
 
+        /**
+         * Define the color of the checkbox for a chore.
+         * The default is gray. A pending chore is orange
+         * and a completed one is green.
+         */
         getChoreRowCheckboxColorClass(row) {
             var colorClass = 'text-stone-400';
 
@@ -118,14 +135,28 @@ export default {
             return colorClass;
         },
 
+        /**
+         * Returns boolean value of inspection_passed on the row
+         */
         choreIsFinished(row) {
             return !!row.inspection_passed;
         },
 
+        /**
+         * Return chores where the user id and chore id match the passed
+         * in userId and choreId
+         * @param {aray} allChores 
+         * @param {int} userId 
+         * @param {int} choreId 
+         */
         findUserChoreByChoreId(allChores, userId, choreId) {
             return allChores.find(chore => chore.id == choreId && chore.user_id == userId);
         },
 
+        /**
+         * 
+         * @param {*} el the chore element
+         */
         handleCheckClick(el) {
             let choreId = el.target.dataset.choreid;
             let user = this.$store.getters.getUser;
@@ -139,7 +170,10 @@ export default {
                 inspection_ready: true
             };
 
-            // Hrm... do we really need user.id in the route???
+            /**
+             * If no points have been awarded to the chore,
+             * send the chore to declare it ready for inspection
+             */
             if (!choreBeingEdited.points_awarded == '1') {
                 axios({
                     method: 'put',
@@ -149,6 +183,12 @@ export default {
                         authorization: this.$store.getters.getUserAuthToken
                     }
                 }).then((response) => {
+
+                    /**
+                     * If the chore has been approved, add it to the transactions
+                     * table with a type of 'choreCompletion' and update the
+                     * user transactions in the store.
+                     */
                     if (response.data.points_awarded) {
 
                         // Set the transaction type
@@ -172,6 +212,9 @@ export default {
             }
         },
 
+        /**
+         * Save the transactions to the vuex store
+         */
         updateUserTransactions(transactions) {
             this.$store.commit('setUserTransactions', transactions);
         },
