@@ -8,6 +8,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import App from "./components/App";
 // import { VuejsDatatableFactory } from 'vuejs-datatable';
 
+// Import pages. Note, need to clearly define pages vs. components
 import RegistrationForm from "./pages/RegistrationForm";
 import LoginForm from "./pages/LoginForm";
 import ChoresListComponent from "./pages/ChoresList";
@@ -26,6 +27,7 @@ import ManageAccount from "./pages/ManageAccount";
 
 // Vue.use(VuejsDatatableFactory);
 
+// Define routes for the router.
 const routes = [
     {path: '/', name: 'welcome-screen', component: WelcomeScreen},
     {path: '/chores-list', name: 'chores-list', component: ChoresListComponent},
@@ -42,6 +44,7 @@ const router = createRouter({
     routes,
 });
 
+// Create the vuex store. This globally handles user, user points and user transactions state
 const store = new createStore({
     state: {
         user: {},
@@ -49,24 +52,31 @@ const store = new createStore({
         windowWidth: window.innerWidth
     },
     mutations: {
+
+        // Sets the current user in the vuex store as well as in localstorage,
+        // which is used as a fallback for the vuex store.
         setCurrentUser (state, data) {
             state.user = data;
             localStorage.setItem('user', JSON.stringify(data));
         },
         
+        // Revmoves the user from the vuex store AND from local storage
         removeCurrentUser (state) {
             state.user = {};
             localStorage.removeItem('user');
         },
 
+        // Set user points on the vuex store
         setUserPoints (state, data) {
             state.user.userPoints = data;
         },
 
+        // Set user transactions in the vuex store
         setUserTransactions (state, transactions) {
             state.userTransactions = transactions;
         },
 
+        // Set window width in hte vuex store
         setWindowWidth (state, windowWidth) {
             state.windowWidth = windowWidth;
         }
@@ -96,6 +106,13 @@ const store = new createStore({
             return authToken;
         },
 
+        /**
+         * Fetches the user from the vuex store by preference. If not found
+         * there, tries to fetch it from localStorage
+         * 
+         * @param {*} state 
+         * @returns userData
+         */
         getUser: state => {
             let userData;
 
@@ -111,14 +128,35 @@ const store = new createStore({
             return userData;
         },
 
+        /**
+         * Fetches the users name from the vuex store
+         * 
+         * @param {*} state 
+         * @returns  the users name from the vuex store
+         */
         getUsersName: state => {
             return state.user.name;
         },
 
+        /**
+         * Fetches user roles from the vuex store
+         * 
+         * @param {*} state 
+         * @returns user roles
+         */
         getUsersRoles: state => {
             return state.user.roles;
         },
 
+        /**
+         * Uses the some() array method on the userRoles array to
+         * determine whether the string 'admin' is included in those
+         * roles. some returns a boolean. If there are no roles for
+         * the user, automatically return false.
+         * 
+         * @param {*} state 
+         * @returns 
+         */
         userIsAdmin: state => {
             let userRoles = state.user.roles;
 
@@ -131,6 +169,16 @@ const store = new createStore({
             }
         },
 
+        /**
+         * Transactions are returned from the database ordered by
+         * most recent transaction first, and going back historically.
+         * The most recent transaction will contain the most up-to-date
+         * points value, which is why we're fetching it from the "first"
+         * transaction.
+         * 
+         * @param {*} state 
+         * @returns 
+         */
         getUserPoints: state => {
             if (state.userTransactions[0]) {
                 return state.userTransactions[0].user_points;
@@ -139,6 +187,11 @@ const store = new createStore({
             }
         },
 
+        /**
+         * Returns all user transactions from the vuex store
+         * @param {*} state 
+         * @returns 
+         */
         getUserTransactions: state => {
             if (state.userTransactions) {
                 return state.userTransactions;
@@ -147,6 +200,12 @@ const store = new createStore({
             }
         },
 
+        /**
+         * Returns the window width from the vuex store
+         * 
+         * @param {*} state 
+         * @returns 
+         */
         getWindowWidth: state => {
             return state.windowWidth;
         }
