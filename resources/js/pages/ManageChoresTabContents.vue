@@ -672,17 +672,27 @@ export default {
          * We need to check that the assignment has not been submitted by the user
          * before deleting. We should only be able to delete chores that have not
          * been submitted.
+         * TODO - take another look at how the chore assignment is working to
+         *        see if I can find a better solution.
          */
         deleteUserAssignment(e) {
-            let assignment = e.target.closest('.list-group-item');
+            let userChoreId;
+            let assignment;
+            if (Number.isInteger(e)) {
+                userChoreId = e;
+            } else {
+                assignment = e.target.closest('.list-group-item');
+                
+                userChoreId = assignment.dataset.itemid;
+            }
 
-            let userChoreId = assignment.id;
 
             axios.delete('/api/user-chores/' + userChoreId, {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
+                assignment.remove();
                 eventBus.emit('refetch-userchores');
             });
         },
