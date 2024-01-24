@@ -4,6 +4,15 @@
     </main>
 </template>
 <script>
+/**
+ * Note, in the template above, the <router-view> component handles routing
+ * requests to the different pages of the app.
+ */
+
+
+/**
+ * Import axios to handle REST calls
+ */
 import axios from 'axios';
 
 export default {
