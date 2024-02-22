@@ -161,7 +161,7 @@ class UserChoresController extends Controller
     public function deleteUsersChore(Request $request, $userChoreId)
     {   
         if (Gate::allows('manage-chorechart')) {
-            $userChore = UserChores::where('id', $userChoreId)->first();
+            $userChore = UserChores::where('chore_id', $userChoreId)->first();
 
             // The chore cannot be in progress. It has to be unstarted.
             if (empty($userChore['inspection_ready'])) {
