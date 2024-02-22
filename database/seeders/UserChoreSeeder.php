@@ -27,6 +27,8 @@ class UserChoreSeeder extends Seeder
             'chore_id' => '1',
             'user_id' => '1',
             'assigner_id' => '1',
+            'chore' => 'Sweep the Floors',
+            'pointValue' => 5,
             'created_at' => now(),
             'updated_at' => now()
             ]
