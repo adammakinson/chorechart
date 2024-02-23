@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             RolesSeeder::class,
             RoleUserSeeder::class,
-
+            ChoresSeeder::class,
+            transactionSeeder::class,
+            rewards_table_seeder::class,
+            UserChoreSeeder::class
         ]);
     }
 }
