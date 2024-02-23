@@ -52,4 +52,60 @@ class UserChoresControllerTest extends TestCase
             ['chore_id' => 5]
         );
     }
+
+    public function test_we_can_get_user_chores()
+    {
+        $this->seed(ChoresSeeder::class);
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(UserChoreSeeder::class);
+
+        $user = User::find(1);
+
+        $route = "api/user-chores/1";
+
+        $response = $this->actingAs($user)->getJson($route);
+
+        $response->assertJsonFragment(
+            ['user_id' => 1]
+        );
+    }
+
+    public function test_we_can_update_user_chore()
+    {
+        $this->seed(ChoresSeeder::class);
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(UserChoreSeeder::class);
+
+        $user = User::find(1);
+
+        $route = "api/users/1/chores/1";
+
+        $response = $this->actingAs($user)->put($route);
+
+        $response->assertJsonFragment(
+            ['user_id' => 1, 'chore_id' => 1, 'points_awarded' => true]
+        );
+    }
+
+    public function test_we_can_delete_user_chore()
+    {
+        // $this->seed(ChoresSeeder::class);
+        $this->seed(UsersTableSeeder::class);
+        $this->seed(RolesSeeder::class);
+        $this->seed(RoleUserSeeder::class);
+        $this->seed(UserChoreSeeder::class);
+
+        $user = User::find(1);
+
+        
+        $route = "api/user-chores/1";
+
+        $response = $this->actingAs($user)->delete($route);
+
+        $response->assertStatus(200);
+    }
 }
