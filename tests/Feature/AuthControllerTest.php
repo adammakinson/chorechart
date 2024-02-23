@@ -2,14 +2,17 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    /**
+     * Private property $seed is set to true on the TestCase class
+     * and that is used along with this trait to run all seeders
+     * before running the tests
+     */
+    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -27,10 +30,6 @@ class AuthControllerTest extends TestCase
             'confirm_password' => 'testpassword'
         ];
         
-        /**
-         * How do I configure multiple connections in Laravel and switch between them?
-         * I'd like to create a database specifically for testing. It might be in phpunit.xml
-         */
         $response = $this->postJson('/api/register', $jsonData);
 
         $response->assertStatus(200);

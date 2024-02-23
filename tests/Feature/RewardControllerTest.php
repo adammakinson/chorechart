@@ -18,7 +18,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class RewardControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
+    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -27,9 +28,9 @@ class RewardControllerTest extends TestCase
      */
     public function test_reward_can_be_created()
     {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
         
         Storage::fake('file');
 
@@ -51,10 +52,10 @@ class RewardControllerTest extends TestCase
 
     public function test_rewards_collection_can_be_fetched()
     {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(rewards_table_seeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(rewards_table_seeder::class);
 
         $user = User::find(1);
 
@@ -67,10 +68,10 @@ class RewardControllerTest extends TestCase
 
     public function test_reward_can_be_updated()
     {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(rewards_table_seeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(rewards_table_seeder::class);
         
         Storage::fake('file');
 
@@ -92,10 +93,10 @@ class RewardControllerTest extends TestCase
 
     public function test_a_reward_can_be_deleted()
     {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(rewards_table_seeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(rewards_table_seeder::class);
 
         $user = User::find(1);
 

@@ -12,7 +12,7 @@ use App\Models\User;
 
 class TransactionsControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
     
     /**
      * A basic feature test example.
@@ -20,10 +20,7 @@ class TransactionsControllerTest extends TestCase
      * @return void
      */
     public function test_user_transactions_ordered_by_creation_time_can_be_fetched()
-    {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(transactionSeeder::class);
-        
+    {        
         $user = User::find(1);
         
         $route = "/api/users/$user->id/transactions";
@@ -46,9 +43,6 @@ class TransactionsControllerTest extends TestCase
      */
     public function test_transaction_store()
     {
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(transactionSeeder::class);
-
         $user = User::find(1);
 
         $jsonData = [

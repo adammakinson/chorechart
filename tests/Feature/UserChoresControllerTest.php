@@ -17,7 +17,8 @@ use App\Models\User;
 
 class UserChoresControllerTest extends TestCase
 {
-    use DatabaseMigrations;
+    // use DatabaseMigrations;
+    use RefreshDatabase;
     
     /**
      * A basic feature test example.
@@ -26,11 +27,11 @@ class UserChoresControllerTest extends TestCase
      */
     public function test_admin_can_assign_chore_to_self()
     {
-        $this->seed(ChoresSeeder::class);
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(UserChoreSeeder::class);
+        // $this->seed(ChoresSeeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(UserChoreSeeder::class);
 
         $user = User::find(1);
 
@@ -55,11 +56,11 @@ class UserChoresControllerTest extends TestCase
 
     public function test_we_can_get_user_chores()
     {
-        $this->seed(ChoresSeeder::class);
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(UserChoreSeeder::class);
+        // $this->seed(ChoresSeeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(UserChoreSeeder::class);
 
         $user = User::find(1);
 
@@ -74,11 +75,11 @@ class UserChoresControllerTest extends TestCase
 
     public function test_we_can_update_user_chore()
     {
-        $this->seed(ChoresSeeder::class);
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(UserChoreSeeder::class);
+        // $this->seed(ChoresSeeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(UserChoreSeeder::class);
 
         $user = User::find(1);
 
@@ -94,10 +95,10 @@ class UserChoresControllerTest extends TestCase
     public function test_we_can_delete_user_chore()
     {
         // $this->seed(ChoresSeeder::class);
-        $this->seed(UsersTableSeeder::class);
-        $this->seed(RolesSeeder::class);
-        $this->seed(RoleUserSeeder::class);
-        $this->seed(UserChoreSeeder::class);
+        // $this->seed(UsersTableSeeder::class);
+        // $this->seed(RolesSeeder::class);
+        // $this->seed(RoleUserSeeder::class);
+        // $this->seed(UserChoreSeeder::class);
 
         $user = User::find(1);
 
