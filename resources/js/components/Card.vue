@@ -1,6 +1,12 @@
 <template>
-    <div v-on="cardData['eventsObject']" class="card p-4 border rounded bg-light max-w shadow-md" v-bind:data-itemId="cardData.id" v-bind:data-eventToFire="cardData.eventToFire">
-        <slot></slot>
+    <div v-on="cardData['eventsObject']" class="card border rounded bg-light max-w shadow-md" v-bind:data-itemId="cardData.id" v-bind:data-eventToFire="cardData.eventToFire">
+        <header class="border p-4">
+            <slot name="header"></slot>
+        </header>
+        <div class="p-4">
+            <slot></slot>
+        </div>
+        <slot name="footer"></slot>
     </div>
 </template>
 
