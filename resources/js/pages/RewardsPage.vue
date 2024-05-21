@@ -35,9 +35,9 @@
                     <template v-slot:header>
                         {{rewardModalTitle}}
                     </template>
-                    <div class="modal-body flex flex-col gap-y-4">
+                    <div class="modal-body">
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                        <form id="rewardForm" name="rewardForm" enctype="multipart/form-data" class="flex flex-col gap-y-4">
+                        <form id="rewardForm" name="rewardForm" enctype="multipart/form-data" class="">
                             <FormInput v-for="formField in rewardModalFormData" :key="formField.identifier"
                                 :identifier="formField.identifier"
                                 :type="formField.type"
