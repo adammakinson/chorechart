@@ -2,17 +2,11 @@
     <div class="flex justify-between py-2 border-b">
         <div class="fas fa-bars text-2xl h-10 ml-1.5 visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
         <slot></slot>
-        <dropdown-menu :dropdownData="dropdownData" class="flex">
-            <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
-            <Button bgColorClass="bg-white" colorClass="text-black" widthClass="w-10" paddingClass="p-1" :callback="dropdownCallback">
-                <icon v-bind:class='dropdownClass'></icon>
-            </Button>
-        </dropdown-menu>
+        <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
     </div>
 </template>
 
 <script>
-import DropdownMenu from './DropdownMenu.vue';
 import Icon from './Icon.vue';
 import Button from './Button.vue';
 import eventBus from '../eventBus';
@@ -20,9 +14,6 @@ import eventBus from '../eventBus';
 export default {
 
     components: {
-        DropdownMenu,
-        Button,
-        Icon
     },
 
     data() {

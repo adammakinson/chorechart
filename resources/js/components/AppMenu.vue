@@ -16,6 +16,12 @@
                     <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
                         <a class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
                     </li>
+                    <li class="nav-item p-2 border-b w-full">
+                        <a class="nav-link block w-full h-full" href="/manage-account">Manage account</a>
+                    </li>
+                    <li class="nav-item p-2 border-b w-full">
+                        <a class="nav-link block w-full h-full" href="/manage-users" @click.prevent="logout">Logout</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -67,7 +73,20 @@ export default {
     },
 
     methods: {
-        
+        logout() {
+            axios({
+                method: 'post',
+                url: '/api/logout',
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.$store.commit('removeCurrentUser');
+                
+                this.$router.push('login');
+            });
+            
+        }
     },
 
     mounted() {
