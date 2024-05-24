@@ -1,12 +1,15 @@
 <template>
     <div class="w-screen max-w-full">
-        <user-status-bar>
+        <!-- <user-status-bar>
             <h1 class="self-center">Rewards</h1>
-        </user-status-bar>
-        <div class="sm:flex w-screen max-w-full divide-x divide-solid divide-slate-100">
+        </user-status-bar> -->
+        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <Button v-if="userIsAdmin" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
+                <div class="flex justify-between">
+                    <div class="fas fa-bars text-2xl h-10 ml-1.5 visible p-1.5 block sm:hidden" @click="clickMobileMainMenu"></div>
+                    <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
+                </div>
                 <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
                         <h2 v-if="!userIsAdmin" class="text-5xl">No rewards have been created. Ask an admin to create one!</h2>
@@ -86,16 +89,16 @@
 </template>
 
 <script>
-import Appmenu from '../components/AppMenu.vue';
-import UserStatusBar from '../components/UserStatusBar.vue';
-import Cardgrid from '../components/Cardgrid.vue';
-import Card from '../components/Card.vue';
 import eventBus from '../eventBus';
-import Modal from '../components/Modal.vue';
 import icon from '../components/Icon';
-import Notification from '../components/Notification.vue';
+import Card from '../components/Card.vue';
+import Modal from '../components/Modal.vue';
 import Button from '../components/Button.vue';
+import Appmenu from '../components/AppMenu.vue';
+import Cardgrid from '../components/Cardgrid.vue';
 import FormInput from '../components/FormInput.vue';
+import Notification from '../components/Notification.vue';
+import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
     data() {
@@ -110,6 +113,7 @@ export default {
             rewardModalPrimaryButtonLabel: "Create",
             modalNotice: '',
             modalErrors: [],
+            mainMenuIsOpen: false,
             rewardModalFormData: {
                 reward: {
                     identifier: 'reward',
@@ -146,6 +150,26 @@ export default {
                 } else {
                     this[eventData.callback]();
                 }
+            }
+        });
+
+        eventBus.on("mobileMainMenuIconClicked", () => {
+            this.mainMenuIsOpen = !this.mainMenuIsOpen;
+        });
+
+        if (this.windowWidth < 640) {
+            this.mainMenuIsOpen = false;
+        } else {
+            this.mainMenuIsOpen = true;
+        }
+
+        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+            const portrait = e.matches;
+
+            if (this.windowWidth < 640) {
+                this.mainMenuIsOpen = false;
+            } else {
+                this.mainMenuIsOpen = true;
             }
         });
     },
@@ -418,6 +442,10 @@ export default {
 
         updatePointvalueFieldValue(elValue) {
             this.rewardModalFormData.pointvalue.value = elValue;
+        },
+
+        clickMobileMainMenu() {
+            eventBus.emit('mobileMainMenuIconClicked', this);
         }
     }
 }

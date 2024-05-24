@@ -1,26 +1,24 @@
 <template>
     <div>
-        <user-status-bar>
+        <!-- <user-status-bar>
             <h1 class="self-center">Manage Chores</h1>
-        </user-status-bar>
-        <div class="sm:flex w-screen divide-x divide-solid divide-slate-100">
+        </user-status-bar> -->
+        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
-            <div class="p-5 w-full">
-                <div id="choreManagement">
+                <div id="choreManagement" class="p-5 w-full">
                     <component :is="mainTabContents"></component>
                 </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
+import eventBus from '../eventBus';
 import Appmenu from "../components/AppMenu.vue";
 import TabComponent from "../components/TabComponent";
+import UserStatusBar from '../components/UserStatusBar.vue';
 import ManageChoresTabContents from "./ManageChoresTabContents.vue";
 import ViewAssignmentsTabContents from "./ViewAssignmentsTabContents.vue";
-import eventBus from '../eventBus';
-import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
 
@@ -31,6 +29,26 @@ export default {
         
         eventBus.on("view-assignments-tab-click", (contents) => {
             this.mainTabContents = contents;
+        });
+
+        eventBus.on("mobileMainMenuIconClicked", () => {
+            this.mainMenuIsOpen = !this.mainMenuIsOpen;
+        });
+
+        if (this.windowWidth < 640) {
+            this.mainMenuIsOpen = false;
+        } else {
+            this.mainMenuIsOpen = true;
+        }
+
+        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+            const portrait = e.matches;
+
+            if (this.windowWidth < 640) {
+                this.mainMenuIsOpen = false;
+            } else {
+                this.mainMenuIsOpen = true;
+            }
         });
     },
 
@@ -50,7 +68,8 @@ export default {
                 'loadsContent': 'ViewAssignmentsTabContents'
             }],
 
-            mainTabContents: 'ManageChoresTabContents'
+            mainTabContents: 'ManageChoresTabContents',
+            mainMenuIsOpen: false
         }
     },
     
