@@ -1,9 +1,9 @@
 <template>
     <div class="w-screen">
-        <user-status-bar>
+        <!-- <user-status-bar>
             <h1 class="self-center">Manage Users</h1>
-        </user-status-bar>
-        <div class="sm:flex w-full divide-x divide-solid divide-slate-100">
+        </user-status-bar> -->
+        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
@@ -93,6 +93,26 @@
                     }
                 }
             });
+
+            eventBus.on("mobileMainMenuIconClicked", () => {
+                this.mainMenuIsOpen = !this.mainMenuIsOpen;
+            });
+
+            if (this.windowWidth < 640) {
+                this.mainMenuIsOpen = false;
+            } else {
+                this.mainMenuIsOpen = true;
+            }
+
+            window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+                const portrait = e.matches;
+
+                if (this.windowWidth < 640) {
+                    this.mainMenuIsOpen = false;
+                } else {
+                    this.mainMenuIsOpen = true;
+                }
+            });
         },
 
         data() {
@@ -107,6 +127,7 @@
                 errorMessages: [],
                 modalNotice: '',
                 modalErrors: {},
+                mainMenuIsOpen: false,
                 editUserModalForm: {
                     name: {
                         identifier: 'name',

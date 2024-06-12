@@ -1,6 +1,5 @@
 <template>
     <div class="flex justify-between py-2 border-b">
-        <div class="fas fa-bars text-2xl h-10 ml-1.5 visible sm:invisible p-1.5" @click="clickMobileMainMenu"></div>
         <slot></slot>
         <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
     </div>
