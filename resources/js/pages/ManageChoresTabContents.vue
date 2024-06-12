@@ -25,15 +25,12 @@
                 <cardgrid class="pt-4 w-100 sm:w-full">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                         <template v-slot:header>
-                            <h4>{{cardData.name}}</h4>
+                            <h4 class="p-2">{{cardData.name}}</h4>
                         </template>
                         <list-group v-if="cardData.chores">
-                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3">
-                                {{userChore.chore}}
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3 w-full">
+                                <p>{{userChore.chore}}</p>
                                 <template v-slot:actions>
-                                    <Button v-if="isApprovable(userChore)" colorClass="text-white" bgColorClass="bg-green-600" widthClass="w-10" paddingClass="px-0 py-2" callback="approveUsersAssignment" :args="userChore">
-                                        <Icon class="fas fa-check"></Icon>
-                                    </Button>
                                     <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">
                                         <Icon class="fas fa-trash"></Icon>
                                     </Button>
@@ -427,7 +424,7 @@ export default {
                         userChore.classList.add('assignment');
                         userChore.classList.add('list-group-item');
                         userChore.dataset.itemid = choreId;
-                        userChore.innerHTML = `<div class="border border-slate-400" style="display: flex; justify-content: space-between;"><div>${choreName}</div><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                        userChore.innerHTML = `<div class="border border-slate-400" style="display: flex; justify-content: space-between;"><p class="p-1">${choreName}</p><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
                     
                         recipientsListUl.append(userChore);
                 
