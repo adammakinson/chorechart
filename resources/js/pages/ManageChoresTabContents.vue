@@ -599,8 +599,11 @@ export default {
 
         userListHasChore(userChoresList, userChore) {
             let hasChore = false;
+            let assignmentItems = userChoresList.children;
+            let assignmentItemsArray = Array.from(assignmentItems);
 
-            userChoresList.childNodes.forEach((assignment) => {
+            assignmentItemsArray.forEach((assignment) => {
+
                 if(assignment.dataset.itemid === userChore.dataset.itemid) {
                     hasChore = true;
                 }
