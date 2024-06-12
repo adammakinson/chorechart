@@ -434,11 +434,16 @@ export default {
                         let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
                         choreDiscardButton.addEventListener('click', this.discardAssignment);
                     }
+
+                    chore.classList.remove('active');
                 });
 
                 this.assignmentsArePending = document.querySelectorAll('.card .assignment').length > 0;
 
                 user.classList.remove('active');
+
+                this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
+                this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;
 
             });
         },
