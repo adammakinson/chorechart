@@ -509,7 +509,6 @@ export default {
             let userCard = event.target.closest('.card');
 
             userCard.classList.toggle('active');
-            userCard.classList.toggle('bg-blue-400');
 
             this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
             this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;
