@@ -423,10 +423,16 @@ export default {
                         let userChore = document.createElement('li');
                         userChore.classList.add('assignment');
                         userChore.classList.add('list-group-item');
+                        userChore.classList.add('flex', 'justify-between', 'items-center', 'pl-2', 'border', 'border-slate-400', 'bg-white', 'leading-3', 'w-full');
                         userChore.dataset.itemid = choreId;
-                        userChore.innerHTML = `<div class="border border-slate-400" style="display: flex; justify-content: space-between;"><p class="p-1">${choreName}</p><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                        userChore.innerHTML = `<p>${choreName}</p><div class="bg-red-600 w-10 h-10"><button class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></button></div></div>`;
                     
                         recipientsListUl.append(userChore);
+
+                        // we don't want the click event to bubble for the item itself
+                        userChore.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
                 
                         let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
                         choreDiscardButton.addEventListener('click', this.discardAssignment);
