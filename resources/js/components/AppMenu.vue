@@ -3,7 +3,7 @@
         <div>
             <!-- <div v-if="mainMenuIsOpen" class="underlay bg-gray-800 bg-opacity-50 transition ease-in-out sm:invisible absolute w-full h-full"></div> -->
             <nav v-if="authenticatedUser" class="opacity-100 w-36">
-                <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-44 absolute -translate-x-44 sm:-translate-x-32 transition-transform ease-in-out duration-500 h-full sm:block border sm:border-none bg-gray-400 sm:visible">
+                <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-44 absolute -translate-x-32 sm:-translate-x-32 transition-transform ease-in-out duration-500 h-full sm:block border sm:border-none bg-gray-400 sm:visible">
                     <li class="nav-item p-2 border-b w-full">
                         <div class="flex justify-end">
                             <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
