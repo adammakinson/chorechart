@@ -1,5 +1,6 @@
 require('./bootstrap');
 
+import 'drag-drop-touch/DragDropTouch';
 import { createApp } from 'vue';
 import { createStore } from 'vuex';
 import 'es6-promise/auto';
