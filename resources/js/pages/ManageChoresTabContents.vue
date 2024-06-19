@@ -1,6 +1,6 @@
 <template>
     <div class="tabcontent">
-        <div>
+        <div class="ml-8 sm:ml-0">
             <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
             <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</Button>
             <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser">add to all</Button>
@@ -24,14 +24,13 @@
                 </list-group>
                 <cardgrid class="pt-4 w-100 sm:w-full">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
-                        <h4 class="mb-4">{{cardData.name}}</h4>
+                        <template v-slot:header>
+                            <h4 class="p-2">{{cardData.name}}</h4>
+                        </template>
                         <list-group v-if="cardData.chores">
-                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3">
-                                {{userChore.chore}}
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3 w-full">
+                                <p>{{userChore.chore}}</p>
                                 <template v-slot:actions>
-                                    <Button v-if="isApprovable(userChore)" colorClass="text-white" bgColorClass="bg-green-600" widthClass="w-10" paddingClass="px-0 py-2" callback="approveUsersAssignment" :args="userChore">
-                                        <Icon class="fas fa-check"></Icon>
-                                    </Button>
                                     <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">
                                         <Icon class="fas fa-trash"></Icon>
                                     </Button>
@@ -424,19 +423,30 @@ export default {
                         let userChore = document.createElement('li');
                         userChore.classList.add('assignment');
                         userChore.classList.add('list-group-item');
+                        userChore.classList.add('flex', 'justify-between', 'items-center', 'pl-2', 'border', 'border-slate-400', 'bg-white', 'leading-3', 'w-full');
                         userChore.dataset.itemid = choreId;
-                        userChore.innerHTML = `<div class="border border-slate-400" style="display: flex; justify-content: space-between;"><div>${choreName}</div><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></span></div></div>`;
+                        userChore.innerHTML = `<p>${choreName}</p><div class="bg-red-600 w-10 h-10"><button class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${choreId}"></button></div></div>`;
                     
                         recipientsListUl.append(userChore);
+
+                        // we don't want the click event to bubble for the item itself
+                        userChore.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
                 
                         let choreDiscardButton = userChore.querySelector('.discardAssignmentIcon');
                         choreDiscardButton.addEventListener('click', this.discardAssignment);
                     }
+
+                    chore.classList.remove('active');
                 });
 
                 this.assignmentsArePending = document.querySelectorAll('.card .assignment').length > 0;
 
                 user.classList.remove('active');
+
+                this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
+                this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;
 
             });
         },
@@ -507,7 +517,6 @@ export default {
             let userCard = event.target.closest('.card');
 
             userCard.classList.toggle('active');
-            userCard.classList.toggle('bg-blue-400');
 
             this.userCardsHighlighted = !!document.querySelectorAll('.card.active').length;
             this.choresAreHighlighted = !!document.querySelectorAll('#chores-list .list-group-item.active').length;
@@ -597,8 +606,11 @@ export default {
 
         userListHasChore(userChoresList, userChore) {
             let hasChore = false;
+            let assignmentItems = userChoresList.children;
+            let assignmentItemsArray = Array.from(assignmentItems);
 
-            userChoresList.childNodes.forEach((assignment) => {
+            assignmentItemsArray.forEach((assignment) => {
+
                 if(assignment.dataset.itemid === userChore.dataset.itemid) {
                     hasChore = true;
                 }

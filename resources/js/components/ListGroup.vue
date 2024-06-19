@@ -1,5 +1,5 @@
 <template>
-    <ul v-bind:id="listId" class="list-group shadow-md">
+    <ul v-bind:id="listId" class="list-group shadow-md w-full">
         <slot></slot>
     </ul>
 </template>

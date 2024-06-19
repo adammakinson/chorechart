@@ -3,3 +3,12 @@
 @tailwind utilities;
 
 @import '~@fortawesome/fontawesome-free/css/all.css';
+
+.active {
+    background-color: rgb(96, 165, 250);
+}
+
+.discardAssignmentIcon {
+    width: 40px;
+    height: 40px;
+}

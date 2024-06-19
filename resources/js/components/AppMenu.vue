@@ -1,9 +1,14 @@
 <template>
     <Transition>
-        <div v-if="mainMenuIsOpen">
-            <div v-if="mainMenuIsOpen" class="underlay bg-gray-800 bg-opacity-50 transition ease-in-out sm:invisible absolute w-full h-full"></div>
-            <nav v-if="authenticatedUser" class="opacity-100 w-48">
-                <ul id="navbarSupportedContent" class="mainmenu absolute w-48 -translate-x-48 transition-transform ease-in-out h-full sm:block border sm:border-none bg-white sm:visible">
+        <div>
+            <!-- <div v-if="mainMenuIsOpen" class="underlay bg-gray-800 bg-opacity-50 transition ease-in-out sm:invisible absolute w-full h-full"></div> -->
+            <nav v-if="authenticatedUser" class="opacity-100 w-36">
+                <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-44 absolute -translate-x-32 sm:-translate-x-32 transition-transform ease-in-out duration-500 h-full sm:block border sm:border-none bg-gray-400 sm:visible">
+                    <li class="nav-item p-2 border-b w-full">
+                        <div class="flex justify-end">
+                            <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
+                        </div>
+                    </li>
                     <li class="nav-item p-2 border-b w-full">
                         <a href="/chores-list" class="nav-link block w-full h-full">Chores</a>
                     </li>
@@ -16,6 +21,12 @@
                     <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
                         <a class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
                     </li>
+                    <li class="nav-item p-2 border-b w-full">
+                        <a class="nav-link block w-full h-full" href="/manage-account">Manage account</a>
+                    </li>
+                    <li class="nav-item p-2 border-b w-full">
+                        <a class="nav-link block w-full h-full" href="/manage-users" @click.prevent="logout">Logout</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -27,11 +38,9 @@ import eventBus from '../eventBus';
 export default {
     created() {
         eventBus.on("mobileMainMenuIconClicked", () => {
-            if(this.windowWidth < 640) {
-                this.mainMenuIsOpen = !this.mainMenuIsOpen;
-            } else {
-                this.mainMenuIsOpen = true;
-            }
+
+            this.mainMenuIsOpen = !this.mainMenuIsOpen;
+
         });
 
         if (this.windowWidth < 640) {
@@ -67,7 +76,25 @@ export default {
     },
 
     methods: {
-        
+        logout() {
+            axios({
+                method: 'post',
+                url: '/api/logout',
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+                this.$store.commit('removeCurrentUser');
+                
+                this.$router.push('login');
+            });
+            
+        },
+
+        clickMobileMainMenu() {
+            // this.mainMenuIsOpen = !this.mainMenuIsOpen;
+            eventBus.emit('mobileMainMenuIconClicked', this);
+        }
     },
 
     mounted() {

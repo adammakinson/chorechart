@@ -1,9 +1,6 @@
 <template>
     <div class="w-full max-w-full h-screen">
-        <user-status-bar>
-            <h1 class="self-center">Chores list</h1>
-        </user-status-bar>
-        <div class="sm:flex divide-x divide-solid divide-slate-100">
+        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
@@ -35,6 +32,7 @@
 </template>
 
 <script>
+import eventBus from '../eventBus';
 import Appmenu from '../components/AppMenu.vue';
 import ListItem from "../components/ListItem.vue";
 import ListGroup from "../components/ListGroup.vue";
@@ -42,6 +40,30 @@ import UserStatusBar from '../components/UserStatusBar.vue';
 
 export default {
     props: ['id'],
+
+    created() {
+        eventBus.on("mobileMainMenuIconClicked", () => {
+
+            this.mainMenuIsOpen = !this.mainMenuIsOpen;
+
+        });
+
+        if (this.windowWidth < 640) {
+            this.mainMenuIsOpen = false;
+        } else {
+            this.mainMenuIsOpen = true;
+        }
+
+        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
+            const portrait = e.matches;
+
+            if (this.windowWidth < 640) {
+                this.mainMenuIsOpen = false;
+            } else {
+                this.mainMenuIsOpen = true;
+            }
+        });
+    },
 
     data() {
         return {
@@ -52,7 +74,8 @@ export default {
             activeElementId: '',
             assignee: '',
             userIsAdmin: false,
-            allUsers: []
+            allUsers: [],
+            mainMenuIsOpen: false
         }
     },
 

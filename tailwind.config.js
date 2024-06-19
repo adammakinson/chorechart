@@ -13,6 +13,14 @@ module.exports = {
       colors: {
         orange: colors.orange,
         green: colors.green
+      },
+      gridTemplateColumns: {
+
+        // grid spacing for expanded menu
+        'menuexpanded': '175px 1fr',
+        
+        // grid spacing for expanded menu
+        'menucollapsed': '48px 1fr',
       }
     },
   },
