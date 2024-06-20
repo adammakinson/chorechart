@@ -6,7 +6,7 @@
         
         <slot name="header"></slot>
         
-        <div class="flex justify-between p-4">
+        <div class="flex justify-between p-4 sm:block">
             <slot></slot>
         </div>
         
