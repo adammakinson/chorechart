@@ -9,23 +9,29 @@
                             <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
                         </div>
                     </li>
-                    <li class="nav-item p-2 border-b w-full">
-                        <a href="/chores-list" class="nav-link block w-full h-full">Chores</a>
+                    <li class="nav-item border-b w-full flex align-items">
+                        <a href="/chores-list" class="nav-link block w-full p-2 leading-8">Chores</a>
+                        <span class="fas fa-brush text-2xl px-3 py-2"></span>
                     </li>
-                    <li class="nav-item p-2 border-b w-full">
-                        <a href="/rewards" class="nav-link block w-full h-full">Rewards</a>
+                    <li class="nav-item border-b w-full flex align-items">
+                        <a href="/rewards" class="nav-link block w-full p-2 leading-8">Rewards</a>
+                        <span class="fas fa-gamepad text-2xl px-2 py-2"></span>
                     </li>
-                    <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
-                        <a href="/manage-chores" class="nav-link block w-full h-full">Manage Chores</a>
+                    <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
+                        <a href="/manage-chores" class="nav-link block w-full p-2 leading-8">Manage Chores</a>
+                        <span class="fas fa-clipboard text-2xl px-3 py-2"></span>
                     </li>
-                    <li v-if="userIsAdmin" class="nav-item p-2 border-b w-full">
-                        <a class="nav-link block w-full h-full" href="/manage-users">Manage users</a>
+                    <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
+                        <a class="nav-link block w-full p-2 leading-8" href="/manage-users">Manage users</a>
+                        <span class="fas fa-user text-2xl px-3 py-2"></span>
                     </li>
-                    <li class="nav-item p-2 border-b w-full">
-                        <a class="nav-link block w-full h-full" href="/manage-account">Manage account</a>
+                    <li class="nav-item border-b w-full flex align-items">
+                        <a class="nav-link block w-full p-2 leading-8" href="/manage-account">My account</a>
+                        <span class="fas fa-laptop text-2xl px-2 py-2"></span>
                     </li>
-                    <li class="nav-item p-2 border-b w-full">
-                        <a class="nav-link block w-full h-full" href="/manage-users" @click.prevent="logout">Logout</a>
+                    <li class="nav-item border-b w-full">
+                        <a class="nav-link block w-full p-2 leading-8" href="/" @click.prevent="logout">Logout</a>
+                        <span class="fas fa-arrow-right-from-bracket text-2xl px-3 py-2"></span>
                     </li>
                 </ul>
             </nav>
