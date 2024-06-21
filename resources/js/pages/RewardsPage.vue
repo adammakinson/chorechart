@@ -7,8 +7,9 @@
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div class="flex justify-between">
-                    <div class="fas fa-bars text-2xl h-10 ml-1.5 visible p-1.5 block sm:hidden" @click="clickMobileMainMenu"></div>
+                    
                     <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
+                    <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} points</p>
                 </div>
                 <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
@@ -106,7 +107,9 @@ export default {
             rewards: [],
             cardCollectionData: [],
             clickedCardData: [],
+            user: [],
             userIsAdmin: false,
+            userTransactions: [],
             editingReward: false,
             rewardModalTitle: "Create Reward",
             rewardModalPrimaryButtonAction: "createReward",
@@ -177,7 +180,14 @@ export default {
     mounted() {
         if (this.$store.getters.getUserAuthToken) {
             
+            if (!this.$store.getters.getUserTransactions || this.$store.getters.getUserTransactions.length == 0) {
+                this.fetchUsersTransactions();
+            }
+
+            this.user = this.$store.getters.getUser;
             this.userIsAdmin = this.$store.getters.userIsAdmin;
+            this.userTransactions = this.$store.getters.getUserTransactions;
+
 
             this.fetchAllRewards();
         } else {
@@ -226,7 +236,6 @@ export default {
         },
 
         userHasEnoughPoints(clickedCardData) {
-            console.log(this.$store.getters.getUserPoints >= clickedCardData.point_value);
 
             return this.$store.getters.getUserPoints >= clickedCardData.point_value;
         },
@@ -446,6 +455,19 @@ export default {
 
         clickMobileMainMenu() {
             eventBus.emit('mobileMainMenuIconClicked', this);
+        },
+
+        fetchUsersTransactions() {
+            let user = this.$store.getters.getUser;
+
+            axios.get('/api/users/' + user.id + '/transactions', {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then((response) => {
+
+                this.$store.commit('setUserTransactions', response.data);
+            });
         }
     }
 }

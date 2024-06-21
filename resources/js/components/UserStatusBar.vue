@@ -1,7 +1,7 @@
 <template>
-    <div class="flex justify-between py-2 border-b">
+    <div class="flex justify-end border-b">
         <slot></slot>
-        <p class="p-1.5">{{this.$store.getters.getUserPoints}}</p>
+        <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} points</p>
     </div>
 </template>
 
