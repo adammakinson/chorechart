@@ -1,14 +1,14 @@
 <template>
     <Transition>
-        <nav v-if="authenticatedUser" class="opacity-100 w-44 h-full bg-gray-400 h-full -translate-x-32 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
-            <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-44">
+        <nav v-if="authenticatedUser" class="opacity-100 w-40 h-full bg-gray-400 h-full -translate-x-28 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
+            <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-40">
                 <li class="nav-item p-2 border-b w-full">
                     <div class="flex justify-end">
                         <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
                     </div>
                 </li>
                 <li class="nav-item border-b w-full flex align-items">
-                    <a href="/chores-list" class="nav-link block w-full p-2 leading-8">Chores</a>
+                    <a href="/chores-list" class="nav-link block w-full p-2 leading-8">My Chores</a>
                     <a href="/chores-list">
                         <span class="fas fa-brush text-2xl px-3 py-2"></span>
                     </a>
@@ -20,13 +20,13 @@
                     </a>
                 </li>
                 <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
-                    <a href="/manage-chores" class="nav-link block w-full p-2 leading-8">Manage Chores</a>
+                    <a href="/manage-chores" class="nav-link block w-full p-2 leading-8">Guide Chores</a>
                     <a href="/manage-chores">
                         <span class="fas fa-clipboard text-2xl px-3 py-2"></span>
                     </a>
                 </li>
                 <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
-                    <a href="/manage-users" class="nav-link block w-full p-2 leading-8">Manage users</a>
+                    <a href="/manage-users" class="nav-link block w-full p-2 leading-8">Users</a>
                     <a href="/manage-users">
                         <span class="fas fa-user text-2xl px-3 py-2"></span>
                     </a>
