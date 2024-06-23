@@ -23,7 +23,7 @@
                                 v-bind:data-choreid="choreData.id"
                                 class="pr-2">
                             </span>
-                            <span v-if="choreIsFinished(choreData)" class="text-green-600 pr-2">Done</span>
+                            <span v-if="choreIsFinished(choreData)" class="text-green-600 pr-2 fas fa-dollar-sign"></span>
                         </template>
                     </list-item>
                 </ListGroup>
