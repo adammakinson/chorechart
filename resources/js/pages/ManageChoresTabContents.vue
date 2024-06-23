@@ -1,6 +1,6 @@
 <template>
     <div class="tabcontent">
-        <div class="ml-8 sm:ml-0">
+        <div>
             <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
             <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</Button>
             <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser">add to all</Button>
