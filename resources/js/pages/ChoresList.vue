@@ -1,8 +1,8 @@
 <template>
     <div class="w-full max-w-full h-screen">
-        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
-            <div class="px-5 pl-16 pr-5 sm:p-5 w-full">
+            <div class="p-5 w-full">
                 <UserStatusBar/>
                 <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 p-4 h-96">
