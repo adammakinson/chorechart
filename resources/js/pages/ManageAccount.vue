@@ -119,6 +119,12 @@ export default {
         }
     },
 
+    computed: {
+        windowWidth() {
+            return this.$store.getters.getWindowWidth;
+        }
+    },
+
     created() {
         this.userData = this.$store.getters.getUser;
 

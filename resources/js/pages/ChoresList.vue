@@ -80,6 +80,12 @@ export default {
         }
     },
 
+    computed: {
+        windowWidth() {
+            return this.$store.getters.getWindowWidth;
+        }
+    },
+
     components: {
         UserStatusBar,
         Appmenu,

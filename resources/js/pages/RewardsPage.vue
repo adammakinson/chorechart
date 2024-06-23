@@ -138,6 +138,12 @@ export default {
         };
     },
 
+    computed: {
+        windowWidth() {
+            return this.$store.getters.getWindowWidth;
+        }
+    },
+
     created() {
         eventBus.on("reward-card-click", (cardData) => {
             this.clickedCardData = cardData;

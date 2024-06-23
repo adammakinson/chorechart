@@ -179,6 +179,12 @@
             }
         },
 
+        computed: {
+            windowWidth() {
+                return this.$store.getters.getWindowWidth;
+            }
+        },
+
         components: {
             Modal,
             Appmenu,
