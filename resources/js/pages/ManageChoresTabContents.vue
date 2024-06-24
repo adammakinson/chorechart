@@ -7,7 +7,7 @@
             <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
                 <list-group :listId="'chores-list'" class="mt-4">
-                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" :draggable="true" :selectable="true" class="border border-slate-400">
+                    <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" :draggable="true" :selectable="true" class="border border-slate-400 grid grid-cols-listitemgrid">
                         <div class="h-full p-1.5">
                             <p>
                                 {{choreData.chore}} <span class="green-600">{{choreData.pointvalue}} pts</span>
@@ -29,7 +29,7 @@
                             <h4 class="p-2">{{cardData.name}}</h4>
                         </template>
                         <list-group v-if="cardData.chores">
-                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="pl-2 border border-slate-400 leading-3 w-full">
+                            <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="flex pl-2 border border-slate-400 leading-3 w-full">
                                 <p>{{userChore.chore}}</p>
                                 <template v-slot:actions>
                                     <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">

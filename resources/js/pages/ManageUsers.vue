@@ -7,7 +7,7 @@
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
-                    <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="border border-slate-400">
+                    <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                         <div class="flex">
                             <span class="h-8 p-1">{{userData.name}}</span>
                         </div>
