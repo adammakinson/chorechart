@@ -13,17 +13,18 @@
                 <ListGroup v-if="chores.length > 0" :listId="'my-chores-list'" class="mt-4">
                     <list-item v-for="choreData in chores" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="grid border border-slate-400 grid-cols-listitemgrid">
                         <div class="flex">
-                            <div class="w-10 h-10 p-2 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
-                            <div class="h-8 p-1.5">{{choreData.chore}}</div>
+                            <div class="h-14 p-1.5">
+                                {{choreData.chore}} <span class="text-green-600">{{choreData.pointvalue}}P</span>
+                            </div>
                         </div>
                         <template v-slot:actions>
                             <span v-if="!choreIsFinished(choreData)"
                                 v-on:click="handleCheckClick" 
                                 v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check']" 
                                 v-bind:data-choreid="choreData.id"
-                                class="pr-2">
+                                class="pr-2 w-full h-full text-center">
                             </span>
-                            <span v-if="choreIsFinished(choreData)" class="text-green-600 pr-2 fas fa-dollar-sign"></span>
+                            <span v-if="choreIsFinished(choreData)" class="text-green-600 self-center w-full h-full text-center fas fa-dollar-sign"></span>
                         </template>
                     </list-item>
                 </ListGroup>
