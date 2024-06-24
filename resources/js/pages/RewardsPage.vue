@@ -1,15 +1,12 @@
 <template>
     <div class="w-screen max-w-full">
-        <!-- <user-status-bar>
-            <h1 class="self-center">Rewards</h1>
-        </user-status-bar> -->
-        <div class="sm:grid transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div class="flex justify-between">
                     
-                    <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">New reward</Button>
-                    <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} points</p>
+                    <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">+ reward</Button>
+                    <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} pts</p>
                 </div>
                 <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
@@ -136,6 +133,12 @@ export default {
                 }
             }
         };
+    },
+
+    computed: {
+        windowWidth() {
+            return this.$store.getters.getWindowWidth;
+        }
     },
 
     created() {

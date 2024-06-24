@@ -17,10 +17,12 @@ module.exports = {
       gridTemplateColumns: {
 
         // grid spacing for expanded menu
-        'menuexpanded': '175px 1fr',
+        'menuexpanded': '160px 1fr',
         
         // grid spacing for expanded menu
         'menucollapsed': '48px 1fr',
+
+        'listitemgrid': '1fr 2.5rem',
       }
     },
   },
