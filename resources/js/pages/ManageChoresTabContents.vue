@@ -8,9 +8,10 @@
             <div>
                 <list-group :listId="'chores-list'" class="mt-4">
                     <list-item v-for="choreData in choresList" :key="choreData.id" :listItem="choreData" :draggable="true" :selectable="true" class="border border-slate-400">
-                        <div class="flex">
-                            <div class="w-10 h-10 p-2 bg-gray-300 flex center">{{choreData.pointvalue}}</div>
-                            <div class="h-8 p-1.5">{{choreData.chore}}</div>
+                        <div class="h-full p-1.5">
+                            <p>
+                                {{choreData.chore}} <span class="green-600">{{choreData.pointvalue}} pts</span>
+                            </p>
                         </div>
                         <template v-slot:actions>
                             <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="editChore" v-bind:args="choreData.id">
