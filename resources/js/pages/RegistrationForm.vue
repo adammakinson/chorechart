@@ -42,14 +42,14 @@ export default {
     },
 
     created() {
-        eventBus.on('callback', (callback, args) => {
+        eventBus.on('callback', (eventData) => {
     
             // 'this' is the VueComponent object
-            if(this[callback]){
-                if(args){
-                    this[callback](args);
+            if(this[eventData.callback]){
+                if(eventData.args){
+                    this[eventData.callback](eventData.args);
                 } else {
-                    this[callback]();
+                    this[eventData.callback]();
                 }
             }
         });
@@ -105,6 +105,7 @@ export default {
 
     methods: {
         handleRegistration() {
+            console.log('calling handleRegistration');
             axios.post('/api/register', {
                 name: this.registerFormData.name.value,
                 username: this.registerFormData.username.value,
