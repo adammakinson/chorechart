@@ -294,6 +294,51 @@
                 createUserModalUnderlay.classList.remove('invisible');
             },
 
+            createUser() {
+
+                let userData = {
+                    name: this.createUserModalForm.name.value,
+                    username: this.createUserModalForm.username.value,
+                    email: this.createUserModalForm.email.value,
+                    password: this.createUserModalForm.password.value,
+                    confirm_password: this.createUserModalForm.passwordconfirm.value
+                }
+
+                axios.post('/api/register', userData).then((response) => {
+                    // When an admin creates a user, we want to manually Create
+                    // the user record from the data sent and add it to the users
+                    // array.
+                    this.users.push(userData)
+
+                    this.createUserModalForm.name.value = '';
+                    this.createUserModalForm.username.value = '';
+                    this.createUserModalForm.email.value = '';
+                    this.createUserModalForm.password.value = '';
+                    this.createUserModalForm.passwordconfirm.value = '';
+
+                    this.closeModal();
+
+                }).catch((error) => {
+                    if (error.response) {
+                        this.registerFormNotification = {
+                            message: error.response.data.message,
+                            status: error.response.status
+                        };
+
+                        this.errors = error.response.data.errors;
+
+                        for (const property in error.response.data.errors) {
+                            if (property === 'message') {
+                                continue;
+                            }
+
+                            this.registerFormData[property].errors = error.response.data.errors[property];
+                        }
+                    }
+                });
+
+            },
+
             showEditUserModal(el) {
                 let editUserModal = document.getElementById('editUserModal');
                 let editUserModalUnderlay = editUserModal.parentNode;
