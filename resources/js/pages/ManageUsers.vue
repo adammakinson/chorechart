@@ -29,6 +29,7 @@
                                 :elementLabel="formField.label"
                                 :errors="formField.errors"
                                 :value="formField.value"
+                                :callback="formField.callback"
                             ></FormInput>
                         </form>
                     </div>
@@ -155,35 +156,40 @@
                         label: 'Name',
                         type: 'text',
                         errors: '',
-                        value: ''
+                        value: '',
+                        callback: 'updateNameFieldValue'
                     },
                     username: {
                         identifier: 'username',
                         label: 'Username',
                         type: 'text',
                         errors: '',
-                        value: ''
+                        value: '',
+                        callback: 'updateUserNameFieldValue'
                     },
                     email: {
                         identifier: 'email',
                         label: 'Email',
                         type: 'text',
                         errors: '',
-                        value: ''
+                        value: '',
+                        callback: 'updateEmailFieldValue'
                     },
                     password: {
                         identifier: 'password',
                         label: 'Password',
                         type: 'password',
                         errors: '',
-                        value: ''
+                        value: '',
+                        callback: 'updatePasswordFieldValue'
                     },
                     passwordconfirm: {
                         identifier: 'passwordconfirm',
                         label: 'Confirm Password',
                         type: 'password',
                         errors: '',
-                        value: ''
+                        value: '',
+                        callback: 'updateConfirmPasswordFieldValue'
                     }
                 },
                 editUserModalForm: {
@@ -479,6 +485,26 @@
             
             closeModal() {
                 eventBus.emit('close-modal');
+            },
+
+            updateNameFieldValue(elValue) {
+                this.createUserModalForm.name.value = elValue;
+            },
+
+            updateUserNameFieldValue(elValue) {
+                this.createUserModalForm.username.value = elValue;
+            },
+            
+            updateEmailFieldValue(elValue) {
+                this.createUserModalForm.email.value = elValue;
+            },
+
+            updatePasswordFieldValue(elValue) {
+                this.createUserModalForm.password.value = elValue;
+            },
+
+            updateConfirmPasswordFieldValue(elValue) {
+                this.createUserModalForm.passwordconfirm.value = elValue;
             }
         }
     }
