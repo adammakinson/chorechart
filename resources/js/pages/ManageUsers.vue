@@ -3,6 +3,7 @@
         <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
+                <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="showCreateUserModal">Add user</Button>
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
                     <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                         <div class="flex">
