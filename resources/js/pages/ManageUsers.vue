@@ -16,6 +16,29 @@
                         </template>
                     </list-item>
                 </ListGroup>
+                <modal id="createUserModal">
+                    <template v-slot:header>
+                        Create User
+                    </template>
+                    <div>
+                        <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
+                        <form id="createUserForm" :key="createUserFormKey">
+                            <FormInput v-for="formField in createUserModalForm" :key="formField.identifier"
+                                :identifier="formField.identifier"
+                                :type="formField.type"
+                                :elementLabel="formField.label"
+                                :errors="formField.errors"
+                                :value="formField.value"
+                            ></FormInput>
+                        </form>
+                    </div>
+                    <template v-slot:footer>
+                        <footer>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="createUser">Create user</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" callback="closeModal">Close</Button>
+                        </footer>
+                    </template>
+                </modal>
                 <modal id="editUserModal">
                     <template v-slot:header>
                         Edit User
@@ -126,6 +149,43 @@
                 modalNotice: '',
                 modalErrors: {},
                 mainMenuIsOpen: false,
+                createUserModalForm: {
+                    name: {
+                        identifier: 'name',
+                        label: 'Name',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    email: {
+                        identifier: 'email',
+                        label: 'Email',
+                        type: 'text',
+                        errors: '',
+                        value: ''
+                    },
+                    password: {
+                        identifier: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        errors: '',
+                        value: ''
+                    },
+                    passwordconfirm: {
+                        identifier: 'passwordconfirm',
+                        label: 'Confirm Password',
+                        type: 'password',
+                        errors: '',
+                        value: ''
+                    }
+                },
                 editUserModalForm: {
                     name: {
                         identifier: 'name',
