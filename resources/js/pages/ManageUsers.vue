@@ -278,6 +278,16 @@
                 );
             },
 
+            showCreateUserModal(el) {
+                let createUserModal = document.getElementById('createUserModal');
+                let createUserModalUnderlay = createUserModal.parentNode;
+
+                createUserModal.classList.add('visible');
+                createUserModal.classList.remove('invisible');
+                createUserModalUnderlay.classList.add('visible');
+                createUserModalUnderlay.classList.remove('invisible');
+            },
+
             showEditUserModal(el) {
                 let editUserModal = document.getElementById('editUserModal');
                 let editUserModalUnderlay = editUserModal.parentNode;
