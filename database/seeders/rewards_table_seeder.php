@@ -7,6 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use App\Models\Image AS ImageModel;
 use App\Models\Reward AS RewardsModel;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\File;
 
 class rewards_table_seeder extends Seeder
 {
@@ -26,13 +28,13 @@ class rewards_table_seeder extends Seeder
             [
                 'reward' => '30 minutes of Roblox time',
                 'point_value' => 30,
-                'file' => 'robloxtimetest.jpg',
+                'file' => '30_game_time.svg',
                 'imgalt' => 'Roblox time'
             ],
             [
                 'reward' => 'One 30 minute episode',
                 'point_value' => 30,
-                'file' => 'episodetimetest.jpg',
+                'file' => 'tv_time.svg',
                 'imgalt' => 'One TV Episode'
             ]
         ];
@@ -46,17 +48,29 @@ class rewards_table_seeder extends Seeder
 
             $rewardInstance->save();
 
-            $imageSeed = UploadedFile::fake()->image($seed['file']);
-            $storageLocation = env('FILESYSTEM_DRIVER', 'public') . '/images';
-
-            $imageSeed->store($storageLocation);
+            // Get the path to the file(s) that the seeder needs
+            $seederImageFileLocation = Storage::path('seederfiles/' . $seed['file']);
             
-            $extension = $imageSeed->getClientOriginalExtension();
+            // Create a new file with the retrieved path
+            $seederImageFile = new File($seederImageFileLocation);
+            
+            // Generate the hash name same as how it would be generated on upload
+            $seederImageFileHashName = $seederImageFile->hashName();
 
+            // copy the file over from the seederfiles directory as the hash name
+            $seederImage = Storage::copy('seederfiles/'.$seed['file'], 'public/images/' . $seederImageFileHashName);
+
+            // define the storage location for the database entry
+            $storageLocation = env('FILESYSTEM_DRIVER', '') . '/images/';
+
+            // define the extension for the database entry
+            $extension = $seederImageFile->extension();
+
+            // generate the database record
             $rewardImageInstance = new ImageModel;
             $rewardImageInstance->reward_id = $rewardInstance->id;
             $rewardImageInstance->path = $storageLocation;
-            $rewardImageInstance->filename = $imageSeed->hashName();
+            $rewardImageInstance->filename = $seederImageFile->hashName();
             $rewardImageInstance->file_extension = $extension;
             $rewardImageInstance->alt_text = $seed['imgalt'];
             $rewardImageInstance->save();
