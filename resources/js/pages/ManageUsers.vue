@@ -1,11 +1,9 @@
 <template>
     <div class="w-screen">
-        <!-- <user-status-bar>
-            <h1 class="self-center">Manage Users</h1>
-        </user-status-bar> -->
         <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
             <appmenu></appmenu>
             <div class="p-5 w-full">
+                <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="showCreateUserModal">Add user</Button>
                 <ListGroup v-if="users.length > 0" :listId="'my-chores-list'" class="mt-4">
                     <list-item v-for="userData in users" :key="userData.id" :listItem="userData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                         <div class="flex">
@@ -18,6 +16,30 @@
                         </template>
                     </list-item>
                 </ListGroup>
+                <modal id="createUserModal">
+                    <template v-slot:header>
+                        Create User
+                    </template>
+                    <div>
+                        <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
+                        <form id="createUserForm" :key="createUserFormKey">
+                            <FormInput v-for="formField in createUserModalForm" :key="formField.identifier"
+                                :identifier="formField.identifier"
+                                :type="formField.type"
+                                :elementLabel="formField.label"
+                                :errors="formField.errors"
+                                :value="formField.value"
+                                :callback="formField.callback"
+                            ></FormInput>
+                        </form>
+                    </div>
+                    <template v-slot:footer>
+                        <footer>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="createUser">Create user</Button>
+                            <Button colorClass="text-white" bgColorClass="bg-red-600" marginClass="mr-4" callback="closeModal">Close</Button>
+                        </footer>
+                    </template>
+                </modal>
                 <modal id="editUserModal">
                     <template v-slot:header>
                         Edit User
@@ -128,6 +150,48 @@
                 modalNotice: '',
                 modalErrors: {},
                 mainMenuIsOpen: false,
+                createUserModalForm: {
+                    name: {
+                        identifier: 'name',
+                        label: 'Name',
+                        type: 'text',
+                        errors: '',
+                        value: '',
+                        callback: 'updateNameFieldValue'
+                    },
+                    username: {
+                        identifier: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        errors: '',
+                        value: '',
+                        callback: 'updateUserNameFieldValue'
+                    },
+                    email: {
+                        identifier: 'email',
+                        label: 'Email',
+                        type: 'text',
+                        errors: '',
+                        value: '',
+                        callback: 'updateEmailFieldValue'
+                    },
+                    password: {
+                        identifier: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        errors: '',
+                        value: '',
+                        callback: 'updatePasswordFieldValue'
+                    },
+                    passwordconfirm: {
+                        identifier: 'passwordconfirm',
+                        label: 'Confirm Password',
+                        type: 'password',
+                        errors: '',
+                        value: '',
+                        callback: 'updateConfirmPasswordFieldValue'
+                    }
+                },
                 editUserModalForm: {
                     name: {
                         identifier: 'name',
@@ -218,6 +282,61 @@
                         this.users = response.data;
                     }
                 );
+            },
+
+            showCreateUserModal(el) {
+                let createUserModal = document.getElementById('createUserModal');
+                let createUserModalUnderlay = createUserModal.parentNode;
+
+                createUserModal.classList.add('visible');
+                createUserModal.classList.remove('invisible');
+                createUserModalUnderlay.classList.add('visible');
+                createUserModalUnderlay.classList.remove('invisible');
+            },
+
+            createUser() {
+
+                let userData = {
+                    name: this.createUserModalForm.name.value,
+                    username: this.createUserModalForm.username.value,
+                    email: this.createUserModalForm.email.value,
+                    password: this.createUserModalForm.password.value,
+                    confirm_password: this.createUserModalForm.passwordconfirm.value
+                }
+
+                axios.post('/api/register', userData).then((response) => {
+                    // When an admin creates a user, we want to manually Create
+                    // the user record from the data sent and add it to the users
+                    // array.
+                    this.users.push(userData)
+
+                    this.createUserModalForm.name.value = '';
+                    this.createUserModalForm.username.value = '';
+                    this.createUserModalForm.email.value = '';
+                    this.createUserModalForm.password.value = '';
+                    this.createUserModalForm.passwordconfirm.value = '';
+
+                    this.closeModal();
+
+                }).catch((error) => {
+                    if (error.response) {
+                        this.registerFormNotification = {
+                            message: error.response.data.message,
+                            status: error.response.status
+                        };
+
+                        this.errors = error.response.data.errors;
+
+                        for (const property in error.response.data.errors) {
+                            if (property === 'message') {
+                                continue;
+                            }
+
+                            this.registerFormData[property].errors = error.response.data.errors[property];
+                        }
+                    }
+                });
+
             },
 
             showEditUserModal(el) {
@@ -411,6 +530,26 @@
             
             closeModal() {
                 eventBus.emit('close-modal');
+            },
+
+            updateNameFieldValue(elValue) {
+                this.createUserModalForm.name.value = elValue;
+            },
+
+            updateUserNameFieldValue(elValue) {
+                this.createUserModalForm.username.value = elValue;
+            },
+            
+            updateEmailFieldValue(elValue) {
+                this.createUserModalForm.email.value = elValue;
+            },
+
+            updatePasswordFieldValue(elValue) {
+                this.createUserModalForm.password.value = elValue;
+            },
+
+            updateConfirmPasswordFieldValue(elValue) {
+                this.createUserModalForm.passwordconfirm.value = elValue;
             }
         }
     }
