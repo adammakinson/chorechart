@@ -39,6 +39,24 @@ Install PHP dependencies
 composer install
 ```
 
+Create a database for the first admin user in MySQL:
+```
+CREATE DATABASE <database name>;
+```
+
+Create a .env from the sample .env and update the pertinent entries
+
+
+Run migrations
+```
+php artisan migrate
+```
+
+Run the seeders:
+```
+php artisan db:seed
+```
+
 Install NPM dependencies
 ```
 npm install
