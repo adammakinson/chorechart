@@ -1,6 +1,6 @@
 <template>
     <Transition>
-        <nav v-if="authenticatedUser" class="opacity-100 w-40 h-full bg-gray-400 h-full -translate-x-28 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
+        <nav v-if="authenticatedUser" class="absolute top-0 opacity-100 w-40 h-full bg-gray-400 h-full -translate-x-40 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
             <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-40">
                 <li class="nav-item p-2 border-b w-full">
                     <div class="flex justify-end">
@@ -61,7 +61,7 @@ export default {
         if (this.windowWidth < 640) {
             this.mainMenuIsOpen = false;
         } else {
-            this.mainMenuIsOpen = true;
+            this.mainMenuIsOpen = false;
         }
     },
 
