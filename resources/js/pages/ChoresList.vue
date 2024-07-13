@@ -38,7 +38,6 @@ import eventBus from '../eventBus';
 import Appmenu from '../components/AppMenu.vue';
 import ListItem from "../components/ListItem.vue";
 import ListGroup from "../components/ListGroup.vue";
-import UserStatusBar from '../components/UserStatusBar.vue';
 import TitleBar from '../components/TitleBar.vue';
 
 export default {
@@ -89,7 +88,6 @@ export default {
     },
 
     components: {
-        UserStatusBar,
         Appmenu,
         ListItem,
         ListGroup,

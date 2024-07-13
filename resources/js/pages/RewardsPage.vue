@@ -97,7 +97,6 @@ import Appmenu from '../components/AppMenu.vue';
 import Cardgrid from '../components/Cardgrid.vue';
 import FormInput from '../components/FormInput.vue';
 import Notification from '../components/Notification.vue';
-import UserStatusBar from '../components/UserStatusBar.vue';
 import TitleBar from '../components/TitleBar.vue';
 
 export default {
@@ -204,7 +203,6 @@ export default {
         Appmenu,
         Cardgrid,
         Card,
-        UserStatusBar,
         Modal,
         icon,
         Notification,

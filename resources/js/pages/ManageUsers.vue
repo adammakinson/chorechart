@@ -101,7 +101,6 @@
     import FormInput from '../components/FormInput.vue';
     import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
-    import UserStatusBar from '../components/UserStatusBar.vue';
     import TitleBar from '../components/TitleBar.vue';
     
     export default {
@@ -255,7 +254,6 @@
             Modal,
             Appmenu,
             Notification,
-            UserStatusBar,
             Button,
             FormInput,
             ListItem,

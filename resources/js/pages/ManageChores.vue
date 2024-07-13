@@ -79,8 +79,6 @@ export default {
     
     components: {
         Appmenu,
-        TabComponent,
-        TabComponent,
         ManageChoresTabContents,
         ViewAssignmentsTabContents,
         TitleBar

@@ -46,7 +46,6 @@ import Button from '../components/Button.vue';
 import Appmenu from '../components/AppMenu.vue';
 import FormInput from '../components/FormInput.vue';
 import Notification from '../components/Notification.vue';
-import UserStatusBar from '../components/UserStatusBar.vue';
 import TitleBar from '../components/TitleBar.vue';
 
 export default {
@@ -54,7 +53,6 @@ export default {
         Card,
         Appmenu,
         Notification,
-        UserStatusBar,
         Button,
         FormInput,
         TitleBar
