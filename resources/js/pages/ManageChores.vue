@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
                 <div id="choreManagement" class="p-5 w-full">
                     <component :is="mainTabContents"></component>
@@ -13,9 +14,9 @@
 import eventBus from '../eventBus';
 import Appmenu from "../components/AppMenu.vue";
 import TabComponent from "../components/TabComponent";
-import UserStatusBar from '../components/UserStatusBar.vue';
 import ManageChoresTabContents from "./ManageChoresTabContents.vue";
 import ViewAssignmentsTabContents from "./ViewAssignmentsTabContents.vue";
+import TitleBar from '../components/TitleBar.vue';
 
 export default {
 
@@ -82,7 +83,7 @@ export default {
         TabComponent,
         ManageChoresTabContents,
         ViewAssignmentsTabContents,
-        UserStatusBar
+        TitleBar
     }
     
 }

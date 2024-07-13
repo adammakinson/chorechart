@@ -1,6 +1,7 @@
 <template>
     <div class="w-screen max-w-full">
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div class="flex justify-between">
@@ -97,6 +98,7 @@ import Cardgrid from '../components/Cardgrid.vue';
 import FormInput from '../components/FormInput.vue';
 import Notification from '../components/Notification.vue';
 import UserStatusBar from '../components/UserStatusBar.vue';
+import TitleBar from '../components/TitleBar.vue';
 
 export default {
     data() {
@@ -207,7 +209,8 @@ export default {
         icon,
         Notification,
         Button,
-        FormInput
+        FormInput,
+        TitleBar
     },
 
     methods: {

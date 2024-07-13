@@ -1,6 +1,7 @@
 <template>
     <div class="w-screen">
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="showCreateUserModal">Add user</Button>
@@ -101,6 +102,7 @@
     import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
     import UserStatusBar from '../components/UserStatusBar.vue';
+    import TitleBar from '../components/TitleBar.vue';
     
     export default {
         created() {
@@ -257,7 +259,8 @@
             Button,
             FormInput,
             ListItem,
-            ListGroup
+            ListGroup,
+            TitleBar
         },
 
         mounted() {
