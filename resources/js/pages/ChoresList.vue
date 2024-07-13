@@ -50,21 +50,7 @@ export default {
 
         });
 
-        if (this.windowWidth < 640) {
-            this.mainMenuIsOpen = false;
-        } else {
-            this.mainMenuIsOpen = true;
-        }
-
-        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-            const portrait = e.matches;
-
-            if (this.windowWidth < 640) {
-                this.mainMenuIsOpen = false;
-            } else {
-                this.mainMenuIsOpen = true;
-            }
-        });
+        this.mainMenuIsOpen = false;
     },
 
     data() {
