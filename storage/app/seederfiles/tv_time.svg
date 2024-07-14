@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="144mm"
+   height="150mm"
+   viewBox="0 0 144 150"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (ce6663b3b7, 2021-05-25)"
+   sodipodi:docname="tv_time.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="false"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.75187991"
+     inkscape:cx="240.06493"
+     inkscape:cy="347.7949"
+     inkscape:window-width="1848"
+     inkscape:window-height="1016"
+     inkscape:window-x="72"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     width="209mm"
+     showborder="true"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="12.668247,100.7346"
+       orientation="1,0"
+       id="guide33406" />
+    <sodipodi:guide
+       position="-2.4632702,137.33175"
+       orientation="0,-1"
+       id="guide33408" />
+    <sodipodi:guide
+       position="130.55332,153.51896"
+       orientation="1,0"
+       id="guide33410" />
+    <sodipodi:guide
+       position="-0.35189574,13.464455"
+       orientation="0,-1"
+       id="guide33412" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#007fa7;fill-opacity:1;stroke:#638cab;stroke-width:2.0493;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect33596"
+       width="117.75377"
+       height="77.882454"
+       x="12.733899"
+       y="28.310061"
+       ry="9.8018541" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#638cab;stroke-width:1.918;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect37439"
+       width="102.48573"
+       height="61.863136"
+       x="20.288914"
+       y="36.060291"
+       ry="4.4023104" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:19.2882px;line-height:1.25;font-family:sans-serif;fill:#007fa7;fill-opacity:1;stroke:none;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="71.780945"
+       y="38.289921"
+       id="text2366"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#007fa7;fill-opacity:1;stroke:none;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="71.780945"
+         y="38.289921"
+         id="tspan2368" /><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#007fa7;fill-opacity:1;stroke:none;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="71.780945"
+         y="62.400169"
+         id="tspan13240"
+         dx="0 3.1670618">TV</tspan><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#007fa7;fill-opacity:1;stroke:none;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="71.780945"
+         y="86.510422"
+         id="tspan13236">TIME!</tspan></text>
+  </g>
+</svg>

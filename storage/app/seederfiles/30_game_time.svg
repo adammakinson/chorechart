@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="144mm"
+   height="150mm"
+   viewBox="0 0 144 150"
+   version="1.1"
+   id="svg5"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient31684">
+      <stop
+         style="stop-color:#fffffe;stop-opacity:1"
+         offset="0"
+         id="stop31680" />
+      <stop
+         style="stop-color:#ffe200;stop-opacity:1"
+         offset="1"
+         id="stop31682" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient31630">
+      <stop
+         style="stop-color:#fff6d5;stop-opacity:1;"
+         offset="0"
+         id="stop31626" />
+      <stop
+         style="stop-color:#fff6d5;stop-opacity:0;"
+         offset="1"
+         id="stop31628" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient31630"
+       id="linearGradient31632"
+       x1="70.301292"
+       y1="128.40504"
+       x2="121.93528"
+       y2="128.40504"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(7.056622,5.2091161)" />
+    <linearGradient
+       xlink:href="#linearGradient31684"
+       id="linearGradient31686"
+       x1="37.237652"
+       y1="136.14706"
+       x2="78.696465"
+       y2="175.53012"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2651814,0,0,1.2651814,7.5768929,-112.33723)" />
+  </defs>
+  <g
+     id="layer1">
+    <g
+       id="g31003"
+       transform="matrix(1.689359,0,0,1.689359,-89.274229,-141.3371)">
+      <circle
+         style="fill:#ffcc00;stroke:#ffffff;stroke-width:0.529167;stroke-linejoin:round;paint-order:stroke fill markers"
+         id="path21668-3"
+         cx="90.307671"
+         cy="133.16411"
+         r="34.518734"
+         transform="rotate(-2.0493301)" />
+      <circle
+         style="fill:#ffff00;stroke:#ffffff;stroke-width:0.529167;stroke-linejoin:round;paint-order:stroke fill markers"
+         id="path21668"
+         cx="95.447227"
+         cy="126.14281"
+         r="34.518734" />
+    </g>
+    <circle
+       style="fill:url(#linearGradient31686);fill-opacity:1;stroke:#ffb000;stroke-width:2.67075;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+       id="path31656"
+       cx="72.516739"
+       cy="72.472816"
+       r="49.128017" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:19.2882px;line-height:1.25;font-family:sans-serif;fill:#ffcc00;fill-opacity:1;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="72.899696"
+       y="55.708359"
+       id="text2366-6"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffcc00;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.899696"
+         y="55.708359"
+         id="tspan2368-7">30 min</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffcc00;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.899696"
+         y="79.818611"
+         id="tspan13240-5">GAME</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffcc00;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.899696"
+         y="103.92886"
+         id="tspan13236-3">TIME!</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:19.2882px;line-height:1.25;font-family:sans-serif;fill:#ffff00;fill-opacity:1;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="72.38279"
+       y="55.056835"
+       id="text2366"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffff00;fill-opacity:1;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.38279"
+         y="55.056835"
+         id="tspan2368">30 min</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffff00;fill-opacity:1;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.38279"
+         y="79.167084"
+         id="tspan13240">GAME</tspan><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';text-align:center;text-anchor:middle;fill:#ffff00;fill-opacity:1;stroke:#ffb000;stroke-width:0.697623;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="72.38279"
+         y="103.27734"
+         id="tspan13236">TIME!</tspan></text>
+  </g>
+</svg>
