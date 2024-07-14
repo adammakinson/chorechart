@@ -11,7 +11,9 @@
                             <span class="h-8 p-1">{{userData.name}}</span>
                         </div>
                         <template v-slot:actions>
-                            <span v-on:click="showChangeCredentialsModal" class="fas fa-key px-1 py-2" v-bind:data-userid="userData.id"></span>
+                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showChangeCredentialsModal" v-bind:args="userData.id">
+                                <Icon class="fas fa-key"/>
+                            </Button>
                             <span v-on:click="showEditUserModal" class="fas fa-edit px-1 py-2" v-bind:data-userid="userData.id"></span>
                             <span v-on:click="removeUser" class="fas fa-trash px-1 py-2" v-bind:data-userid="userData.id"></span>
                         </template>
@@ -102,6 +104,7 @@
     import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
     import TitleBar from '../components/TitleBar.vue';
+    import Icon from "../components/Icon.vue";
     
     export default {
         created() {
@@ -244,7 +247,8 @@
             FormInput,
             ListItem,
             ListGroup,
-            TitleBar
+            TitleBar,
+            Icon
         },
 
         mounted() {
@@ -272,6 +276,7 @@
             },
 
             showCreateUserModal(el) {
+                
                 let createUserModal = document.getElementById('createUserModal');
                 let createUserModalUnderlay = createUserModal.parentNode;
 
@@ -358,10 +363,9 @@
                 this.editUserFormKey += 1;
             },
 
-            showChangeCredentialsModal(el) {
+            showChangeCredentialsModal(userId) {
                 let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
                 let changeCredentialsModalUnderlay = changeCredentialsModal.parentNode;
-                let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
                 this.modalNotice = '';
