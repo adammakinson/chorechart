@@ -1,6 +1,7 @@
 <template>
     <div class="w-screen">
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <Button colorClass="text-white" bgColorClass="bg-blue-600" marginClass="mr-4" callback="showCreateUserModal">Add user</Button>
@@ -100,7 +101,7 @@
     import FormInput from '../components/FormInput.vue';
     import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
-    import UserStatusBar from '../components/UserStatusBar.vue';
+    import TitleBar from '../components/TitleBar.vue';
     
     export default {
         created() {
@@ -120,21 +121,7 @@
                 this.mainMenuIsOpen = !this.mainMenuIsOpen;
             });
 
-            if (this.windowWidth < 640) {
-                this.mainMenuIsOpen = false;
-            } else {
-                this.mainMenuIsOpen = true;
-            }
-
-            window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-                const portrait = e.matches;
-
-                if (this.windowWidth < 640) {
-                    this.mainMenuIsOpen = false;
-                } else {
-                    this.mainMenuIsOpen = true;
-                }
-            });
+            this.mainMenuIsOpen = false;
         },
 
         data() {
@@ -253,11 +240,11 @@
             Modal,
             Appmenu,
             Notification,
-            UserStatusBar,
             Button,
             FormInput,
             ListItem,
-            ListGroup
+            ListGroup,
+            TitleBar
         },
 
         mounted() {

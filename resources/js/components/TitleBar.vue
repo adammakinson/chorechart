@@ -1,40 +1,20 @@
 <template>
-    <div class="flex justify-end border-b">
+    <div class="w-full max-w-full flex justify-between border-b w-screen h-14">
+        <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
         <slot></slot>
         <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} pts</p>
     </div>
 </template>
 
 <script>
-import Icon from './Icon.vue';
-import Button from './Button.vue';
 import eventBus from '../eventBus';
 
 export default {
 
-    components: {
-    },
-
     data() {
         return {
             authenticatedUser: false,
-            usersName: '',
-            dropdownClass: 'fas fa-user text-2xl h-10 mr-1.5',
-            dropdownCallback: 'clickDropdownButton',
-            dropdownData: [
-                {
-                    'id': 'manageAccount',
-                    'href': '/manage-account',
-                    'label': 'Manage Account',
-                    'event': ''
-                },
-                {
-                    'id': 'logout',
-                    'href': '#',
-                    'label': 'Logout',
-                    'event': 'logout'
-                }
-            ]
+            usersName: ''
         };
     },
 

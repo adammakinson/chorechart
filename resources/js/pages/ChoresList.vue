@@ -1,9 +1,9 @@
 <template>
     <div class="w-full max-w-full h-screen">
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <UserStatusBar/>
                 <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 p-4 h-96">
                         <h2 v-if="!userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Check back later.</h2>
@@ -38,7 +38,7 @@ import eventBus from '../eventBus';
 import Appmenu from '../components/AppMenu.vue';
 import ListItem from "../components/ListItem.vue";
 import ListGroup from "../components/ListGroup.vue";
-import UserStatusBar from '../components/UserStatusBar.vue';
+import TitleBar from '../components/TitleBar.vue';
 
 export default {
     props: ['id'],
@@ -50,21 +50,7 @@ export default {
 
         });
 
-        if (this.windowWidth < 640) {
-            this.mainMenuIsOpen = false;
-        } else {
-            this.mainMenuIsOpen = true;
-        }
-
-        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-            const portrait = e.matches;
-
-            if (this.windowWidth < 640) {
-                this.mainMenuIsOpen = false;
-            } else {
-                this.mainMenuIsOpen = true;
-            }
-        });
+        this.mainMenuIsOpen = false;
     },
 
     data() {
@@ -88,10 +74,10 @@ export default {
     },
 
     components: {
-        UserStatusBar,
         Appmenu,
         ListItem,
-        ListGroup
+        ListGroup,
+        TitleBar
     },
 
     mounted() {

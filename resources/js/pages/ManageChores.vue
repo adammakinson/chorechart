@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="grid min-h-screen transition-all duration-500 ease-in-out" :class="[ mainMenuIsOpen ? 'grid-cols-menuexpanded' : 'grid-cols-menucollapsed' ]">
+        <title-bar></title-bar>
+        <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
                 <div id="choreManagement" class="p-5 w-full">
                     <component :is="mainTabContents"></component>
@@ -13,9 +14,9 @@
 import eventBus from '../eventBus';
 import Appmenu from "../components/AppMenu.vue";
 import TabComponent from "../components/TabComponent";
-import UserStatusBar from '../components/UserStatusBar.vue';
 import ManageChoresTabContents from "./ManageChoresTabContents.vue";
 import ViewAssignmentsTabContents from "./ViewAssignmentsTabContents.vue";
+import TitleBar from '../components/TitleBar.vue';
 
 export default {
 
@@ -32,21 +33,7 @@ export default {
             this.mainMenuIsOpen = !this.mainMenuIsOpen;
         });
 
-        if (this.windowWidth < 640) {
-            this.mainMenuIsOpen = false;
-        } else {
-            this.mainMenuIsOpen = true;
-        }
-
-        window.matchMedia("(orientation: portrait)").addEventListener("change", e => {
-            const portrait = e.matches;
-
-            if (this.windowWidth < 640) {
-                this.mainMenuIsOpen = false;
-            } else {
-                this.mainMenuIsOpen = true;
-            }
-        });
+        this.mainMenuIsOpen = false;
     },
 
     data() {
@@ -78,11 +65,9 @@ export default {
     
     components: {
         Appmenu,
-        TabComponent,
-        TabComponent,
         ManageChoresTabContents,
         ViewAssignmentsTabContents,
-        UserStatusBar
+        TitleBar
     }
     
 }
