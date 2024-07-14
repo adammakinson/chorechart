@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             ChoresSeeder::class,
             rewards_table_seeder::class,
             UserChoreSeeder::class,
-            HomeImageSeeder::class
+            HomeImageSeeder::class,
+            FaviconsSeeder::class
         ]);
     }
 }
