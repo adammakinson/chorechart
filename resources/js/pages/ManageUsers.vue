@@ -337,10 +337,10 @@
 
             },
 
-            showEditUserModal(el) {
+            showEditUserModal(userId) {
+
                 let editUserModal = document.getElementById('editUserModal');
                 let editUserModalUnderlay = editUserModal.parentNode;
-                let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
                 this.modalNotice = '';
@@ -506,8 +506,7 @@
                 });
             },
 
-            removeUser(el) {
-                let userId = el.target.dataset.userid;
+            removeUser(userId) {
 
                 axios({
                     method: 'delete',
