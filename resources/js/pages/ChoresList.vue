@@ -24,7 +24,7 @@
                                 v-bind:data-choreid="choreData.id"
                                 class="pr-2 w-full h-full text-center">
                             </span>
-                            <span v-if="choreIsFinished(choreData)" class="text-green-600 self-center w-full h-full text-center fas fa-dollar-sign fa-lg"></span>
+                            <span v-if="choreIsFinished(choreData)" class="text-yellow-500 self-center pr-2 w-full h-full text-center fas fa-trophy fa-lg"></span>
                         </template>
                     </list-item>
                 </ListGroup>
