@@ -11,9 +11,17 @@
                             <span class="h-8 p-1">{{userData.name}}</span>
                         </div>
                         <template v-slot:actions>
-                            <span v-on:click="showChangeCredentialsModal" class="fas fa-key px-1 py-2" v-bind:data-userid="userData.id"></span>
-                            <span v-on:click="showEditUserModal" class="fas fa-edit px-1 py-2" v-bind:data-userid="userData.id"></span>
-                            <span v-on:click="removeUser" class="fas fa-trash px-1 py-2" v-bind:data-userid="userData.id"></span>
+                            <div class="divide-x divide-solid divide-white">
+                                <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showChangeCredentialsModal" v-bind:args="userData.id">
+                                    <Icon class="fas fa-key"/>
+                                </Button>
+                                <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showEditUserModal" v-bind:args="userData.id">
+                                    <Icon class="fas fa-edit"/>
+                                </Button>
+                                <Button colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="removeUser" v-bind:args="userData.id">
+                                    <Icon class="fas fa-trash"/>
+                                </Button>
+                            </div>
                         </template>
                     </list-item>
                 </ListGroup>
@@ -102,6 +110,7 @@
     import ListGroup from "../components/ListGroup.vue";
     import Notification from '../components/Notification.vue';
     import TitleBar from '../components/TitleBar.vue';
+    import Icon from "../components/Icon.vue";
     
     export default {
         created() {
@@ -244,7 +253,8 @@
             FormInput,
             ListItem,
             ListGroup,
-            TitleBar
+            TitleBar,
+            Icon
         },
 
         mounted() {
@@ -272,6 +282,7 @@
             },
 
             showCreateUserModal(el) {
+                
                 let createUserModal = document.getElementById('createUserModal');
                 let createUserModalUnderlay = createUserModal.parentNode;
 
@@ -326,10 +337,10 @@
 
             },
 
-            showEditUserModal(el) {
+            showEditUserModal(userId) {
+
                 let editUserModal = document.getElementById('editUserModal');
                 let editUserModalUnderlay = editUserModal.parentNode;
-                let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
                 this.modalNotice = '';
@@ -358,10 +369,9 @@
                 this.editUserFormKey += 1;
             },
 
-            showChangeCredentialsModal(el) {
+            showChangeCredentialsModal(userId) {
                 let changeCredentialsModal = document.getElementById('updateUserCredentialsModal');
                 let changeCredentialsModalUnderlay = changeCredentialsModal.parentNode;
-                let userId = el.target.dataset.userid;
                 let userBeingEdited;
 
                 this.modalNotice = '';
@@ -496,8 +506,7 @@
                 });
             },
 
-            removeUser(el) {
-                let userId = el.target.dataset.userid;
+            removeUser(userId) {
 
                 axios({
                     method: 'delete',
