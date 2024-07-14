@@ -11,11 +11,9 @@
                             <span class="h-8 p-1">{{userData.name}}</span>
                         </div>
                         <template v-slot:actions>
-                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showChangeCredentialsModal" v-bind:args="userData.id">
-                                <Icon class="fas fa-key"/>
-                            </Button>
-                            <span v-on:click="showEditUserModal" class="fas fa-edit px-1 py-2" v-bind:data-userid="userData.id"></span>
-                            <span v-on:click="removeUser" class="fas fa-trash px-1 py-2" v-bind:data-userid="userData.id"></span>
+                                <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showEditUserModal" v-bind:args="userData.id">
+                                    <Icon class="fas fa-edit"/>
+                                </Button>
                         </template>
                     </list-item>
                 </ListGroup>
