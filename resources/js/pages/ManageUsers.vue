@@ -11,6 +11,9 @@
                             <span class="h-8 p-1">{{userData.name}}</span>
                         </div>
                         <template v-slot:actions>
+                                <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showChangeCredentialsModal" v-bind:args="userData.id">
+                                    <Icon class="fas fa-key"/>
+                                </Button>
                                 <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showEditUserModal" v-bind:args="userData.id">
                                     <Icon class="fas fa-edit"/>
                                 </Button>
