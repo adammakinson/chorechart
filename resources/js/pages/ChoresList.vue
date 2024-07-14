@@ -20,7 +20,7 @@
                         <template v-slot:actions>
                             <span v-if="!choreIsFinished(choreData)"
                                 v-on:click="handleCheckClick" 
-                                v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check']" 
+                                v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check-square fa-2x']" 
                                 v-bind:data-choreid="choreData.id"
                                 class="pr-2 w-full h-full text-center">
                             </span>
