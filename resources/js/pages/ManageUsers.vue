@@ -14,6 +14,10 @@
                                 <Button colorClass="text-white" bgColorClass="bg-blue-600" widthClass="w-10" paddingClass="px-0 py-2" callback="showEditUserModal" v-bind:args="userData.id">
                                     <Icon class="fas fa-edit"/>
                                 </Button>
+                                <Button colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="removeUser" v-bind:args="userData.id">
+                                    <Icon class="fas fa-trash"/>
+                                </Button>
+                            </div>
                         </template>
                     </list-item>
                 </ListGroup>
