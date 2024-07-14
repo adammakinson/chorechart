@@ -22,7 +22,7 @@ module.exports = {
         // grid spacing for expanded menu
         'menucollapsed': '48px 1fr',
 
-        'listitemgrid': '1fr 2.5rem',
+        'listitemgrid': '1fr 2.5rem 2.5rem',
       }
     },
   },
