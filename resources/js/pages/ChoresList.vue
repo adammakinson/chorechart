@@ -79,6 +79,7 @@ export default {
 
     data() {
         return {
+            chores: [],
             myChores: [],
             choresToReview: [],
             rows: [],
@@ -152,6 +153,7 @@ export default {
                         }
                     });
                     
+                    this.chores = allChores;
                     this.myChores = myChores;
                     this.choresToReview = choresToReview;
                 });
@@ -162,7 +164,7 @@ export default {
                     }
                 }).then((response) => {
                     
-                    this.myChores = response.data;
+                    this.chores = this.myChores = response.data;
                 });
             }
         },
