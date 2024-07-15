@@ -4,19 +4,32 @@
         <div class="grid transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
             <div class="p-5 w-full">
-                <div v-if="!chores || chores.length == 0" class="grid h-screen justify-center items-center">
+                <div v-if="!myChores || myChores.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 p-4 h-96">
                         <h2 v-if="!userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Check back later.</h2>
                         <h2 v-if="userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
-                <ListGroup v-if="chores.length > 0" :listId="'my-chores-list'" class="mt-4">
-                    <list-item v-for="choreData in chores" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
-                        <!-- <div class="flex"> -->
+                <h2 class="pl-5 pt-5">My chores</h2>
+                <ListGroup v-if="myChores.length > 0" :listId="'my-chores-list'" class="px-5">
+                    <list-item v-for="choreData in myChores" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                             <div class="grow h-12 p-1.5 leading-10">
                                 {{choreData.chore}} <span class="text-green-600">{{choreData.pointvalue}}P</span>
                             </div>
-                        <!-- </div> -->
+                        <template v-slot:actions>
+                            <div class="grow-0">
+
+                                <span v-if="!choreIsFinished(choreData)"
+                                    v-on:click="handleCheckClick" 
+                                    v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check-square fa-2x']" 
+                                    v-bind:data-choreid="choreData.id"
+                                    class="pr-2 w-full h-full text-center">
+                                </span>
+                                <span v-if="choreIsFinished(choreData)" class="text-yellow-500 self-center pr-2 w-full h-full text-center fas fa-trophy fa-lg"></span>
+                            </div>
+                        </template>
+                    </list-item>
+                </ListGroup>
                         <template v-slot:actions>
                             <div class="grow-0">
 
@@ -58,7 +71,7 @@ export default {
 
     data() {
         return {
-            chores: [],
+            myChores: [],
             rows: [],
             choreFieldValue: '',
             pointFieldValue: '',
@@ -109,15 +122,40 @@ export default {
          */
         fetchChoresCollection() {
             let user = this.$store.getters.getUser;
+            let myChores = [];
+            let choresToReview = [];
 
-            axios.get('/api/user-chores/' + user.id, {
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
-                }
-            }).then((response) => {
-                
-                this.chores = response.data;
-            });
+            if (this.userIsAdmin) {
+
+                axios.get('/api/user-chores', {
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    // separate the chores by ones belonging to currently logged in user and ones not belonging to them
+                    let allChores = response.data;
+
+                    allChores.forEach((chore) => {
+                        if (chore.user_id == user.id) {
+                            myChores.push(chore);
+                        } else {
+                            choresToReview.push(chore);
+                        }
+                    });
+                    
+                    this.myChores = myChores;
+                    this.choresToReview = choresToReview;
+                });
+            } else {
+                axios.get('/api/user-chores/' + user.id, {
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+                    
+                    this.myChores = response.data;
+                });
+            }
         },
 
         /**
