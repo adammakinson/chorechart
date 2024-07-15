@@ -30,6 +30,12 @@
                         </template>
                     </list-item>
                 </ListGroup>
+                <h2 class="pl-5 pt-5">Chores to review</h2>
+                <ListGroup v-if="choresToReview.length > 0" :listId="'my-chores-list'" class="px-5 pb-5">
+                    <list-item v-for="choreData in choresToReview" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
+                            <div class="grow h-12 p-1.5 leading-10">
+                                {{choreData.chore}} <span class="text-green-600">{{choreData.pointvalue}}P</span>
+                            </div>
                         <template v-slot:actions>
                             <div class="grow-0">
 
@@ -72,6 +78,7 @@ export default {
     data() {
         return {
             myChores: [],
+            choresToReview: [],
             rows: [],
             choreFieldValue: '',
             pointFieldValue: '',
