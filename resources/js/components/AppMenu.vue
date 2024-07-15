@@ -58,11 +58,8 @@ export default {
 
         });
 
-        if (this.windowWidth < 640) {
-            this.mainMenuIsOpen = false;
-        } else {
-            this.mainMenuIsOpen = false;
-        }
+        this.mainMenuIsOpen = false;
+        
     },
 
     data() {
@@ -77,16 +74,6 @@ export default {
     computed: {
         windowWidth() {
             return this.$store.getters.getWindowWidth;
-        }
-    },
-
-    watch: {
-        windowWidth(newWidth, oldWidth) {
-            if (newWidth > 640) {
-                this.mainMenuIsOpen = true;
-            } else {
-                this.mainMenuIsOpen = false;
-            }
         }
     },
 
@@ -107,7 +94,6 @@ export default {
         },
 
         clickMobileMainMenu() {
-            // this.mainMenuIsOpen = !this.mainMenuIsOpen;
             eventBus.emit('mobileMainMenuIconClicked', this);
         }
     },

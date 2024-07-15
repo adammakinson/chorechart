@@ -69,9 +69,7 @@ export default {
 
     created() {
         eventBus.on("mobileMainMenuIconClicked", () => {
-
             this.mainMenuIsOpen = !this.mainMenuIsOpen;
-
         });
 
         this.mainMenuIsOpen = false;
