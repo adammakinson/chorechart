@@ -5,9 +5,7 @@
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div class="flex justify-between">
-                    
                     <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">+ reward</Button>
-                    <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} pts</p>
                 </div>
                 <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
