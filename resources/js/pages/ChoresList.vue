@@ -10,7 +10,7 @@
                         <h2 v-if="userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
-                <h2 class="pl-5 pt-5">My chores</h2>
+                <h2 v-if="myChores.length > 0" class="pl-5 pt-5">My chores</h2>
                 <ListGroup v-if="myChores.length > 0" :listId="'my-chores-list'" class="px-5">
                     <list-item v-for="choreData in myChores" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                             <div class="grow h-12 p-1.5 leading-10">
@@ -30,7 +30,7 @@
                         </template>
                     </list-item>
                 </ListGroup>
-                <h2 class="pl-5 pt-5">Chores to review</h2>
+                <h2 v-if="choresToReview.length > 0" class="pl-5 pt-5">Chores to review</h2>
                 <ListGroup v-if="choresToReview.length > 0" :listId="'my-chores-list'" class="px-5 pb-5">
                     <list-item v-for="choreData in choresToReview" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
                             <div class="grow h-12 p-1.5 leading-10">
