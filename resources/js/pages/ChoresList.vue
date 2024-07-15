@@ -217,7 +217,7 @@ export default {
          * @param {int} choreId 
          */
         findUserChoreByChoreId(allChores, userId, choreId) {
-            return allChores.find(chore => chore.id == choreId && chore.user_id == userId);
+            return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
         },
 
         /**
