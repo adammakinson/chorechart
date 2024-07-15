@@ -48,13 +48,13 @@ const store = new createStore({
         // which is used as a fallback for the vuex store.
         setCurrentUser (state, data) {
             state.user = data;
-            localStorage.setItem('user', JSON.stringify(data));
+            sessionStorage.setItem('user', JSON.stringify(data));
         },
         
         // Revmoves the user from the vuex store AND from local storage
         removeCurrentUser (state) {
             state.user = {};
-            localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
         },
 
         // Set user points on the vuex store
@@ -84,8 +84,8 @@ const store = new createStore({
 
             if (state.user.token_type && state.user.access_token) {
                 authToken = `${state.user.token_type} ${state.user.access_token}`;
-            } else if (localStorage.getItem('user')) {
-                let userData = JSON.parse(localStorage.getItem('user'));
+            } else if (sessionStorage.getItem('user')) {
+                let userData = JSON.parse(sessionStorage.getItem('user'));
 
                 authToken = `${userData.token_type} ${userData.access_token}`;
 
@@ -108,8 +108,8 @@ const store = new createStore({
 
             if (state.user.name) {
                 userData = state.user; // fetch from vuex.
-            } else if (localStorage.getItem('user')) {
-                userData = JSON.parse(localStorage.getItem('user'));
+            } else if (sessionStorage.getItem('user')) {
+                userData = JSON.parse(sessionStorage.getItem('user'));
                 state.user = userData;
             } else {
                 // fetch the user from the database
