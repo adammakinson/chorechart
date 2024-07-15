@@ -22,7 +22,8 @@
                                 <span v-if="!choreIsFinished(choreData)"
                                     v-on:click="handleCheckClick" 
                                     v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check-square fa-2x']" 
-                                    v-bind:data-choreid="choreData.id"
+                                    v-bind:data-choreid="choreData.chore_id"
+                                    v-bind:data-userid="choreData.user_id"
                                     class="pr-2 w-full h-full text-center">
                                 </span>
                                 <span v-if="choreIsFinished(choreData)" class="text-yellow-500 self-center pr-2 w-full h-full text-center fas fa-trophy fa-lg"></span>
@@ -42,7 +43,8 @@
                                 <span v-if="!choreIsFinished(choreData)"
                                     v-on:click="handleCheckClick" 
                                     v-bind:class="[ getChoreRowCheckboxColorClass(choreData), 'fas fa-check-square fa-2x']" 
-                                    v-bind:data-choreid="choreData.id"
+                                    v-bind:data-choreid="choreData.chore_id"
+                                    v-bind:data-userid="choreData.user_id"
                                     class="pr-2 w-full h-full text-center">
                                 </span>
                                 <span v-if="choreIsFinished(choreData)" class="text-yellow-500 self-center pr-2 w-full h-full text-center fas fa-trophy fa-lg"></span>
@@ -225,8 +227,15 @@ export default {
         handleCheckClick(el) {
             let choreId = el.target.dataset.choreid;
             let user = this.$store.getters.getUser;
+            let userId = user.id;
             let allChores = this.chores;
-            let choreBeingEdited = this.findUserChoreByChoreId(allChores, user.id, choreId);
+            let choreBeingEdited;
+
+            if (this.userIsAdmin) {
+                userId = el.target.dataset.userid;
+            }
+
+            choreBeingEdited = this.findUserChoreByChoreId(allChores, userId, choreId);
 
             // The way the update function works right now, I'm not even using the data payload.
             let choreData = {
