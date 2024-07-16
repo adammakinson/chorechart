@@ -3,39 +3,35 @@
         <title-bar/>
         <div class="grid min-h-screen transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
-            <div class="p-5 w-full">
-                <div class="md:flex">
-                    <div class="card p-4">
-                        <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
-                        <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
-                            <FormInput v-for="formField in editUserForm" :key="formField.identifier"
-                            :identifier="formField.identifier"
-                            :type="formField.type"
-                            :elementLabel="formField.label"
-                            :errors="formField.errors"
-                            :value="formField.value"
-                            ></FormInput>
-                            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUserInfo">Update user</Button>
-                        </form>
-                    </div>
-                    <div class="card p-4">
-                        <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
-                        <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">
-                            <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier"
-                            :identifier="formField.identifier"
-                            :type="formField.type"
-                            :elementLabel="formField.label"
-                            :errors="formField.errors"
-                            :value="formField.value"
-                            ></FormInput>
-                            <div>
-                                <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateCredentials">Update credentials</Button>
-                            </div>
-                        </form>
-                    </div>
+            <div class="p-5 w-full max-w-[960px] mx-auto">
+                <div class="card p-4 md:w-1/2 mx-auto">
+                    <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
+                    <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
+                        <FormInput v-for="formField in editUserForm" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        ></FormInput>
+                        <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUserInfo">Update user</Button>
+                    </form>
+                </div>
+                <div class="card p-4 md:w-1/2 mx-auto">
+                    <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
+                    <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">
+                        <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier"
+                        :identifier="formField.identifier"
+                        :type="formField.type"
+                        :elementLabel="formField.label"
+                        :errors="formField.errors"
+                        :value="formField.value"
+                        ></FormInput>
+                        <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateCredentials">Update credentials</Button>
+                    </form>
                 </div>
             </div>
-            </div>
+        </div>
     </div>
 </template>
 
