@@ -28,7 +28,7 @@ export default {
          * logged in and we have an auth token, redirect to the chores list
          * page
          */
-        if(this.$store.getters.getUserAuthToken) {
+        if (this.$store.getters.getUserAuthToken) {
             this.$router.push('chores-list');
         }
     }
