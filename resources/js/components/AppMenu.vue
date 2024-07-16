@@ -71,12 +71,6 @@ export default {
         };
     },
 
-    computed: {
-        windowWidth() {
-            return this.$store.getters.getWindowWidth;
-        }
-    },
-
     methods: {
         logout() {
             axios({

@@ -56,12 +56,6 @@ export default {
             mainMenuIsOpen: false
         }
     },
-
-    computed: {
-        windowWidth() {
-            return this.$store.getters.getWindowWidth;
-        }
-    },
     
     components: {
         Appmenu,

@@ -39,9 +39,9 @@ const router = createRouter({
 const store = new createStore({
     state: {
         user: {},
-        userTransactions: [],
-        windowWidth: window.innerWidth
+        userTransactions: []
     },
+
     mutations: {
 
         // Sets the current user in the vuex store as well as in localstorage,
@@ -65,18 +65,16 @@ const store = new createStore({
         // Set user transactions in the vuex store
         setUserTransactions (state, transactions) {
             state.userTransactions = transactions;
-        },
-
-        // Set window width in hte vuex store
-        setWindowWidth (state, windowWidth) {
-            state.windowWidth = windowWidth;
         }
     },
+
     getters: {
+
         /**
-         * Tries to get the user access token from vuex first. If vuex doesn't
-         * have the token, looks in sessionStorage for stored user data. If no
-         * user token is found in either place, returns undefined.
+         * Tries to get the user access token from the store first. If the store
+         * doesn't have the token, looks in sessionStorage for stored user data.
+         * If no user token is found in either place, returns undefined. if it's
+         * not in the store, but in sessionStorage, save it to the store.
          * @param {*} state
          */
         getUserAuthToken: state => {
@@ -89,7 +87,6 @@ const store = new createStore({
 
                 authToken = `${userData.token_type} ${userData.access_token}`;
 
-                // If we get it from sessionStorage, we need to ensure it's in vuex
                 state.user = userData;
             }
 
@@ -188,16 +185,6 @@ const store = new createStore({
             } else {
                 return [];
             }
-        },
-
-        /**
-         * Returns the window width from the vuex store
-         * 
-         * @param {*} state 
-         * @returns 
-         */
-        getWindowWidth: state => {
-            return state.windowWidth;
         }
     }
 });

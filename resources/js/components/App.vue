@@ -17,9 +17,6 @@ import axios from 'axios';
 
 export default {
     created() {
-        window.addEventListener('resize', () => {
-            this.$store.commit('setWindowWidth', window.innerWidth);
-        });
 
         // I'm thinking this could be the place where we check for the existence
         // of the database schema we need for the app. The idea is a health check
