@@ -93,6 +93,7 @@ const store = new createStore({
             return authToken;
         },
 
+
         /**
          * Fetches the user from the vuex store by preference. If not found
          * there, tries to fetch it from sessionStorage
@@ -115,6 +116,7 @@ const store = new createStore({
             return userData;
         },
 
+        
         /**
          * Fetches the users name from the vuex store
          * 
@@ -125,6 +127,7 @@ const store = new createStore({
             return state.user.name;
         },
 
+        
         /**
          * Fetches user roles from the vuex store
          * 
@@ -135,6 +138,7 @@ const store = new createStore({
             return state.user.roles;
         },
 
+        
         /**
          * Uses the some() array method on the userRoles array to
          * determine whether the string 'admin' is included in those
@@ -156,7 +160,9 @@ const store = new createStore({
             }
         },
 
+        
         /**
+         * Get the user points from the users transactions.
          * Transactions are returned from the database ordered by
          * most recent transaction first, and going back historically.
          * The most recent transaction will contain the most up-to-date
@@ -174,6 +180,7 @@ const store = new createStore({
             }
         },
 
+        
         /**
          * Returns all user transactions from the vuex store
          * @param {*} state 
