@@ -1,5 +1,5 @@
 <template>
-    <div class="tabcontent">
+    <div class="tabcontent max-w-[960px] m-auto">
         <div>
             <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
             <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</Button>
