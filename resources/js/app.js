@@ -95,8 +95,9 @@ const store = new createStore({
 
 
         /**
-         * Fetches the user from the vuex store by preference. If not found
-         * there, tries to fetch it from sessionStorage
+         * Fetches the user from the store by preference. If not found
+         * there, tries to fetch it from sessionStorage. If the user is not in
+         * session, clear sessionStorage and redirect to the login screen
          * 
          * @param {*} state 
          * @returns userData
@@ -105,12 +106,13 @@ const store = new createStore({
             let userData;
 
             if (state.user.name) {
-                userData = state.user; // fetch from vuex.
+                userData = state.user;
             } else if (sessionStorage.getItem('user')) {
                 userData = JSON.parse(sessionStorage.getItem('user'));
                 state.user = userData;
             } else {
-                // fetch the user from the database
+                sessionStorage.clear();
+                this.$router.push('login');
             }
 
             return userData;
