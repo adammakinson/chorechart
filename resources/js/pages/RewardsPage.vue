@@ -5,9 +5,7 @@
             <appmenu></appmenu>
             <div class="p-5 w-full">
                 <div class="flex justify-between">
-                    
                     <Button v-if="userIsAdmin" class="" colorClass="text-white" bgColorClass="bg-blue-600" callback="showRewardModal">+ reward</Button>
-                    <p class="p-1.5 text-xl">{{this.$store.getters.getUserPoints}} pts</p>
                 </div>
                 <div v-if="!rewards || rewards.length == 0" class="grid justify-center items-center">
                     <div class="w-96 h-96">
@@ -214,8 +212,6 @@ export default {
                     reward.eventsObject = {
                         click: this.showRewardConfirmationModal
                     };
-
-                    // reward.contentItems = [];
                 });
 
                 // TODO - store rewards in vuex on fetch, update single record on update, remove on delete.
@@ -245,9 +241,6 @@ export default {
             this.rewardModalFormData.reward.errors = '';
             this.rewardModalFormData.pointvalue.errors = '';
             
-            // hack, not the way to do it...
-            document.getElementById('reward').value = '';
-            document.getElementById('pointvalue').value = '';
             this.rewardModalFormData.reward.value = '';
             this.rewardModalFormData.pointvalue.value = '';
 
@@ -268,9 +261,6 @@ export default {
 
             this.clickedCardData = reward;
 
-            // Pretty hacky way to do this. See if I can figure out better way
-            document.getElementById('reward').value = reward.reward;
-            document.getElementById('pointvalue').value = reward.cost;
             this.rewardModalFormData.reward.value = reward.reward;
             this.rewardModalFormData.pointvalue.value = reward.cost;
 
