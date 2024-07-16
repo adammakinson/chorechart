@@ -1,9 +1,9 @@
 <template>
-    <div class="tabcontent">
+    <div class="tabcontent max-w-[960px] m-auto">
         <div>
             <notification v-if="typeof generalNotice === 'object'" v-bind:notice="generalNotice"></notification>
-            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal">Add chore</Button>
-            <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser">add to all</Button>
+            <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="showAddChoreModal" class="mr-1">Add chore</Button>
+            <Button colorClass="text-white" v-if="userCardsHighlighted && choresAreHighlighted" bgColorClass="bg-blue-600" callback="assignToUser" class="mr-1">add to all</Button>
             <Button colorClass="text-white" v-if="assignmentsArePending" bgColorClass="bg-blue-600" callback="assignChores">Assign</Button>
             <div>
                 <list-group :listId="'chores-list'" class="mt-4">
@@ -23,7 +23,7 @@
                         </template>
                     </list-item>
                 </list-group>
-                <cardgrid class="pt-4 w-100 sm:w-full">
+                <cardgrid class="pt-4 w-full">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                         <template v-slot:header>
                             <h4 class="p-2">{{cardData.name}}</h4>
@@ -495,6 +495,8 @@ export default {
                             discardAssignmentButton.removeEventListener('click', this.discardAssignment);
                             discardAssignmentButton.addEventListener('click', this.deleteUserAssignment);
                         });
+
+                        this.assignmentsArePending = false;
                     }
                 });
             } else {

@@ -3,7 +3,7 @@
         <title-bar></title-bar>
         <div class="grid transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
-            <div class="w-full">
+            <div class="w-full max-w-[960px] m-auto">
                 <div v-if="!myChores || myChores.length == 0" class="grid h-screen justify-center items-center">
                     <div class="w-96 p-4 h-96">
                         <h2 v-if="!userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Check back later.</h2>
