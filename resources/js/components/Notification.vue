@@ -16,13 +16,16 @@ export default {
     },
     
     methods: {
+
+        /**
+         * Get the notification color class from the type or the status if type
+         * isn't specified
+         */
         getNotificationColorClass() {
             let notificationColorClass = 'bg-red-200';
             
-            // I want to use success, danger, and info primarily
-            // If the type is specified, use that.
+            // If the type success, danger, or info is specified, use that.
             if (this.notice.type) {
-
                 notificationColorClass = this.getNotificationColorClassFromType(this.notice.type);
             }
 
@@ -33,10 +36,16 @@ export default {
             return notificationColorClass;
         },
 
+
+        /**
+         * Get the color by notice type
+         * 
+         * @param noticetype - a string of success, error or info
+         */
         getNotificationColorClassFromType(noticetype) {
             let notificationColorClass = 'bg-blue-300';
             
-            if(noticetype == 'success'){
+            if (noticetype == 'success') {
                 notificationColorClass = 'bg-green-200';
             } else if (noticetype == 'error') {
                 notificationColorClass = 'bg-red-200';
@@ -45,20 +54,25 @@ export default {
             return notificationColorClass;
         },
 
+        /**
+         * Get the color by HTTP status code
+         * 
+         * @param status - a http response code
+         */
         getNotificationColorClassFromStatus(status) {
             let statusNumber = parseInt(status);
             let notificationColorClass = 'bg-blue-300';
 
-            if(statusNumber > 199 && statusNumber < 300) {
+            if (statusNumber > 199 && statusNumber < 300) {
                 notificationColorClass = 'bg-green-200';
             }
 
-            if(statusNumber >= 400) {
+            if (statusNumber >= 400) {
                 notificationColorClass = 'bg-red-200';
             }
 
             return notificationColorClass;
-        },
+        }
     }
 }
 </script>
