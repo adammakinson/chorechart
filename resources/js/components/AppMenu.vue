@@ -8,8 +8,8 @@
                     </div>
                 </li>
                 <li v-for="menuItem in menuItems" :key="menuItem.url" class="nav-item border-b w-full flex align-items">
-                    <a href="menuItem.url" class="nav-link block w-full p-2 leading-8">{{ menuItem.label }}</a>
-                    <a href="menuItem.url">
+                    <a :href="menuItem.url" class="nav-link block w-full p-2 leading-8">{{ menuItem.label }}</a>
+                    <a :href="menuItem.url">
                         <span class="text-2xl px-3 py-2" :class="menuItem.icon"></span>
                     </a>
                 </li>
