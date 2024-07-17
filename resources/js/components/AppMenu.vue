@@ -1,6 +1,6 @@
 <template>
     <Transition>
-        <nav v-if="authenticatedUser" class="absolute top-0 opacity-100 w-48 h-full bg-gray-400 h-full -translate-x-48 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
+        <nav v-if="authenticatedUser" class="absolute top-0 opacity-100 w-48 h-full bg-gray-400 -translate-x-48 transition-transform ease-in-out duration-500 sm:visible" :class="{mainmenu: mainMenuIsOpen}">
             <ul id="navbarSupportedContent" :class="{mainmenu: mainMenuIsOpen}" class="w-48">
                 <li class="nav-item p-2 border-b w-full">
                     <div class="flex justify-end">
@@ -55,11 +55,7 @@ export default {
         eventBus.on("mobileMainMenuIconClicked", () => {
 
             this.mainMenuIsOpen = !this.mainMenuIsOpen;
-
         });
-
-        this.mainMenuIsOpen = false;
-        
     },
 
     data() {
@@ -72,6 +68,11 @@ export default {
     },
 
     methods: {
+
+        /**
+         * Send a request to the server to remove the server side session, then
+         * remove the session from the vue store and from sessionStorage
+         */
         logout() {
             axios({
                 method: 'post',
@@ -87,6 +88,10 @@ export default {
             
         },
 
+
+        /**
+         * Send an event to open or close the menu
+         */
         clickMobileMainMenu() {
             eventBus.emit('mobileMainMenuIconClicked', this);
         }
@@ -95,7 +100,7 @@ export default {
     mounted() {
         this.authenticatedUser = !!this.$store.getters.getUserAuthToken;
         
-        if(this.authenticatedUser) {
+        if (this.authenticatedUser) {
             this.usersName = this.$store.getters.getUsersName;
 
             this.userIsAdmin = this.$store.getters.userIsAdmin;
