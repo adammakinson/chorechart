@@ -10,6 +10,7 @@
                         <h2 v-if="userIsAdmin" class="text-4xl text-center">You don't have any chores assigned to you. Assign one now!</h2>
                     </div>
                 </div>
+                
                 <h2 v-if="myChores.length > 0" class="pl-5 pt-5">My chores</h2>
                 <ListGroup v-if="myChores.length > 0" :listId="'my-chores-list'" class="px-5">
                     <list-item v-for="choreData in myChores" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
@@ -31,6 +32,7 @@
                         </template>
                     </list-item>
                 </ListGroup>
+                
                 <h2 v-if="choresToReview.length > 0" class="pl-5 pt-5">Chores to review</h2>
                 <ListGroup v-if="choresToReview.length > 0" :listId="'my-chores-list'" class="px-5 pb-5">
                     <list-item v-for="choreData in choresToReview" :key="choreData.id" :listItem="choreData" :draggable="false" :selectable="false" class="flex border border-slate-400">
@@ -119,47 +121,53 @@ export default {
     methods: {
 
         /**
-         * Fetch chores associated with a user from the /api/user-chores route
-         * and store them in data.
+         * Fetch data based on a passed in route
+         */
+        getData(route) {
+            axios.get(route, {
+                headers: {
+                    authorization: this.$store.getters.getUserAuthToken
+                }
+            }).then(response => {
+                return response.data;
+            });
+        },
+
+
+        /**
+         * Fetch chores pertinent to the logged in user. If the user is an admin,
+         * fetch all chores; otherwise only fetch the chores belonging to the user.
          */
         fetchChoresCollection() {
             let user = this.$store.getters.getUser;
+            let chores = [];
             let myChores = [];
             let choresToReview = [];
+            let route = '/api/user-chores/' + user.id;
 
             if (this.userIsAdmin) {
+                route = '/api/user-chores';
+            }
 
-                axios.get('/api/user-chores', {
-                    headers: {
-                        authorization: this.$store.getters.getUserAuthToken
-                    }
-                }).then((response) => {
-                    // separate the chores by ones belonging to currently logged in user and ones not belonging to them
-                    let allChores = response.data;
+            chores = this.getData(route);
+            this.chores = this.myChores = chores;
+            
+            if (this.userIsAdmin) {
 
-                    allChores.forEach((chore) => {
-                        if (chore.user_id == user.id) {
-                            myChores.push(chore);
-                        } else {
-                            choresToReview.push(chore);
-                        }
-                    });
-                    
-                    this.chores = allChores;
-                    this.myChores = myChores;
-                    this.choresToReview = choresToReview;
-                });
-            } else {
-                axios.get('/api/user-chores/' + user.id, {
-                    headers: {
-                        authorization: this.$store.getters.getUserAuthToken
+                chores.forEach((chore) => {
+                    if (chore.user_id == user.id) {
+                        myChores.push(chore);
+                    } else {
+                        choresToReview.push(chore);
                     }
-                }).then((response) => {
-                    
-                    this.chores = this.myChores = response.data;
                 });
+                
+                this.chores = allChores;
+                this.myChores = myChores;
+                this.choresToReview = choresToReview;
             }
         },
+
 
         /**
          * Fetch user transactions from the backend. Upon successful
@@ -167,20 +175,14 @@ export default {
          */
         fetchUsersTransactions() {
             let user = this.$store.getters.getUser;
+            let userTransactions = this.getData(`/api/users/${user.id}/transactions`);
 
-            axios.get('/api/users/' + user.id + '/transactions', {
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
-                }
-            }).then((response) => {
-                this.updateUserTransactions(response.data);
-            });
+            this.updateUserTransactions(userTransactions);
         },
 
+        
         /**
-         * Define the color of the checkbox for a chore.
-         * The default is gray. A pending chore is orange
-         * and a completed one is green.
+         * Define the color of the checkbox for a chore. The default is gray. A pending chore is orange and a completed one is green.
          */
         getChoreRowCheckboxColorClass(row) {
             var colorClass = 'text-stone-400';
@@ -196,25 +198,36 @@ export default {
             return colorClass;
         },
 
+        
         /**
          * Returns boolean value of inspection_passed on the row
+         * 
+         * @param {object} row
          */
         choreIsFinished(row) {
             return !!row.inspection_passed;
         },
 
+        
         /**
-         * Return chores where the user id and chore id match the passed
-         * in userId and choreId
-         * @param {aray} allChores 
-         * @param {int} userId 
-         * @param {int} choreId 
+         * Return chores where the user id and chore id match the passed in userId and choreId
+         * 
+         * @param {array} allChores
+         * @param {int} userId
+         * @param {int} choreId
          */
         findUserChoreByChoreId(allChores, userId, choreId) {
             return allChores.find(chore => chore.chore_id == choreId && chore.user_id == userId);
         },
 
+        
         /**
+         * Handles the click of a chore checkbox.
+         * 
+         * Gets the user and checks if the user is an admin. If they are an admin, get the user id from the clicked
+         * element. If points have NOT been awarded for the chore, send a request to the server for the user and chore
+         * to mark the chore as ready for inspection. If the response indicates points have been awarded for the chore,
+         * make a call to create a transaction for the user/chore with the response data.
          * 
          * @param {*} el the chore element
          */
@@ -222,26 +235,20 @@ export default {
             let choreId = el.target.dataset.choreid;
             let user = this.$store.getters.getUser;
             let userId = user.id;
+
             let allChores = this.chores;
-            let choreBeingEdited;
-
-            if (this.userIsAdmin) {
-                userId = el.target.dataset.userid;
-            }
-
-            choreBeingEdited = this.findUserChoreByChoreId(allChores, userId, choreId);
-
-            // The way the update function works right now, I'm not even using the data payload.
+            let choreBeingEdited = this.findUserChoreByChoreId(allChores, userId, choreId);
+            
             let choreData = {
                 chore_id: choreBeingEdited.chore_id,
                 userId: choreBeingEdited.user_id,
                 inspection_ready: true
             };
+            
+            if (this.userIsAdmin) {
+                userId = el.target.dataset.userid;
+            }
 
-            /**
-             * If no points have been awarded to the chore,
-             * send the chore to declare it ready for inspection
-             */
             if (!choreBeingEdited.points_awarded == '1') {
                 axios({
                     method: 'put',
@@ -252,14 +259,8 @@ export default {
                     }
                 }).then((response) => {
 
-                    /**
-                     * If the chore has been approved, add it to the transactions
-                     * table with a type of 'choreCompletion' and update the
-                     * user transactions in the store.
-                     */
                     if (response.data.points_awarded) {
 
-                        // Set the transaction type
                         response.data.transactionType = 'choreCompletion';
 
                         axios({
@@ -279,6 +280,7 @@ export default {
                 });
             }
         },
+
 
         /**
          * Save the transactions to the vuex store
