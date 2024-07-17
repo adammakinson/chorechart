@@ -123,14 +123,14 @@ export default {
         /**
          * Fetch data based on a passed in route
          */
-        getData(route) {
-            axios.get(route, {
+        async getData(route) {
+            let payload = await axios.get(route, {
                 headers: {
                     authorization: this.$store.getters.getUserAuthToken
                 }
-            }).then(response => {
-                return response.data;
             });
+
+            return payload.data;
         },
 
 
@@ -138,7 +138,7 @@ export default {
          * Fetch chores pertinent to the logged in user. If the user is an admin,
          * fetch all chores; otherwise only fetch the chores belonging to the user.
          */
-        fetchChoresCollection() {
+        async fetchChoresCollection() {
             let user = this.$store.getters.getUser;
             let chores = [];
             let myChores = [];
@@ -149,7 +149,8 @@ export default {
                 route = '/api/user-chores';
             }
 
-            chores = this.getData(route);
+            chores = await this.getData(route);
+
             this.chores = this.myChores = chores;
             
             if (this.userIsAdmin) {
@@ -162,7 +163,7 @@ export default {
                     }
                 });
                 
-                this.chores = allChores;
+                this.chores = chores;
                 this.myChores = myChores;
                 this.choresToReview = choresToReview;
             }
@@ -173,9 +174,9 @@ export default {
          * Fetch user transactions from the backend. Upon successful
          * response, call updateUserTransactions passing in the transactions data
          */
-        fetchUsersTransactions() {
+        async fetchUsersTransactions() {
             let user = this.$store.getters.getUser;
-            let userTransactions = this.getData(`/api/users/${user.id}/transactions`);
+            let userTransactions = await this.getData(`/api/users/${user.id}/transactions`);
 
             this.updateUserTransactions(userTransactions);
         },
