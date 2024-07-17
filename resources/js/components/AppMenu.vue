@@ -7,34 +7,10 @@
                         <div class="text-2xl h-10 ml-1.5 visible p-1.5 fas fa-bars" @click="clickMobileMainMenu"></div>
                     </div>
                 </li>
-                <li class="nav-item border-b w-full flex align-items">
-                    <a href="/chores-list" class="nav-link block w-full p-2 leading-8">My Chores</a>
-                    <a href="/chores-list">
-                        <span class="fas fa-brush text-2xl px-3 py-2"></span>
-                    </a>
-                </li>
-                <li class="nav-item border-b w-full flex align-items">
-                    <a href="/rewards" class="nav-link block w-full p-2 leading-8">Rewards</a>
-                    <a href="/rewards">
-                        <span class="fas fa-gamepad text-2xl px-2 py-2"></span>
-                    </a>
-                </li>
-                <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
-                    <a href="/manage-chores" class="nav-link block w-full p-2 leading-8">Manage Chores</a>
-                    <a href="/manage-chores">
-                        <span class="fas fa-clipboard text-2xl px-3 py-2"></span>
-                    </a>
-                </li>
-                <li v-if="userIsAdmin" class="nav-item border-b w-full flex align-items">
-                    <a href="/manage-users" class="nav-link block w-full p-2 leading-8">Users</a>
-                    <a href="/manage-users">
-                        <span class="fas fa-user text-2xl px-3 py-2"></span>
-                    </a>
-                </li>
-                <li class="nav-item border-b w-full flex align-items">
-                    <a href="/manage-account" class="nav-link block w-full p-2 leading-8">My account</a>
-                    <a href="/manage-account">
-                        <span class="fas fa-laptop text-2xl px-2 py-2"></span>
+                <li v-for="menuItem in menuItems" :key="menuItem.url" class="nav-item border-b w-full flex align-items">
+                    <a href="menuItem.url" class="nav-link block w-full p-2 leading-8">{{ menuItem.label }}</a>
+                    <a href="menuItem.url">
+                        <span class="text-2xl px-3 py-2" :class="menuItem.icon"></span>
                     </a>
                 </li>
                 <li class="nav-item border-b w-full flex align-items">
@@ -63,7 +39,14 @@ export default {
             authenticatedUser: false,
             usersName: '',
             userIsAdmin: false,
-            mainMenuIsOpen: false
+            mainMenuIsOpen: false,
+            menuItems: [
+                {label: 'My Chores', url: '/chores-list', icon: 'fas fa-brush'},
+                {label: 'Rewards', url: '/rewards', icon: 'fas fa-gamepad'},
+                {label: 'Manage Chores', url: '/manage-chores', icon: 'fas fa-clipboard'},
+                {label: 'Users', url: '/manage-users', icon: 'fas fa-user'},
+                {label: 'My account', url: '/manage-account', icon: 'fas fa-laptop'}
+            ]
         };
     },
 
