@@ -3,7 +3,7 @@
         <label :for="identifier" class="block">
             {{elementLabel}}: <span v-if="errors" class="text-red-600">{{errors[0]}}</span>
         </label>
-        <input :type="type" :name="identifier" :value="value" :id="identifier" class="block border h-8 w-full pl-2" @change="handleChangeEvent">
+        <input :type="type" :name="identifier" v-model="value" :id="identifier" class="block border h-8 w-full pl-2" @change="handleChangeEvent">
     </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
     methods: {
         handleChangeEvent(e) {
 
-            eventBus.emit('callback', {"callback": this.elementCallback, "args": this.elementValue});
+            eventBus.emit('callback', {"callback": this.elementCallback, "args": this.value});
         }
     }
 }
