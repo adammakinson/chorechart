@@ -94,7 +94,6 @@
 </template>
 
 <script>
-import GroupsSubView from "./GroupsSubView.vue";
 import Cardgrid from '../components/Cardgrid.vue';
 import Card from '../components/Card.vue';
 import ListGroup from "../components/ListGroup.vue";
@@ -259,7 +258,6 @@ export default {
     },
 
     components: {
-    GroupsSubView,
     ListGroup,
     ListItem,
     Cardgrid,
