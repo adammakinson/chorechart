@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full max-w-full h-screen">
+    <div class="w-full h-screen">
         <title-bar></title-bar>
         <div class="grid transition-all duration-500 ease-in-out">
             <appmenu></appmenu>
@@ -67,14 +67,11 @@ import ListGroup from "../components/ListGroup.vue";
 import TitleBar from '../components/TitleBar.vue';
 
 export default {
-    props: ['id'],
 
     created() {
         eventBus.on("mobileMainMenuIconClicked", () => {
             this.mainMenuIsOpen = !this.mainMenuIsOpen;
         });
-
-        this.mainMenuIsOpen = false;
     },
 
     data() {
