@@ -82,9 +82,14 @@ export default {
     },
 
     methods: {
+        
+        /**
+         * Send a login request to the server and if successful, set the current
+         * user in the store and redirect to the chores list page; otherwise,
+         * display the error from the server.
+         */
         handleLogin: function() {
             
-            // Send the POST request
             axios.post('/api/login', {
                 username: this.userNameField.value,
                 password: this.passwordField.value
@@ -103,10 +108,24 @@ export default {
             });
         },
 
+
+        /**
+         * update the username fields value. This is called onChange of the
+         * username field.
+         * 
+         * @param elValue - the value of the username field
+         */
         updateUserNameFieldValue(elValue) {
             this.userNameField.value = elValue;
         },
 
+
+        /**
+         * update the password fields value. This is called onChange of the
+         * password field.
+         * 
+         * @param elValue - the value of the password field
+         */
         updatePasswordFieldValue(elValue) {
             this.passwordField.value = elValue;
         }
@@ -115,8 +134,8 @@ export default {
     mounted() {
         axios.get('/sanctum/csrf-cookie');
 
-        if(this.$store.getters.getUserAuthToken) {
-            this.$router.push('chores-list'); // This may change to a different view...
+        if (this.$store.getters.getUserAuthToken) {
+            this.$router.push('chores-list');
         }
     }
 }
