@@ -222,7 +222,7 @@ export default {
                 };
             }
 
-            if(validPasswords) {
+            if (validPasswords) {
 
                 axios({
                     method: 'put',
@@ -234,9 +234,12 @@ export default {
                 }).then((response) => {
                     // rename
                     this.userCredsNotification = {
-                        message: 'Password updates successfully!',
+                        message: 'Password updated successfully!',
                         type: 'success'
                     };
+
+                    this.updateCredentialsForm.password.errors = [];
+                    this.updateCredentialsForm.confirm_password.errors = [];
 
                     document.querySelector('#password').value = '';
                     document.querySelector('#confirm_password').value = '';
