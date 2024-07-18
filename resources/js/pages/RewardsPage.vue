@@ -13,7 +13,7 @@
                         <h2 v-if="userIsAdmin" class="text-5xl">No rewards have been created. Create one now!</h2>
                     </div>
                 </div>
-                <cardgrid :cardCollectionData="rewards" class="mt-4">
+                <cardgrid :cardCollectionData="rewards" class='mt-4 sm:grid-cols-cardgrid'>
                     <card v-for="cardData in cardCollectionData" :key="cardData.id" :cardData="cardData">
                         <template v-slot:header>
                             <h4 class="p-4">{{cardData.title}} - {{cardData.cost}}P</h4>

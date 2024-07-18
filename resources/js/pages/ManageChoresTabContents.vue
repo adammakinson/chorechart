@@ -23,7 +23,7 @@
                         </template>
                     </list-item>
                 </list-group>
-                <cardgrid class="pt-4 w-full">
+                <cardgrid class="pt-4 w-full sm:grid-cols-2">
                     <card v-for="cardData in users" :key="cardData.id" :cardData="cardData" v-bind:data-userid="cardData.id">
                         <template v-slot:header>
                             <h4 class="p-2">{{cardData.name}}</h4>
