@@ -87,13 +87,6 @@ export default {
                 },
                 editUserFormKey: 0,
                 updateCredentialsForm: {
-                    username: {
-                        identifier: 'username',
-                        label: 'Username',
-                        type: 'text',
-                        errors: [],
-                        value: ''
-                    },
                     password: {
                         identifier: 'password',
                         label: 'Password',
