@@ -566,6 +566,7 @@ export default {
             userChore.classList.add('list-group-item');
             userChore.classList.add('border');
             userChore.classList.add('border-slate-400');
+            userChore.classList.add('bg-white');
             userChore.innerHTML = `<div style="display: flex; justify-content: space-between;"><div class="pl-2 py-2">${droppedChoreName}</div><div class="bg-red-600 w-10 h-10 px-3 py-2"><span class="fas fa-minus text-white discardAssignmentIcon" data-itemid="${droppedChoreId}"></span></div></div>`;
             userChore.dataset.itemid = droppedChoreId;
 
