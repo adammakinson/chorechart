@@ -1,9 +1,9 @@
 <template>
     <div>
-        <label :for="identifier" class="block">
+        <label :for="id" class="block">
             {{elementLabel}}: <span v-if="errors" class="text-red-600">{{errors[0]}}</span>
         </label>
-        <input :type="type" :name="identifier" v-model="value" :id="identifier" class="block border h-8 w-full pl-2" @change="handleChangeEvent">
+        <input :type="type" :name="identifier" v-model="value" :id="id" class="block border h-8 w-full pl-2" @keyup="handleKeyUp" @change="handleChangeEvent">
     </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
     props: [
         'errors',
         'type',
+        'id',
         'identifier',
         'elementLabel',
         'value',

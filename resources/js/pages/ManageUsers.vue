@@ -56,7 +56,8 @@
                     <div>
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                         <form id="editUserForm" :key="editUserFormKey">
-                            <FormInput v-for="formField in editUserModalForm" :key="formField.identifier"
+                            <FormInput v-for="formField in editUserModalForm" :key="formField.id"
+                                :id="formField.id"
                                 :identifier="formField.identifier"
                                 :type="formField.type"
                                 :elementLabel="formField.label"
@@ -79,7 +80,8 @@
                     <div>
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                         <form id="changeUserCredentialsForm" :key="updateCredentialsFormKey">
-                            <FormInput v-for="formField in updateCredentialsModalForm" :key="formField.identifier"
+                            <FormInput v-for="formField in updateCredentialsModalForm" :key="formField.id"
+                                :id="formField.id"
                                 :identifier="formField.identifier"
                                 :type="formField.type"
                                 :elementLabel="formField.label"
@@ -190,6 +192,7 @@
                 },
                 editUserModalForm: {
                     name: {
+                        id: 'name',
                         identifier: 'name',
                         label: 'Name',
                         type: 'text',
@@ -197,6 +200,7 @@
                         value: ''
                     },
                     username: {
+                        id: 'username',
                         identifier: 'username',
                         label: 'Username',
                         type: 'text',
@@ -204,6 +208,7 @@
                         value: ''
                     },
                     email: {
+                        id: 'email',
                         identifier: 'email',
                         label: 'Email',
                         type: 'text',
@@ -214,6 +219,7 @@
                 editUserFormKey: 0,
                 updateCredentialsModalForm: {
                     username: {
+                        id: 'credsusername',
                         identifier: 'username',
                         label: 'Username',
                         type: 'text',
@@ -221,6 +227,7 @@
                         value: ''
                     },
                     password: {
+                        id: 'password',
                         identifier: 'password',
                         label: 'Password',
                         type: 'password',
@@ -228,6 +235,7 @@
                         value: ''
                     },
                     confirm_password: {
+                        id: 'confirm_password',
                         identifier: 'confirm_password',
                         label: 'Confirm password',
                         type: 'password',
@@ -348,8 +356,11 @@
 
                 this.editingUsersId = userId;
 
+                this.editUserModalForm.name.id = 'user_' + userBeingEdited.id + '_name';
                 this.editUserModalForm.name.value = userBeingEdited.name;
+                this.editUserModalForm.username.id = 'user_' + userBeingEdited.id + '_username';
                 this.editUserModalForm.username.value = userBeingEdited.username;
+                this.editUserModalForm.email.id = 'user_' + userBeingEdited.id + '_email';
                 this.editUserModalForm.email.value = userBeingEdited.email;
                 this.editUserModalForm.name.errors = '';
                 this.editUserModalForm.username.errors = '';
@@ -379,9 +390,12 @@
 
                 this.editingUsersId = userId;
 
+                this.updateCredentialsModalForm.username.id = 'user_' + userBeingEdited.id;
                 this.updateCredentialsModalForm.username.value = userBeingEdited.username;
                 this.updateCredentialsModalForm.username.errors = '';
+                this.updateCredentialsModalForm.password.id = 'pwd_' + userBeingEdited.id;
                 this.updateCredentialsModalForm.password.errors = '';
+                this.updateCredentialsModalForm.confirm_password.id = 'cpwd_' + userBeingEdited.id;
                 this.updateCredentialsModalForm.confirm_password.errors = '';
 
                 changeCredentialsModal.classList.add('visible');

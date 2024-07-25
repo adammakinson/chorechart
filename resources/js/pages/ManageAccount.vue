@@ -63,46 +63,46 @@ export default {
             mainMenuIsOpen: false,
 
             editUserForm: {
-                    name: {
-                        identifier: 'name',
-                        label: 'Name',
-                        type: 'text',
-                        errors: '',
-                        value: ''
-                    },
-                    username: {
-                        identifier: 'username',
-                        label: 'Username',
-                        type: 'text',
-                        errors: '',
-                        value: ''
-                    },
-                    email: {
-                        identifier: 'email',
-                        label: 'Email',
-                        type: 'text',
-                        errors: '',
-                        value: ''
-                    }
+                name: {
+                    identifier: 'name',
+                    label: 'Name',
+                    type: 'text',
+                    errors: [],
+                    value: ''
                 },
-                editUserFormKey: 0,
-                updateCredentialsForm: {
-                    password: {
-                        identifier: 'password',
-                        label: 'Password',
-                        type: 'password',
-                        errors: [],
-                        value: ''
-                    },
-                    confirm_password: {
-                        identifier: 'confirm_password',
-                        label: 'Confirm password',
-                        type: 'password',
-                        errors: [],
-                        value: ''
-                    }
+                username: {
+                    identifier: 'username',
+                    label: 'Username',
+                    type: 'text',
+                    errors: [],
+                    value: ''
                 },
-                updateCredentialsFormKey: 0
+                email: {
+                    identifier: 'email',
+                    label: 'Email',
+                    type: 'text',
+                    errors: [],
+                    value: ''
+                }
+            },
+            editUserFormKey: 0,
+            updateCredentialsForm: {
+                password: {
+                    identifier: 'password',
+                    label: 'Password',
+                    type: 'password',
+                    errors: [],
+                    value: ''
+                },
+                confirm_password: {
+                    identifier: 'confirm_password',
+                    label: 'Confirm password',
+                    type: 'password',
+                    errors: [],
+                    value: ''
+                }
+            },
+            updateCredentialsFormKey: 0
         }
     },
 
