@@ -179,7 +179,7 @@ export default {
 
             // TODO validate passwords on the fly with an onchange event.
             if (userData['password'].length < 8) {
-                if(!Array.isArray(this.updateCredentialsForm.password.errors)) {
+                if (!Array.isArray(this.updateCredentialsForm.password.errors)) {
                     this.updateCredentialsForm.password.errors = [];
                 }
 
@@ -189,7 +189,7 @@ export default {
             }
             
             if (userData['confirm_password'].length < 8) {
-                if(!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
+                if (!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
                     this.updateCredentialsForm.confirm_password.errors = [];
                 }
                 
@@ -199,11 +199,11 @@ export default {
             }
             
             if (userData['password'] != userData['confirm_password']) {
-                if(!Array.isArray(this.updateCredentialsForm.password.errors)) {
+                if (!Array.isArray(this.updateCredentialsForm.password.errors)) {
                     this.updateCredentialsForm.password.errors = [];
                 }
 
-                if(!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
+                if (!Array.isArray(this.updateCredentialsForm.confirm_password.errors)) {
                     this.updateCredentialsForm.confirm_password.errors = [];
                 }
                 
@@ -213,7 +213,7 @@ export default {
                 numErrors += 2;
             }
 
-            if(numErrors == 0) {
+            if (numErrors == 0) {
                 validPasswords = true;
             } else {
                 this.userCredsNotification = {
@@ -232,7 +232,7 @@ export default {
                         authorization: this.$store.getters.getUserAuthToken
                     }
                 }).then((response) => {
-                    // rename
+                    
                     this.userCredsNotification = {
                         message: 'Password updated successfully!',
                         type: 'success'
