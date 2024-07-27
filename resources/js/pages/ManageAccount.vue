@@ -7,7 +7,8 @@
                 <div class="card p-4 md:w-1/2 mx-auto">
                     <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
                     <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
-                        <FormInput v-for="formField in editUserForm" :key="formField.identifier"
+                        <FormInput v-for="formField in editUserForm" :key="formField.identifier" @keyup="resetFormsAndClearNotification"
+                        :id="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
                         :elementLabel="formField.label"
@@ -20,7 +21,8 @@
                 <div class="card p-4 md:w-1/2 mx-auto">
                     <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
                     <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">
-                        <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier"
+                        <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier" @keyup="resetFormsAndClearNotification"
+                        :id="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
                         :elementLabel="formField.label"
@@ -64,6 +66,7 @@ export default {
 
             editUserForm: {
                 name: {
+                    id: '',
                     identifier: 'name',
                     label: 'Name',
                     type: 'text',
@@ -71,6 +74,7 @@ export default {
                     value: ''
                 },
                 username: {
+                    id: '',
                     identifier: 'username',
                     label: 'Username',
                     type: 'text',
@@ -78,6 +82,7 @@ export default {
                     value: ''
                 },
                 email: {
+                    id: '',
                     identifier: 'email',
                     label: 'Email',
                     type: 'text',
@@ -88,6 +93,7 @@ export default {
             editUserFormKey: 0,
             updateCredentialsForm: {
                 password: {
+                    id: '',
                     identifier: 'password',
                     label: 'Password',
                     type: 'password',
@@ -95,6 +101,7 @@ export default {
                     value: ''
                 },
                 confirm_password: {
+                    id: '',
                     identifier: 'confirm_password',
                     label: 'Confirm password',
                     type: 'password',
@@ -109,8 +116,18 @@ export default {
     created() {
         this.userData = this.$store.getters.getUser;
 
+        this.updateCredentialsForm.password.id = `user_${this.userData.id}_pwd`;
+        this.updateCredentialsForm.confirm_password.id = `user_${this.userData.id}_cpwd`;
+        
+        this.editUserForm.name.id = `user_${this.userData.id}_name`;
         this.editUserForm.name.value = this.userData.name;
+
+
+        this.editUserForm.username.id = `user_${this.userData.id}_username`;
         this.editUserForm.username.value = this.userData.username;
+
+
+        this.editUserForm.email.id = `user_${this.userData.id}_email`;
         this.editUserForm.email.value = this.userData.email;
 
         eventBus.on('callback', (eventData) => {
@@ -170,8 +187,8 @@ export default {
             let userData = {};
             let validPasswords = false;
             let numErrors = 0;
-            let inputPassword = document.querySelector('#password').value;
-            let inputPasswordConfirm = document.querySelector('#confirm_password').value;
+            let inputPassword = document.querySelector(`#${this.updateCredentialsForm.password.id}`).value;
+            let inputPasswordConfirm = document.querySelector(`#${this.updateCredentialsForm.confirm_password.id}`).value;
 
             userData.password = inputPassword;
             userData.confirm_password = inputPasswordConfirm;
