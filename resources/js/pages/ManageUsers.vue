@@ -31,7 +31,7 @@
                     </template>
                     <div>
                         <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
-                        <form id="createUserForm" :key="createUserFormKey">
+                        <form id="createUserForm">
                             <FormInput v-for="formField in createUserModalForm" :key="formField.identifier"
                                 :identifier="formField.identifier"
                                 :type="formField.type"
@@ -387,6 +387,8 @@
                         userBeingEdited = user;
                     }
                 });
+
+                console.log(userBeingEdited);
 
                 this.editingUsersId = userId;
 
