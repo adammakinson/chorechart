@@ -263,9 +263,10 @@ export default {
                     document.querySelector('#confirm_password').value = '';
                 }).catch((error) => {
                     if (error.response) {
+
                         this.userCredsNotification = {
                             message: error.response.data.message,
-                            status: error.response.status
+                            type: 'error'
                         };
 
                         for (const property in error.response.data.errors) {
