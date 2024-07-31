@@ -7,7 +7,7 @@
                 <div class="card p-4 md:w-1/2 mx-auto">
                     <notification v-if="typeof userInfoNotification === 'object'" v-bind:notice="userInfoNotification"></notification>
                     <form id="editUserForm" :key="editUserFormKey" class="flex flex-col flex-rows-3 gap-y-4">
-                        <FormInput v-for="formField in editUserForm" :key="formField.identifier" @keyup="resetFormsAndClearNotification"
+                        <FormInput v-for="formField in editUserForm" :key="formField.id"
                         :id="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
@@ -22,7 +22,7 @@
                 <div class="card p-4 md:w-1/2 mx-auto">
                     <notification v-if="typeof userCredsNotification === 'object'" v-bind:notice="userCredsNotification"></notification>
                     <form id="changeUserCredentialsForm" class="flex flex-col flex-rows-3 gap-y-4">
-                        <FormInput v-for="formField in updateCredentialsForm" :key="formField.identifier" @keyup="resetFormsAndClearNotification"
+                        <FormInput v-for="formField in updateCredentialsForm" :key="formField.id"
                         :id="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
