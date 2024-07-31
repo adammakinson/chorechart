@@ -63,7 +63,6 @@ export default {
             userData: {},
             userInfoNotification: '',
             userCredsNotification: '',
-            errors: {},
             mainMenuIsOpen: false,
 
             editUserForm: {
