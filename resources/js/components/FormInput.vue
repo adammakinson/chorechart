@@ -18,7 +18,8 @@ export default {
         'identifier',
         'elementLabel',
         'value',
-        'callback'
+        'callback',
+        'form'
     ],
 
     data() {
@@ -31,6 +32,10 @@ export default {
         handleChangeEvent(e) {
 
             eventBus.emit('callback', {"callback": this.elementCallback, "args": this.value});
+        },
+
+        handleKeyUp(e) {
+            eventBus.emit('callback', {"callback": "resetFormsAndClearNotification", "args": [{"form": this.form, "name": this.identifier,"value":this.value}]});
         }
     }
 }
