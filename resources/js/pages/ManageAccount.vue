@@ -14,6 +14,7 @@
                         :elementLabel="formField.label"
                         :errors="formField.errors"
                         :value="formField.value"
+                        :form='"editUserForm"'
                         ></FormInput>
                         <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateUserInfo">Update user</Button>
                     </form>
@@ -28,6 +29,7 @@
                         :elementLabel="formField.label"
                         :errors="formField.errors"
                         :value="formField.value"
+                        :form='"updateCredentialsForm"'
                         ></FormInput>
                         <Button colorClass="text-white" bgColorClass="bg-blue-600" callback="updateCredentials">Update credentials</Button>
                     </form>
@@ -255,8 +257,7 @@ export default {
                         type: 'success'
                     };
 
-                    this.updateCredentialsForm.password.errors = [];
-                    this.updateCredentialsForm.confirm_password.errors = [];
+                    this.resetFormErrors([{"form": 'updateCredentialsForm', 'name': 'password', 'value': ''}, {"form": 'updateCredentialsForm', 'name': 'confirm_password', 'value': ''}]);
 
                     document.querySelector('#password').value = '';
                     document.querySelector('#confirm_password').value = '';
@@ -277,6 +278,28 @@ export default {
                     }
                 });
             }
+        },
+
+        resetFormsAndClearNotification(args) {
+            this.resetFormErrors(args);
+            this.clearNotification();
+        },
+
+        /**
+         * 
+         * @param fields array 
+         */
+        resetFormErrors(fields) {
+            fields.forEach(field => {
+                let fieldName = field.name;
+                let formName = field.form;
+                this[formName][fieldName].errors = [];
+                this[formName][fieldName].value = field.value;
+            });
+        },
+
+        clearNotification() {
+            this.userCredsNotification = undefined;
         }
     }
 }
