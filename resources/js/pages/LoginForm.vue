@@ -5,22 +5,15 @@
             <div class="m-4 p-4 border rounded-sm flex flex-col flex-rows-2 gap-y-4">
                 <notification v-if="typeof loginFormNotification === 'object'" v-bind:notice="loginFormNotification"></notification>
                 <form id="loginForm" class="flex flex-col flex-rows-3 gap-y-4">
-                    <FormInput 
-                        :identifier="userNameField.identifier" 
-                        :type="userNameField.type" 
-                        :elementLabel="userNameField.label" 
-                        :errors="errors.username" 
-                        :value="userNameField.value" 
-                        :callback="userNameField.callback"
-                    ></FormInput>
-                    
-                    <FormInput 
-                        :identifier="passwordField.identifier" 
-                        :type="passwordField.type" 
-                        :elementLabel="passwordField.label" 
-                        :errors="errors.password" 
-                        :value="passwordField.value" 
-                        :callback="passwordField.callback"
+                    <FormInput v-for="formField in loginForm" :key="formField.id"
+                        :id="formField.id"
+                        :identifier="formField.identifier" 
+                        :type="formField.type" 
+                        :elementLabel="formField.label" 
+                        :errors="formField.errors" 
+                        :value="formField.value" 
+                        :callback="formField.callback"
+                        :form="'loginForm'"
                     ></FormInput>
 
                     <Button bgColorClass="bg-blue-600" colorClass="text-white" callback="handleLogin">Login</Button>
@@ -64,19 +57,25 @@ export default {
         return {
             loginFormNotification: '',
             errors: '',
-            userNameField: {
-                identifier: 'username',
-                label: 'Username',
-                type: 'text',
-                value: '',
-                callback: 'updateUserNameFieldValue'
-            },
-            passwordField: {
-                identifier: 'password',
-                label: 'Password',
-                type: 'password',
-                value: '',
-                callback: 'updatePasswordFieldValue'
+            loginForm: {
+                username: {
+                    id: "username",
+                    identifier: 'username',
+                    label: 'Username',
+                    type: 'text',
+                    errors: [],
+                    value: '',
+                    callback: 'updateUserNameFieldValue'
+                },
+                password: {
+                    id: 'password',
+                    identifier: 'password',
+                    label: 'Password',
+                    type: 'password',
+                    value: '',
+                    errors: [],
+                    callback: 'updatePasswordFieldValue'
+                }
             }
         }
     },
@@ -91,8 +90,8 @@ export default {
         handleLogin: function() {
             
             axios.post('/api/login', {
-                username: this.userNameField.value,
-                password: this.passwordField.value
+                username: this.loginForm.username.value,
+                password: this.loginForm.password.value
             }).then((response) => {
                 this.$store.commit('setCurrentUser', response.data.user);
                 this.$router.push('chores-list');
@@ -103,7 +102,16 @@ export default {
                         status: error.response.status
                     };
 
-                    this.errors = error.response.data.errors;
+                    // this.errors = error.response.data.errors;
+                    console.log(error.response);
+
+                    for (const property in error.response.data.errors) {
+                        if (property === 'message') {
+                            continue;
+                        }
+
+                        this.loginForm[property].errors = error.response.data.errors[property];
+                    }
                 }
             });
         },
@@ -128,6 +136,28 @@ export default {
          */
         updatePasswordFieldValue(elValue) {
             this.passwordField.value = elValue;
+        },
+
+        resetFormsAndClearNotification(args) {
+            this.resetFormErrors(args);
+            this.clearNotification();
+        },
+
+        /**
+         * 
+         * @param fields array 
+         */
+        resetFormErrors(fields) {
+            fields.forEach(field => {
+                let fieldName = field.name;
+                let formName = field.form;
+                this[formName][fieldName].errors = [];
+                this[formName][fieldName].value = field.value;
+            });
+        },
+
+        clearNotification() {
+            this.loginFormNotification = undefined;
         }
     },
 
