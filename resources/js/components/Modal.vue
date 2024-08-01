@@ -47,10 +47,9 @@ export default {
 
     created() {
 
-        // Is this thing needed???
-        // eventBus.on("close-modal", () => {
-        //     this.closeModal();
-        // });
+        eventBus.on("close-modal", () => {
+            this.closeModal();
+        });
 
         eventBus.on('callback', (eventData) => {
     
