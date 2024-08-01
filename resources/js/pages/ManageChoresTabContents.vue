@@ -49,13 +49,14 @@
             <div class="modal-body">
                 <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="createChoreForm">
-                    <FormInput v-for="formField in createChoreModalData" :key="formField.identifier"
+                    <FormInput v-for="formField in createChoreModalData" :key="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
                         :elementLabel="formField.label"
                         :errors="formField.errors"
                         :value="formField.value"
                         :callback="formField.callback"
+                        :form="'createChoreModalData'"
                     ></FormInput>
                 </form>
             </div>
@@ -73,13 +74,14 @@
             <div class="modal-body">
                 <notification v-if="typeof modalNotice === 'object'" v-bind:notice="modalNotice"></notification>
                 <form id="editChoreForm">
-                    <FormInput v-for="formField in editChoreModalData" :key="formField.identifier"
+                    <FormInput v-for="formField in editChoreModalData" :key="formField.id"
                         :identifier="formField.identifier"
                         :type="formField.type"
                         :elementLabel="formField.label"
                         :errors="formField.errors"
                         :value="formField.value"
                         :callback="formField.callback"
+                        :form="'editChoreModalData'"
                     ></FormInput>
                 </form>
             </div>
@@ -220,36 +222,40 @@ export default {
             assignmentsArePending: false,
             createChoreModalData: {
                 chore: {
+                    id: 'chore',
                     identifier: 'chore',
                     label: 'Chore',
                     type: 'text',
-                    errors: '',
+                    errors: [],
                     value: '',
                     callback: 'updateChoreFieldValue'
                 },
                 pointvalue: {
+                    id: 'pointvalue',
                     identifier: 'pointvalue',
                     label: 'Point value',
                     type: 'number',
-                    errors: '',
+                    errors: [],
                     value: '',
                     callback: 'updatePointvalueValue'
                 }
             },
             editChoreModalData: {
                 chore: {
+                    id: 'chore',
                     identifier: 'chore',
                     label: 'Chore',
                     type: 'text',
-                    errors: '',
+                    errors: [],
                     value: '',
                     callback: 'updateChoreFieldValue'
                 },
                 pointvalue: {
+                    id: 'pointvalue',
                     identifier: 'pointvalue',
                     label: 'Point value',
                     type: 'number',
-                    errors: '',
+                    errors: [],
                     value: '',
                     callback: 'updatePointvalueValue'
                 }
@@ -316,6 +322,8 @@ export default {
 
             this.createChoreModalData.chore.value = '';
             this.createChoreModalData.pointvalue.value = '';
+            this.modalErrors = [];
+            this.modalNotice = '';
 
             this.activeElementId = '';
 
@@ -334,68 +342,108 @@ export default {
             let choreData = {};
 
             formEls.forEach((el) => {
-                choreData[el.name] = el.value;
-            });
-
-            axios({
-                method: 'post',
-                url: '/api/chores',
-                data: choreData,
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
+                if (el.value.length > 0) {
+                    choreData[el.name] = el.value;
+                } else {
+                    this.createChoreModalData[el.name].errors.push(`The ${el.name} field cant be empty`);
+                    this.modalErrors.push(`The ${el.name} field cant be empty`);
                 }
-            }).then(() => {
-                this.fetchChoresCollection();
-                
-                eventBus.emit('close-modal');
-            }).catch((error) => {
-
-                this.modalNotice = {
-                    message: error.response.data.message,
-                    status: error.response.status
-                };
-
-                this.choreFieldValue = choreData.chore;
-                this.pointFieldValue = choreData.pointvalue;
-
-                this.modalErrors = error.response.data.errors;
             });
+
+            if(this.modalErrors.length === 0) {
+                axios({
+                    method: 'post',
+                    url: '/api/chores',
+                    data: choreData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then(() => {
+                    this.fetchChoresCollection();
+                    
+                    eventBus.emit('close-modal');
+                }).catch((error) => {
+    
+                    this.modalNotice = {
+                        message: error.response.data.message,
+                        status: error.response.status
+                    };
+    
+                    this.choreFieldValue = choreData.chore;
+                    this.pointFieldValue = choreData.pointvalue;
+    
+                    this.modalErrors = error.response.data.errors;
+                });
+            } else {
+                if (this.modalErrors.length === 1) {
+                    this.modalNotice = {
+                        message: this.modalErrors[0],
+                        type: 'error'
+                    };
+                } else {
+                    let remainingcount = this.modalErrors.length - 1;
+                    this.modalNotice = {
+                        message: `${this.modalErrors[0]} and ${remainingcount} more`,
+                        type: 'error'
+                    };
+                }
+            }
         },
 
         updateChore() {
-            let formEls = document.querySelectorAll('#editChoreModal .form-control');
+            let formEls = document.querySelectorAll('#editChoreForm input');
             let choreData = {};
 
-            formEls.forEach((formInput) => {
-                choreData[formInput.name] = formInput.value;
+            formEls.forEach((el) => {
+                if (el.value.length > 0) {
+                    choreData[el.name] = el.value;
+                } else {
+                    this.editChoreModalData[el.name].errors.push(`The ${el.name} field cant be empty`);
+                    this.modalErrors.push(`The ${el.name} field cant be empty`);
+                }
             });
 
-            axios({
-                method: 'put',
-                url: '/api/chores/' + this.choreBeingEdited.id,
-                data: choreData,
-                headers: {
-                    authorization: this.$store.getters.getUserAuthToken
+            if (this.modalErrors.length === 0) {
+                axios({
+                    method: 'put',
+                    url: '/api/chores/' + this.choreBeingEdited.id,
+                    data: choreData,
+                    headers: {
+                        authorization: this.$store.getters.getUserAuthToken
+                    }
+                }).then((response) => {
+    
+                    this.choreBeingEdited = '';
+    
+                    this.fetchChoresCollection();
+    
+                    eventBus.emit('close-modal');
+                }).catch((error) => {
+    
+                    this.modalNotice = {
+                        message: error.response.data.message,
+                        status: error.response.status
+                    }
+    
+                    this.choreFieldValue = choreData.chore;
+                    this.pointFieldValue = choreData.pointvalue;
+    
+                    this.modalErrors = error.response.data.errors;
+                });
+            } else {
+                if (this.modalErrors.length === 1) {
+                    this.modalNotice = {
+                        message: this.modalErrors[0],
+                        type: 'error'
+                    };
+                } else {
+
+                    this.modalNotice = {
+                        message: this.modalErrors[0] + " and " + this.modalErrors.length - 1 + "more",
+                        type: 'error'
+                    };
                 }
-            }).then((response) => {
-
-                this.choreBeingEdited = '';
-
-                this.fetchChoresCollection();
-
-                eventBus.emit('close-modal');
-            }).catch((error) => {
-
-                this.modalNotice = {
-                    message: error.response.data.message,
-                    status: error.response.status
-                }
-
-                this.choreFieldValue = choreData.chore;
-                this.pointFieldValue = choreData.pointvalue;
-
-                this.modalErrors = error.response.data.errors;
-            });
+            }
         },
 
         assignToUser() {
@@ -647,6 +695,8 @@ export default {
 
             this.editChoreModalData.chore.value = choreBeingEdited.chore;
             this.editChoreModalData.pointvalue.value = choreBeingEdited.pointvalue;
+            this.modalErrors = [];
+            this.modalNotice = '';
 
             this.activeElementId = choreId;
 
@@ -742,6 +792,30 @@ export default {
             }).then((response) => {
                 eventBus.emit('refetch-userchores');
             });
+        },
+
+        resetFormsAndClearNotification(args) {
+            this.resetFormErrors(args);
+            this.clearNotification();
+        },
+
+        /**
+         * 
+         * @param fields array 
+         */
+        resetFormErrors(fields) {
+            fields.forEach(field => {
+                let fieldName = field.name;
+                let formName = field.form;
+                this[formName][fieldName].errors = [];
+                this[formName][fieldName].value = field.value;
+            });
+            
+            this.modalErrors = [];
+        },
+
+        clearNotification() {
+            this.modalNotice = '';
         }
     }
 }
