@@ -536,6 +536,8 @@ export default {
                         assignedItems.forEach((assignedChore) => {
                             let discardAssignmentButton = assignedChore.querySelector('.discardAssignmentIcon');
 
+                            assignedChore.classList.remove('assignment');
+
                             discardAssignmentButton.classList.remove('fa-minus');
                             discardAssignmentButton.classList.add('fa-trash');
                             discardAssignmentButton.removeEventListener('click', this.discardAssignment);
