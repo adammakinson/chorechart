@@ -623,6 +623,7 @@ export default {
             if (!this.assignmentsStarted(dropTarget)) {
                 userChoresList = document.createElement('ul');
                 userChoresList.className = 'list-group';
+                userChoresList.classList.add('p-4');
                 card.appendChild(userChoresList);
             } else {
                 userChoresList = dropTarget;
