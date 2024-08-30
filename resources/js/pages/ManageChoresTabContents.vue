@@ -32,7 +32,7 @@
                             <list-item v-for="userChore in cardData.chores" :key="userChore.chore_id" :listItem="userChore" v-bind:data-itemId="userChore.chore_id" class="flex pl-2 border border-slate-400 leading-3 w-full">
                                 <p>{{userChore.chore}}</p>
                                 <template v-slot:actions>
-                                    <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="userChore.chore_id">
+                                    <Button v-if="isDeletable(userChore)" colorClass="text-white" bgColorClass="bg-red-600" widthClass="w-10" paddingClass="px-0 py-2" callback="deleteUserAssignment" :args="{'userId': cardData.id, 'choreId': userChore.chore_id}">
                                         <Icon class="fas fa-trash"></Icon>
                                     </Button>
                                 </template>
@@ -452,11 +452,12 @@ export default {
 
             highlightedUsers.forEach((user) => {
                 let recipientsListUl;
+                let userBody = user.querySelector('div.flex');
 
                 if (!user.querySelector('ul.list-group')) {
                     recipientsListUl = document.createElement('ul');
                     recipientsListUl.classList.add('list-group');
-                    user.appendChild(recipientsListUl);
+                    userBody.appendChild(recipientsListUl);
                 } else {
                     recipientsListUl = user.querySelector('ul.list-group');
                 }
@@ -602,7 +603,8 @@ export default {
             dragEvent.stopPropagation();
 
             let card = dragEvent.toElement.closest('.card');
-            let dropTarget = card.querySelector('.list-group');
+            let cardBody = card.querySelector('div.flex');
+            let dropTarget = cardBody.querySelector('.list-group');
             let userChoresList;
             let userChore;
             let droppedChoreName = dragEvent.dataTransfer.getData('text/html'); 
@@ -623,8 +625,7 @@ export default {
             if (!this.assignmentsStarted(dropTarget)) {
                 userChoresList = document.createElement('ul');
                 userChoresList.className = 'list-group';
-                userChoresList.classList.add('p-4');
-                card.appendChild(userChoresList);
+                cardBody.appendChild(userChoresList);
             } else {
                 userChoresList = dropTarget;
             }
@@ -745,8 +746,11 @@ export default {
         deleteUserAssignment(e) {
             let userChoreId;
             let assignment;
-            if (Number.isInteger(e)) {
-                userChoreId = e;
+
+            if (e.hasOwnProperty('choreId')) {
+                userChoreId = e.choreId;
+
+                assignment = document.querySelector(`div[data-userId="${e.userId}"] li[data-itemid="${e.choreId}"]`);
             } else {
                 assignment = e.target.closest('.list-group-item');
                 
@@ -759,7 +763,7 @@ export default {
                     authorization: this.$store.getters.getUserAuthToken
                 }
             }).then((response) => {
-                assignment.remove();
+                assignment.closest('ul').remove();
                 eventBus.emit('refetch-userchores');
             });
         },
